@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 import org.apache.http.Header;
 
-import com.sachin.qa.spider.SpiderConstants;
+import com.sachin.qa.app.AppConstants;
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
 
@@ -85,7 +85,7 @@ public class WebURL implements Serializable {
 	}
 
 	public void setURL(String url1) {
-		if (!SpiderConstants.URL_IS_CASE_SENSITIVE) {
+		if (!AppConstants.URL_IS_CASE_SENSITIVE) {
 			url = url1.toLowerCase();
 		}
 		this.url = url1;

@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import org.apache.http.HttpStatus;
 import org.apache.http.impl.EnglishReasonPhraseCatalog;
 
-import com.sachin.qa.spider.SpiderConstants;
+import com.sachin.qa.app.AppConstants;
 
 import edu.uci.ics.crawler4j.crawler.exceptions.ContentFetchException;
 import edu.uci.ics.crawler4j.crawler.exceptions.ExternalLinkException;
@@ -360,14 +360,14 @@ public class WebCrawler implements Runnable {
 	    page.setStatusCode(statusCode);
 	    page.setResponseTime(fetchResult.getResponseTime());
 
-	    Matcher m = SpiderConstants.PATTERN.matcher(curURL.getURL());
-	    String prop = SpiderConstants.PROPERTIES.getProperty("crawler.domainRegex");
+	    Matcher m = AppConstants.PATTERN.matcher(curURL.getURL());
+	    String prop = AppConstants.PROPERTIES.getProperty("crawler.domainRegex");
 	    if (null == prop || prop.isEmpty() || prop.equals(".")) {
-		if (!SpiderConstants.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !curURL.isInternalLink()) {
+		if (!AppConstants.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !curURL.isInternalLink()) {
 		    throw new ExternalLinkException(Level.WARN, "Skipping parsing of external link: " + curURL);
 		}
 	    } else {
-		if (!SpiderConstants.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !m.find()) {
+		if (!AppConstants.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !m.find()) {
 		    throw new ExternalLinkException(Level.WARN,
 			    "Skipping parsing of link based on user regex: " + curURL);
 		}

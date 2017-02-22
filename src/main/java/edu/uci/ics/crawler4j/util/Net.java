@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sachin.qa.spider.SpiderConstants;
+import com.sachin.qa.app.AppConstants;
 
 import edu.uci.ics.crawler4j.url.WebURL;
 
@@ -46,8 +46,8 @@ public class Net {
 	}
 
 	public static boolean getWebUrlType(WebURL curURL, String host) {
-		Matcher m = SpiderConstants.PATTERN.matcher(curURL.getURL());
-		String prop = SpiderConstants.PROPERTIES.getProperty("crawler.domainRegex");
+		Matcher m = AppConstants.PATTERN.matcher(curURL.getURL());
+		String prop = AppConstants.PROPERTIES.getProperty("crawler.domainRegex");
 		if (null == prop || prop.isEmpty() || prop.equals(".")) {
 			return Util.getUrlHost(curURL.getURL()).contains(host);
 		} else {
