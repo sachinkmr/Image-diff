@@ -1,37 +1,48 @@
-/*
-Notes:
-	- Browser name must be from: chrome, firefox, ie, iphone with chrome emulation, andriod with chrome emulation, tablet with chrome emulation
-	- Provide width and height as negative integer value to maximize the browser screen
-	
-*/
-
 {
 	"instances": 5,
-	"broswers": [
-		"chrome",
-		"firefox",
-		"ie",
-		"phantom",
-		"edge",
-		"iphone with chrome emulation",
-		"andriod with chrome emulation",
-		"tablet with chrome emulation",
-		"tablet with chrome emulation"
-	]
+	"broswers": {
+		"chrome": {
+			"enable": true
+		},
+		"firefox": {
+			"enable": true
+		},
+		"ie": {
+			"enable": false
+		},
+		"phantom": {
+			"enable": false
+		},
+		"edge": {
+			"enable": false
+		},
+		"iphone_with_chrome_emulation": {
+			"enable": false
+		},
+		"andriod_with_chrome_emulation": {
+			"enable": false
+		},
+		"tablet_with_chrome_emulation": {
+			"enable": false
+		}
+	},
+		
 	"custom":[
 		{
+			"enable":false,
 			"name":"browser1",
 			"emulatedBy":"",
 			"height":0,
 			"width":0,
-			"user-agent":""
+			"userAgent":""
 		},
 		{
+			"enable":false,
 			"name":"browser2",
 			"emulatedBy":"",
 			"height":0,
 			"width":0,
-			"user-agent":""
+			"userAgent":""
 		}
 	]
 }
