@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
@@ -37,13 +39,16 @@ public class AppConstants {
     public static String ERROR_TEXT;
     public static boolean ERROR;
     public static final String TIME_STAMP;
-    public static final boolean URL_IS_CASE_SENSITIVE;
+    public static final boolean URL_IS_CASE_SENSITIVE,IS_DIFF;
     public static final String BROWSER_TYPE;
-    public static final int BROWSER_HEIGHT, BROWSER_WIDTH, BROWSER_INSTANCE;
+    public static final int BROWSER_INSTANCE;
+    public static final Set<D2Page> d2Pages;
+
     static {
 	SITE = System.getProperty("SiteAddress");
 	USERNAME = System.getProperty("Username");
 	PASSWORD = System.getProperty("Password");
+	d2Pages = new CopyOnWriteArraySet<>();
 	String host = "";
 	try {
 	    host = new URL(SITE).getHost().replaceAll("www.", "");
@@ -108,11 +113,11 @@ public class AppConstants {
 	USER_AGENT = PROPERTIES.getProperty("crawler.userAgentString",
 		"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
 	URL_IS_CASE_SENSITIVE = Boolean.parseBoolean(PROPERTIES.getProperty("crawler.caseSensitiveUrl", "false"));
-
+	IS_DIFF = Boolean.parseBoolean(PROPERTIES.getProperty("app.isdiff", "false"));
+	
 	// browsers info instantiation
-	BROWSER_HEIGHT = Integer.parseInt(PROPERTIES.getProperty("browser.height", "0"));
-	BROWSER_WIDTH = Integer.parseInt(PROPERTIES.getProperty("browser.width", "0"));
-	BROWSER_INSTANCE = Integer.parseInt(PROPERTIES.getProperty("instance", "0"));
+	BROWSER_INSTANCE = Integer.parseInt(PROPERTIES.getProperty("instance", "1"));
+	
 	BROWSER_TYPE = PROPERTIES.getProperty("browser.type", "chrome").toUpperCase();
 	switch (BROWSER_TYPE) {
 	case "CHROME":
@@ -129,12 +134,6 @@ public class AppConstants {
 	    break;
 	case "PHANTOM":
 	    System.setProperty("phantomjs.binary.path", "servers/phantomjs.exe");
-	    break;
-	case "SAFARI":
-	    System.setProperty("webdriver.safari.driver", "servers/");
-	    break;
-	case "OPERA":
-	    System.setProperty("webdriver.opera.driver", "servers/");
 	    break;
 	}
 	if (deletePropFile) {

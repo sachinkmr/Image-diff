@@ -22,5 +22,6 @@ public class SpiderController extends CrawlController {
 	super(config, pageFetcher, robotstxtServer);
 	executor= Executors.newFixedThreadPool(AppConstants.BROWSER_INSTANCE); 
     }
+    
 
 }

@@ -1,0 +1,37 @@
+/*
+Notes:
+	- Browser name must be from: chrome, firefox, ie, iphone with chrome emulation, andriod with chrome emulation, tablet with chrome emulation
+	- Provide width and height as negative integer value to maximize the browser screen
+	
+*/
+
+{
+	"instances": 5,
+	"broswers": [
+		"chrome",
+		"firefox",
+		"ie",
+		"phantom",
+		"edge",
+		"iphone with chrome emulation",
+		"andriod with chrome emulation",
+		"tablet with chrome emulation",
+		"tablet with chrome emulation"
+	]
+	"custom":[
+		{
+			"name":"browser1",
+			"emulatedBy":"",
+			"height":0,
+			"width":0,
+			"user-agent":""
+		},
+		{
+			"name":"browser2",
+			"emulatedBy":"",
+			"height":0,
+			"width":0,
+			"user-agent":""
+		}
+	]
+}
