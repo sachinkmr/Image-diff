@@ -5,13 +5,22 @@ import java.io.Serializable;
 public class ImageInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final String pageUrl;
-	private String name;
+	private String browserName;
 	private String imagePathOld;
 	private String imagePathNew;
 	private boolean matched;
 	private boolean processed;
 	private String diffImage;
 	private String diffGiff;
+	private int diffSize = 0;
+
+	public int getDiffSize() {
+		return diffSize;
+	}
+
+	public void setDiffSize(int diffSize) {
+		this.diffSize = diffSize;
+	}
 
 	public ImageInfo(String pageUrl) {
 		this.pageUrl = pageUrl;
@@ -25,12 +34,12 @@ public class ImageInfo implements Serializable {
 		this.processed = processed;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setBrowserName(String browserName) {
+		this.browserName = browserName;
 	}
 
-	public String getName() {
-		return name;
+	public String getBrowserName() {
+		return browserName;
 	}
 
 	public String getPageUrl() {

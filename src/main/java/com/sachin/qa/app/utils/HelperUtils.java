@@ -1,26 +1,30 @@
 package com.sachin.qa.app.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
 import com.sachin.qa.app.selenium.Browser;
-import com.sachin.qa.app.site.UrlHandler;
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer;
 import edu.uci.ics.crawler4j.url.WebURL;
@@ -128,13 +132,25 @@ public class HelperUtils {
 		return list;
 	}
 
-	public static WebDriver getIdealDriver() {
-		synchronized (UrlHandler.class) {
-			for (WebDriver driver : AppConstants.DRIVERS.keySet()) {
-				if (!AppConstants.DRIVERS.get(driver)) {
-					return driver;
-				}
+	/**
+	 * Method to read CSV File.
+	 *
+	 * @return List<CSVRecord> List of CSV Records
+	 *
+	 ***/
+
+	public static List<CSVRecord> readCSV(String csvPath) {
+		try {
+			CSVParser parser = CSVParser.parse(new File(csvPath), StandardCharsets.UTF_8, CSVFormat.EXCEL.withHeader());
+			try {
+				return parser.getRecords();
+			} finally {
+				parser.close();
 			}
+		} catch (FileNotFoundException ex) {
+			LoggerFactory.getLogger(HelperUtils.class).debug("DEBUG", ex);
+		} catch (IOException ex) {
+			LoggerFactory.getLogger(HelperUtils.class).debug("DEBUG", ex);
 		}
 		return null;
 	}

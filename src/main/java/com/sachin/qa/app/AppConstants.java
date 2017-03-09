@@ -41,22 +41,26 @@ public class AppConstants {
 	public static final Pattern ASSETS_PATTERN;
 	public static final String USER_AGENT;
 	public static long CRAWLING_TIME;
-	public static String ERROR_TEXT, DIFF_FOLDER;
+	public static String ERROR_TEXT, DIFF_FOLDER_PNG, DIFF_FOLDER_GIF, AFTER_FOLDER, BEFORE_FOLDER, BUILD_VERSION;
 	public static boolean ERROR;
-	public static final String TIME_STAMP;
+	// public static final String TIME_STAMP;
 	public static final boolean URL_IS_CASE_SENSITIVE, IS_DIFF;
 	public static final int IGNORED_PIXELS;
+	public static final int HEADER_PIXELS;
+	public static final int FOOTER_PIXELS;
 	public static int BROWSER_INSTANCE = 1;
 	public static Set<Browser> BROWSERS;
 	public static Map<WebDriver, Boolean> DRIVERS;
+
 	static {
 		SITE = System.getProperty("SiteAddress");
 		USERNAME = System.getProperty("Username");
 		PASSWORD = System.getProperty("Password");
+		BUILD_VERSION = System.getProperty("BuildVersion");
 		BRAND_NAME = System.getProperty("BrandName");
-		IS_DIFF = Boolean.parseBoolean(System.getProperty("diff-run"));
-		DIFF_FOLDER = System.getProperty("diff-folder");
-		TIME_STAMP = HelperUtils.generateUniqueString();
+		IS_DIFF = System.getProperty("Diff-run") != null && !System.getProperty("Diff-run").isEmpty()
+				&& System.getProperty("Diff-run").equalsIgnoreCase("true");
+		// TIME_STAMP = HelperUtils.generateUniqueString();
 		DRIVERS = new HashMap<>();
 		File storage = null;
 		if (SITE != null && !SITE.isEmpty()) {
@@ -67,17 +71,29 @@ public class AppConstants {
 				LoggerFactory.getLogger(AppConstants.class).debug("Error in loading config file", e);
 			}
 			storage = new File(System.getProperty("user.dir") + File.separator + "data" + File.separator + host
-					+ File.separator + TIME_STAMP);
+					+ File.separator + BUILD_VERSION);
 		} else {
 			storage = new File(System.getProperty("user.dir") + File.separator + "data" + File.separator + BRAND_NAME
-					+ File.separator + TIME_STAMP);
+					+ File.separator + BUILD_VERSION);
 		}
+
 		File file = new File(storage, "crawler-data");
 		file.mkdirs();
 		CRAWLER_DATA = file.getAbsolutePath();
 		file = new File(storage, "app-data");
 		file.mkdirs();
 		APP_DATA = file.getAbsolutePath();
+		BEFORE_FOLDER = APP_DATA + File.separator + "before";
+		AFTER_FOLDER = APP_DATA + File.separator + "after";
+		DIFF_FOLDER_GIF = APP_DATA + File.separator + "diff" + File.separator + "gif";
+		DIFF_FOLDER_PNG = APP_DATA + File.separator + "diff" + File.separator + "png";
+		new File(BEFORE_FOLDER).mkdirs();
+		if (IS_DIFF) {
+			createFolder(AFTER_FOLDER);
+			createFolder(DIFF_FOLDER_GIF);
+			createFolder(DIFF_FOLDER_PNG);
+		}
+
 		file = null;
 		storage = null;
 
@@ -127,7 +143,8 @@ public class AppConstants {
 		USER_AGENT = PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
 		URL_IS_CASE_SENSITIVE = Boolean.parseBoolean(PROPERTIES.getProperty("crawler.caseSensitiveUrl", "false"));
-
+		HEADER_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.header.pixels", "0"));
+		FOOTER_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.footer.pixels", "0"));
 		IGNORED_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.pixel", "0"));
 		// browsers info instantiation
 
@@ -158,6 +175,13 @@ public class AppConstants {
 		if (delBrowserFile) {
 			FileUtils.deleteQuietly(new File(browserLoc).getParentFile());
 		}
+	}
+
+	private static void createFolder(String bEFORE_FOLDER2) {
+		File file = new File(bEFORE_FOLDER2);
+		if (file.exists())
+			FileUtils.deleteQuietly(file);
+		file.mkdirs();
 	}
 
 }

@@ -11,16 +11,16 @@
 			"enable": false
 		},
 		"phantom": {
-			"enable": false
+			"enable": true
 		},
 		"edge": {
 			"enable": false
 		},
 		"iphone_with_chrome_emulation": {
-			"enable": false
+			"enable": true
 		},
 		"andriod_with_chrome_emulation": {
-			"enable": false
+			"enable": true
 		},
 		"tablet_with_chrome_emulation": {
 			"enable": false
