@@ -52,7 +52,7 @@ public class AppConstants {
 	public static int BROWSER_INSTANCE = 1;
 	public static Set<Browser> BROWSERS;
 	public static Map<WebDriver, Boolean> DRIVERS;
-
+	public static boolean DELETE_DATA;
 	static {
 		SITE = System.getProperty("SiteAddress");
 		USERNAME = System.getProperty("Username");
@@ -61,6 +61,8 @@ public class AppConstants {
 		BRAND_NAME = System.getProperty("BrandName");
 		IS_DIFF = System.getProperty("Diff-run") != null && !System.getProperty("Diff-run").isEmpty()
 				&& System.getProperty("Diff-run").equalsIgnoreCase("Yes");
+		IS_DIFF = System.getProperty("DeleteData") != null && !System.getProperty("DeleteData").isEmpty()
+				&& System.getProperty("DeleteData").equalsIgnoreCase("Yes");
 		URL_TEXT = !StringUtils.isBlank(System.getProperty("UrlsTextFile")) ? System.getProperty("UrlsTextFile") : "";
 		// TIME_STAMP = HelperUtils.generateUniqueString();
 		boolean flag = false;

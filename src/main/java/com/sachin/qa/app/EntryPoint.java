@@ -35,7 +35,6 @@ public class EntryPoint {
 				for (String url : FileUtils.readLines(file, "UTF-8")) {
 					ThreadManager.processUrl(url);
 				}
-				ThreadManager.cleanup();
 				StreamUtils.generateReportCSV();
 			} catch (IOException e) {
 				logger.debug("Error in controller", e);
@@ -54,6 +53,7 @@ public class EntryPoint {
 				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
 				controller.start(Spider.class, numberOfCrawlers);
 				AppConstants.CRAWLING_TIME = System.currentTimeMillis() - start;
+				StreamUtils.generateReportCSV();
 			} catch (Exception e) {
 				logger.debug("Error in controller", e);
 				System.out.println("Error in application: " + e);
@@ -62,5 +62,6 @@ public class EntryPoint {
 						+ e.getMessage();
 			}
 		}
+		ThreadManager.cleanup();
 	}
 }
