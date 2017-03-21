@@ -26,7 +26,7 @@ public class EntryPoint {
 		// System.setProperty("SiteAddress", "http://www.liptontea.com/");
 		System.setProperty("Username", "axed2stage");
 		System.setProperty("Password", "S@pient123");
-		System.setProperty("Diff-run", "false");
+		System.setProperty("Diff-run", "No");
 		System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
 		// HelperUtils.validate();
 		File file = new File(AppConstants.URL_TEXT);

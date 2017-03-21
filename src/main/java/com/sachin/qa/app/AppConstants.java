@@ -60,7 +60,7 @@ public class AppConstants {
 		BUILD_VERSION = System.getProperty("BuildVersion");
 		BRAND_NAME = System.getProperty("BrandName");
 		IS_DIFF = System.getProperty("Diff-run") != null && !System.getProperty("Diff-run").isEmpty()
-				&& System.getProperty("Diff-run").equalsIgnoreCase("true");
+				&& System.getProperty("Diff-run").equalsIgnoreCase("Yes");
 		URL_TEXT = !StringUtils.isBlank(System.getProperty("UrlsTextFile")) ? System.getProperty("UrlsTextFile") : "";
 		// TIME_STAMP = HelperUtils.generateUniqueString();
 		boolean flag = false;
