@@ -21,13 +21,13 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		System.setProperty("BrandName", "AXE");
-		System.setProperty("BuildVersion", "2.17");
+		// System.setProperty("BrandName", "AXE");
+		// System.setProperty("BuildVersion", "2.17");
 		// System.setProperty("SiteAddress", "http://www.liptontea.com/");
-		System.setProperty("Username", "axed2stage");
-		System.setProperty("Password", "S@pient123");
-		System.setProperty("Diff-run", "No");
-		System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
+		// System.setProperty("Username", "axed2stage");
+		// System.setProperty("Password", "S@pient123");
+		// System.setProperty("Diff-run", "No");
+		// System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
 		// HelperUtils.validate();
 		File file = new File(AppConstants.URL_TEXT);
 		if (file.exists() && file.isFile()) {
