@@ -18,6 +18,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -155,4 +156,14 @@ public class HelperUtils {
 		return null;
 	}
 
+	public static void validate() throws Exception {
+		boolean x = StringUtils.isBlank(AppConstants.SITE);
+		boolean y = !StringUtils.isBlank(AppConstants.BRAND_NAME) && !StringUtils.isBlank(AppConstants.URL_TEXT);
+		if (!(x & y) && !(!x & !y)) {
+			throw new Exception("Please enter site or brand name and URL text file");
+		}
+		if (StringUtils.isBlank(AppConstants.BUILD_VERSION)) {
+			throw new Exception("Please enter build version");
+		}
+	}
 }

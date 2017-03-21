@@ -6,13 +6,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
 
+import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -42,34 +44,39 @@ public class ImageTaker {
 		if (driver instanceof InternetExplorerDriver) {
 			throw new Exception("IE driver is not supported");
 		}
-		new AShot().shootingStrategy(ShootingStrategies.viewportPasting(200)).takeScreenshot(driver);
+		new AShot().shootingStrategy(ShootingStrategies.viewportPasting(700)).takeScreenshot(driver);
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e1) {
 			logger.error("waiting intruppted: ", e1);
 		}
 		Screenshot shot = new AShot().shootingStrategy(
-				ShootingStrategies.viewportNonRetina(100, AppConstants.HEADER_PIXELS, AppConstants.FOOTER_PIXELS))
+				ShootingStrategies.viewportNonRetina(500, AppConstants.HEADER_PIXELS, AppConstants.FOOTER_PIXELS))
 				.takeScreenshot(driver);
 		try {
+			List<String> list = new ArrayList<>();
 			if (driver instanceof ChromeDriver || driver instanceof PhantomJSDriver) {
 				LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
-				List<String> list = new ArrayList<>();
 				list.add("Logging console logs for: " + info.getPageUrl());
 				list.add("Browser Type: " + info.getBrowserName());
 				list.add("----------------------------------------------------------------------");
 				for (LogEntry entry : logEntries) {
-					list.add(entry.getLevel() + " : " + entry.getMessage());
+					if (entry.getLevel().equals(Level.SEVERE))
+						list.add(entry.getLevel() + " : " + entry.getMessage());
 				}
-				String fileName = Base64
-						.encodeBase64URLSafeString((info.getPageUrl() + info.getBrowserName()).getBytes());
-				if (AppConstants.IS_DIFF) {
-					FileUtils.writeLines(new File(new File(info.getImagePathNew()).getParentFile(), fileName + ".log"),
-							"UTF-8", list);
-				} else {
-					FileUtils.writeLines(new File(new File(info.getImagePathOld()).getParentFile(), fileName + ".log"),
-							"UTF-8", list);
+			} else if (driver instanceof FirefoxDriver) {
+				list.add("Logging console logs for: " + info.getPageUrl());
+				list.add("Browser Type: " + info.getBrowserName());
+				list.add("----------------------------------------------------------------------");
+				for (JavaScriptError jsError : JavaScriptError.readErrors(driver)) {
+					list.add(jsError.toString());
 				}
+			}
+
+			if (AppConstants.IS_DIFF) {
+				FileUtils.writeLines(new File(info.getPostJSErrorsPath()), "UTF-8", list);
+			} else {
+				FileUtils.writeLines(new File(info.getPreJSErrorsPath()), "UTF-8", list);
 			}
 		} catch (Exception e) {
 			logger.warn("unable to read console log for: " + info.getPageUrl(), e);

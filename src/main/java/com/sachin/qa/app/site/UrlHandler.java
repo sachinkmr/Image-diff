@@ -29,6 +29,8 @@ public class UrlHandler implements Runnable {
 			imageInfo.setDiffImage(AppConstants.DIFF_FOLDER_PNG + File.separator + name + ".png");
 			imageInfo.setImagePathNew(AppConstants.AFTER_FOLDER + File.separator + name + ".png");
 			imageInfo.setImagePathOld(AppConstants.BEFORE_FOLDER + File.separator + name + ".png");
+			imageInfo.setPreJSErrorsPath(AppConstants.BEFORE_FOLDER + File.separator + name + ".log");
+			imageInfo.setPostJSErrorsPath(AppConstants.AFTER_FOLDER + File.separator + name + ".log");
 			imageInfo.setProcessed(false);
 			imageInfo.setBrowserName(webDriverManager.getName());
 		}

@@ -1,6 +1,7 @@
 package com.sachin.qa.app.selenium;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
 
+import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
@@ -105,6 +107,11 @@ public class WebDriverManager {
 	 **/
 	public WebDriver getFireFoxDriver() {
 		FirefoxProfile profile = new FirefoxProfile();
+		try {
+			JavaScriptError.addExtension(profile);
+		} catch (IOException e) {
+			LoggerFactory.getLogger(WebDriverManager.class).debug("ubable to add extention", e);
+		}
 		profile.setPreference("network.proxy.http", "localhost");
 		profile.setPreference("network.proxy.http_port", proxy.getPort());
 		profile.setPreference("network.proxy.ssl", "localhost");

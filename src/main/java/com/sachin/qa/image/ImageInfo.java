@@ -8,6 +8,8 @@ public class ImageInfo implements Serializable {
 	private String browserName;
 	private String imagePathOld;
 	private String imagePathNew;
+	private String preJSErrorsPath;
+	private String postJSErrorsPath;
 	private boolean matched;
 	private boolean processed;
 	private String diffImage;
@@ -16,6 +18,22 @@ public class ImageInfo implements Serializable {
 
 	public int getDiffSize() {
 		return diffSize;
+	}
+
+	public String getPreJSErrorsPath() {
+		return preJSErrorsPath;
+	}
+
+	public void setPreJSErrorsPath(String preJSErrorsPath) {
+		this.preJSErrorsPath = preJSErrorsPath;
+	}
+
+	public String getPostJSErrorsPath() {
+		return postJSErrorsPath;
+	}
+
+	public void setPostJSErrorsPath(String postJSErrorsPath) {
+		this.postJSErrorsPath = postJSErrorsPath;
 	}
 
 	public void setDiffSize(int diffSize) {
