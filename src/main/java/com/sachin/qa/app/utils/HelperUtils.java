@@ -165,8 +165,9 @@ public class HelperUtils {
 		if (StringUtils.isBlank(AppConstants.BUILD_VERSION)) {
 			throw new Exception("Please enter build version");
 		}
-		if (!(AppConstants.DELETE_DATA && AppConstants.IS_DIFF)) {
-			throw new Exception("Diff-run and DeleteData both should be set to true");
-		}
+		// if (!(AppConstants.DELETE_DATA && AppConstants.IS_DIFF)) {
+		// throw new Exception("Diff-run and DeleteData both should be set to
+		// true");
+		// }
 	}
 }
