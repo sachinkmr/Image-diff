@@ -2,7 +2,7 @@
 	"instances": 5,
 	"broswers": {
 		"chrome": {
-			"enable": false
+			"enable": true
 		},
 		"firefox": {
 			"enable": true
@@ -17,7 +17,7 @@
 			"enable": false
 		},
 		"iphone_with_chrome_emulation": {
-			"enable": false
+			"enable": true
 		},
 		"andriod_with_chrome_emulation": {
 			"enable": false

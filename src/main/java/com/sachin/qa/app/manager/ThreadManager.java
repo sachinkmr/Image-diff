@@ -20,10 +20,10 @@ public class ThreadManager {
 	protected static final Logger logger = LoggerFactory.getLogger(ThreadManager.class);
 
 	static {
-		try {
-			drivers = new ArrayList<>(AppConstants.BROWSERS.size());
-			services = new ArrayList<>(AppConstants.BROWSERS.size());
-			for (Browser browser : AppConstants.BROWSERS) {
+		drivers = new ArrayList<>(AppConstants.BROWSERS.size());
+		services = new ArrayList<>(AppConstants.BROWSERS.size());
+		for (Browser browser : AppConstants.BROWSERS) {
+			try {
 				services.add(Executors.newFixedThreadPool(1));
 				switch (browser.getName()) {
 				case "chrome":
@@ -31,52 +31,61 @@ public class ThreadManager {
 					mngr.setName(browser.getName());
 					mngr.getChromeDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				case "firefox":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
 					mngr.getFireFoxDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				case "ie":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
 					mngr.getIEDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				case "phantom":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
 					mngr.getPhantumDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				case "edge":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
 					mngr.getEdgeDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				case "iphone_with_chrome_emulation":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
 					mngr.getiPhoneDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				case "andriod_with_chrome_emulation":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
 					mngr.getAndriodDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				case "tablet_with_chrome_emulation":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
 					mngr.getiPadDriver();
 					drivers.add(mngr);
+					logger.info("Browser launched: " + browser.getName());
 					break;
 				}
+			} catch (Exception ex) {
+				logger.debug("DEBUG: ", ex);
 			}
-		} catch (Exception ex) {
 		}
 
 	}

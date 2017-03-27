@@ -177,6 +177,7 @@ public class AppConstants {
 						FileUtils.readFileToString(new File(browserLoc), "UTF-8"));
 				BROWSER_INSTANCE = BROWSER_PROPERTIES.getInt("instances");
 				BROWSERS = HelperUtils.readBrowsers(BROWSER_PROPERTIES);
+				LoggerFactory.getLogger(AppConstants.class).info("Total browser loaded: " + BROWSERS);
 				BROWSER_PROPERTIES = null;
 			} catch (JSONException | IOException e) {
 				LoggerFactory.getLogger(AppConstants.class).error("Error in loading browser file", e);

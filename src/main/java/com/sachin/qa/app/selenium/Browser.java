@@ -56,4 +56,9 @@ public class Browser {
 		this.parentBrowser = parentBrowser;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }
