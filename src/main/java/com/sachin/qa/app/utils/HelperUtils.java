@@ -49,6 +49,15 @@ public class HelperUtils {
 		return date + "_" + time;
 	}
 
+	public static String generateTimeString() {
+		DateFormat df = new SimpleDateFormat("dd-MMMM-yyyy");
+		DateFormat df1 = new SimpleDateFormat("hh-mmaa");
+		Calendar calobj = Calendar.getInstance();
+		String time = df1.format(calobj.getTime());
+		String date = df.format(calobj.getTime());
+		return date + "_" + time;
+	}
+
 	public static String getResourceFile(String fileName) {
 		File file = null;
 		try {
@@ -162,9 +171,9 @@ public class HelperUtils {
 		if (!(x & y) && !(!x & !y)) {
 			throw new Exception("Please enter site or brand name and URL text file");
 		}
-		if (StringUtils.isBlank(AppConstants.BUILD_VERSION)) {
-			throw new Exception("Please enter build version");
-		}
+		// if (StringUtils.isBlank(AppConstants.BUILD_VERSION)) {
+		// throw new Exception("Please enter build version");
+		// }
 		// if (!(AppConstants.DELETE_DATA && AppConstants.IS_DIFF)) {
 		// throw new Exception("Diff-run and DeleteData both should be set to
 		// true");

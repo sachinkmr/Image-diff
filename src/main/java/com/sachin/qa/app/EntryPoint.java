@@ -22,8 +22,8 @@ public class EntryPoint {
 
 	public static void main(String[] args) {
 		// System.setProperty("BrandName", "AXE");
-		// System.setProperty("BuildVersion", "2.17");
-		// System.setProperty("SiteAddress", "http://www.liptontea.com/");
+		System.setProperty("BuildVersion", "2.17");
+		System.setProperty("SiteAddress", "http://www.dove.com/");
 		// System.setProperty("Username", "axed2stage");
 		// System.setProperty("Password", "S@pient123");
 		// System.setProperty("Diff-run", "No");

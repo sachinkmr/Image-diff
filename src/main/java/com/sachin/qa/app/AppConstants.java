@@ -10,22 +10,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.selenium.Browser;
 import com.sachin.qa.app.utils.HelperUtils;
+import com.sachin.qa.page.D2Page;
 
 public class AppConstants {
 
@@ -40,31 +46,41 @@ public class AppConstants {
 	public static Pattern SHOULD_VISIT_PATTERN;
 	public static Pattern IMAGE_PATTERN;
 	public static Pattern ASSETS_PATTERN;
-	public static String USER_AGENT;
+	public static String USER_AGENT, PRE_DATA;
 	public static long CRAWLING_TIME;
-	public static String ERROR_TEXT, DIFF_FOLDER_PNG, DIFF_FOLDER_GIF, AFTER_FOLDER, BEFORE_FOLDER, BUILD_VERSION;
+	public static String ERROR_TEXT, DIFF_FOLDER, FOLDER, BUILD_VERSION;
 	public static boolean ERROR;
-	// public static final String TIME_STAMP;
-	public static boolean URL_IS_CASE_SENSITIVE, IS_DIFF;
+	public static final String TIME_STAMP;
+	public static boolean URL_IS_CASE_SENSITIVE, HAS_DIFF;
 	public static int IGNORED_PIXELS;
 	public static int HEADER_PIXELS;
 	public static int FOOTER_PIXELS;
 	public static int BROWSER_INSTANCE = 1;
 	public static Set<Browser> BROWSERS;
 	public static Map<WebDriver, Boolean> DRIVERS;
+	public static Set<D2Page> PAGES;
+	public static BuildType BUILD_TYPE;
 	static {
+		PAGES = new CopyOnWriteArraySet<>(new HashSet<>());
 		SITE = System.getProperty("SiteAddress");
 		USERNAME = System.getProperty("Username");
 		PASSWORD = System.getProperty("Password");
-		BUILD_VERSION = System.getProperty("BuildVersion");
 		BRAND_NAME = System.getProperty("BrandName");
-		IS_DIFF = System.getProperty("Diff-run") != null && !System.getProperty("Diff-run").isEmpty()
-				&& System.getProperty("Diff-run").equalsIgnoreCase("Yes");
+		boolean IMAGE_DIFF = System.getProperty("imageDiff") != null && !System.getProperty("imageDiff").isEmpty()
+				&& System.getProperty("imageDiff").equalsIgnoreCase("Yes");
+		boolean JS_DIFF = System.getProperty("jsDiff") != null && !System.getProperty("jsDiff").isEmpty()
+				&& System.getProperty("jsDiff").equalsIgnoreCase("Yes");
+		boolean HTML_DIFF = System.getProperty("htmlDiff") != null && !System.getProperty("htmlDiff").isEmpty()
+				&& System.getProperty("htmlDiff").equalsIgnoreCase("Yes");
 		URL_TEXT = !StringUtils.isBlank(System.getProperty("UrlsTextFile")) ? System.getProperty("UrlsTextFile") : "";
-		// TIME_STAMP = HelperUtils.generateUniqueString();
+		TIME_STAMP = HelperUtils.generateTimeString();
+		BUILD_TYPE = !StringUtils.isBlank(System.getProperty("BuildType"))
+				&& System.getProperty("BuildType").toUpperCase() == "PRE" ? BuildType.PRE : BuildType.POST;
+		HAS_DIFF = (IMAGE_DIFF || HTML_DIFF || JS_DIFF);
 		boolean flag = false;
 		try {
 			HelperUtils.validate();
+			BUILD_VERSION = getBuildVersion();
 			flag = true;
 		} catch (Exception e1) {
 			LoggerFactory.getLogger(EntryPoint.class).error("Error in initialization", e1);
@@ -92,17 +108,21 @@ public class AppConstants {
 			file = new File(storage, "app-data");
 			file.mkdirs();
 			APP_DATA = file.getAbsolutePath();
-			BEFORE_FOLDER = APP_DATA + File.separator + "before";
-			AFTER_FOLDER = APP_DATA + File.separator + "after";
-			DIFF_FOLDER_GIF = APP_DATA + File.separator + "diff" + File.separator + "gif";
-			DIFF_FOLDER_PNG = APP_DATA + File.separator + "diff" + File.separator + "png";
-			new File(BEFORE_FOLDER).mkdirs();
-			if (IS_DIFF) {
-				createFolder(AFTER_FOLDER);
-				createFolder(DIFF_FOLDER_GIF);
-				createFolder(DIFF_FOLDER_PNG);
+			FOLDER = APP_DATA + File.separator + BUILD_TYPE + File.separator + TIME_STAMP;
+			createFolder(FOLDER);
+			new File(FOLDER).mkdirs();
+			if (BUILD_TYPE == BuildType.POST && HAS_DIFF) {
+				String PRE_BUILD = !StringUtils.isBlank(System.getProperty("PreBuildVersion"))
+						? System.getProperty("PreBuildVersion") : "";
+				String PRE_TIME = !StringUtils.isBlank(System.getProperty("PreBuildTime"))
+						? System.getProperty("PreBuildTime") : "";
+				DIFF_FOLDER = System.getProperty("user.dir") + File.separator + "data" + File.separator + BRAND_NAME
+						+ File.separator + "diff" + File.separator + "Pre_" + PRE_BUILD + "_" + PRE_TIME
+						+ File.separator + "Post_" + BUILD_VERSION + "_" + TIME_STAMP;
+				PRE_DATA = System.getProperty("user.dir") + File.separator + "data" + File.separator + BRAND_NAME
+						+ File.separator + PRE_BUILD + File.separator + "PRE" + File.separator + PRE_TIME;
+				createFolder(DIFF_FOLDER);
 			}
-
 			file = null;
 			storage = null;
 
@@ -196,6 +216,26 @@ public class AppConstants {
 		if (file.exists())
 			FileUtils.deleteQuietly(file);
 		file.mkdirs();
+	}
+
+	private static String getBuildVersion() throws IOException {
+		String url = !StringUtils.isBlank(SITE) ? SITE : FileUtils.readLines(new File(URL_TEXT), "utf-8").get(0);
+		try {
+			Connection con = Jsoup.connect(url).timeout(30000).followRedirects(true);
+			if (!StringUtils.isBlank(USERNAME)) {
+				String login = USERNAME + ":" + PASSWORD;
+				String base64login = new String(Base64.encodeBase64(login.getBytes()));
+				con.header("Authorization", "Basic " + base64login);
+			}
+			String document = con.execute().parse().outerHtml();
+			document = document.substring(document.indexOf("<html"), document.indexOf("<head"));
+			int in = document.indexOf("<!--\"Release version - ");
+			document = document.substring(in).replaceAll("<!--\"Release version - ", "").replaceAll("\"-->", "");
+			return document;
+		} catch (IOException e) {
+			LoggerFactory.getLogger(AppConstants.class).error("Error fetching build version.\n", e);
+		}
+		return "default";
 	}
 
 }

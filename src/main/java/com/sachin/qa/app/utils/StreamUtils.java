@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
-import com.sachin.qa.image.ImageInfo;
+import com.sachin.qa.page.PageInfo;
 
 import edu.uci.ics.crawler4j.crawler.Page;
 
@@ -36,10 +36,10 @@ public class StreamUtils {
 		}
 	}
 
-	public static ImageInfo fetchInfo(File file) {
+	public static PageInfo fetchInfo(File file) {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
-			ImageInfo link = (ImageInfo) in.readObject();
+			PageInfo link = (PageInfo) in.readObject();
 			in.close();
 			return link;
 		} catch (IOException | ClassNotFoundException e) {
@@ -48,7 +48,7 @@ public class StreamUtils {
 		return null;
 	}
 
-	public static void storeImageInfo(ImageInfo info) {
+	public static void storeImageInfo(PageInfo info) {
 		String fileName = Base64.encodeBase64URLSafeString((info.getPageUrl() + info.getBrowserName()).getBytes());
 		File file = new File(AppConstants.CRAWLER_DATA, fileName + ".info");
 		try {
@@ -62,12 +62,12 @@ public class StreamUtils {
 		}
 	}
 
-	public static ImageInfo readImageInfo(String url, String name) {
+	public static PageInfo readImageInfo(String url, String name) {
 		String fileName = Base64.encodeBase64URLSafeString((url + name).getBytes());
 		File file = new File(AppConstants.CRAWLER_DATA, fileName + ".info");
 		try {
 			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
-			ImageInfo info = (ImageInfo) in.readObject();
+			PageInfo info = (PageInfo) in.readObject();
 			in.close();
 			return info;
 		} catch (IOException | ClassNotFoundException e) {
@@ -85,25 +85,53 @@ public class StreamUtils {
 		logger.info("Generating Report: " + file.getAbsolutePath());
 		for (File f : files) {
 			StringBuffer s = new StringBuffer();
-			ImageInfo info = fetchInfo(f);
-			s.append(info.getPageUrl());
-			s.append(",");
-			s.append(info.getImagePathOld());
-			s.append(",");
-			s.append(AppConstants.IS_DIFF ? info.getImagePathNew() : "");
-			s.append(",");
-			s.append(AppConstants.IS_DIFF ? info.isMatched() : "");
-			s.append(",");
-			s.append(AppConstants.IS_DIFF ? info.getDiffSize() : "");
-			s.append(",");
-			s.append(AppConstants.IS_DIFF ? info.getDiffImage() : "");
-			s.append(",");
-			s.append(AppConstants.IS_DIFF ? info.getDiffGiff() : "");
-			s.append(",");
-			s.append(info.getBrowserName());
-			list.add(s.toString());
+			// PageInfo info = fetchInfo(f);
+			// s.append(info.getPageUrl());
+			// s.append(",");
+			// s.append(info.getImagePathOld());
+			// s.append(",");
+			// s.append(AppConstants.IS_DIFF ? info.getImagePathNew() : "");
+			// s.append(",");
+			// s.append(AppConstants.IS_DIFF ? info.isMatched() : "");
+			// s.append(",");
+			// s.append(AppConstants.IS_DIFF ? info.getDiffSize() : "");
+			// s.append(",");
+			// s.append(AppConstants.IS_DIFF ? info.getDiffImage() : "");
+			// s.append(",");
+			// s.append(AppConstants.IS_DIFF ? info.getDiffGiff() : "");
+			// s.append(",");
+			// s.append(info.getBrowserName());
+			// list.add(s.toString());
 
 		}
 		FileUtils.writeLines(file, "UTF-8", list);
+	}
+
+	public static PageInfo readPageInfo(String url, String name) {
+		String fileName = Base64.encodeBase64URLSafeString((url + name).getBytes());
+		File file = new File(AppConstants.PRE_DATA, fileName + ".info");
+		try {
+			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+			PageInfo info = (PageInfo) in.readObject();
+			in.close();
+			return info;
+		} catch (IOException | ClassNotFoundException e) {
+			logger.debug("Error in Reading File: " + file.getAbsolutePath(), e);
+		}
+		return null;
+	}
+
+	public static void writeImageInfo(PageInfo info) {
+		String fileName = Base64.encodeBase64URLSafeString((info.getPageUrl() + info.getBrowserName()).getBytes());
+		File file = new File(AppConstants.FOLDER, fileName + ".info");
+		try {
+			FileOutputStream fout = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(fout));
+			out.writeObject(info);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			logger.debug("Error in Writing File: " + file.getAbsolutePath(), e);
+		}
 	}
 }

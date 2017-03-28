@@ -1,4 +1,4 @@
-package com.sachin.qa.image.diff;
+package com.sachin.qa.page.diff;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -12,16 +12,16 @@ import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
 import com.sachin.qa.app.utils.StreamUtils;
-import com.sachin.qa.image.ImageInfo;
+import com.sachin.qa.page.PageInfo;
 
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
 
 public class DiffFinder implements Runnable {
 	protected static final Logger logger = LoggerFactory.getLogger(DiffFinder.class);
-	private ImageInfo info;
+	private PageInfo info;
 
-	public DiffFinder(ImageInfo info) {
+	public DiffFinder(PageInfo info) {
 		this.info = info;
 	}
 

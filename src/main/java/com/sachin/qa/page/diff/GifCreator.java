@@ -1,4 +1,4 @@
-package com.sachin.qa.image.diff;
+package com.sachin.qa.page.diff;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,12 +13,12 @@ import javax.imageio.stream.ImageOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sachin.qa.image.ImageInfo;
+import com.sachin.qa.page.PageInfo;
 
 public class GifCreator {
 	protected static final Logger logger = LoggerFactory.getLogger(GifCreator.class);
 
-	public static void createGif(ImageInfo info) {
+	public static void createGif(PageInfo info) {
 		try {
 			BufferedImage firstImage = ImageIO.read(Files.newInputStream(Paths.get(info.getImagePathOld())));
 			BufferedImage secondImage = ImageIO.read(Files.newInputStream(Paths.get(info.getImagePathNew())));

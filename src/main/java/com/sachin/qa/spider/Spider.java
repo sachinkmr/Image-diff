@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
 import com.sachin.qa.app.manager.ThreadManager;
+import com.sachin.qa.page.D2Page;
 
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
+import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 public class Spider extends WebCrawler {
@@ -27,7 +29,15 @@ public class Spider extends WebCrawler {
 		if (page.getWebURL().isInternalLink() && page.getStatusCode() == 200
 				&& page.getContentType().contains("text/html")) {
 			try {
-				ThreadManager.processUrl(page.getWebURL().getURL());
+				if (page.getParseData() instanceof HtmlParseData) {
+					HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+					String html = htmlParseData.getHtml();
+					D2Page d2page = new D2Page(html, true);
+					d2page.setSite(page.getWebURL().getURL());
+					if (AppConstants.PAGES.add(d2page)) {
+						ThreadManager.processUrl(page.getWebURL().getURL());
+					}
+				}
 			} catch (Exception e) {
 			}
 		}
