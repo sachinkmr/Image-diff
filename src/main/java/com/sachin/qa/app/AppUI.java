@@ -263,6 +263,9 @@ public class AppUI extends javax.swing.JFrame {
                 // Can safely update the GUI from this method.
                 @Override
                 protected void done() {
+                    if (!StringUtils.isBlank(System.getProperty("Report"))) {
+                        JOptionPane.showMessageDialog(null, "Report Generated at: \n"+System.getProperty("Report"), "Report Generated", JOptionPane.INFORMATION_MESSAGE);
+                    }
                     start.setEnabled(true);
                 }
             };

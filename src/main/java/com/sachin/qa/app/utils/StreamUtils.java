@@ -105,5 +105,6 @@ public class StreamUtils {
 
 		}
 		FileUtils.writeLines(file, "UTF-8", list);
+                System.setProperty("Report", file.getAbsolutePath());
 	}
 }

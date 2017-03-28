@@ -74,6 +74,5 @@ public class EntryPoint {
         } catch (Exception e) {
             logger.debug("Error in app", e);
         }
-
     }
 }
