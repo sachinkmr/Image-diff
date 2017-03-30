@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
+import com.sachin.qa.app.utils.HelperUtils;
 
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
@@ -37,11 +38,17 @@ import net.lightbody.bmp.client.ClientUtil;
 
 public class WebDriverManager {
 	static {
-		System.setProperty("webdriver.chrome.driver", "servers/chromedriver.exe");
-		System.setProperty("webdriver.ie.driver", "servers/IEDriverServer.exe");
-		System.setProperty("webdriver.gecko.driver", "servers/geckodriver.exe");
-		System.setProperty("webdriver.edge.driver", "servers/MicrosoftWebDriver.exe");
-		System.setProperty("phantomjs.binary.path", "servers/phantomjs.exe");
+		try {
+			HelperUtils.loadWebDriverServers();
+		} catch (Exception e) {
+			LoggerFactory.getLogger(WebDriverManager.class).info("Error loading browser servers from property file.");
+			LoggerFactory.getLogger(WebDriverManager.class).info("Falling back to in build servers.");
+			System.setProperty("webdriver.chrome.driver", "servers/chromedriver.exe");
+			System.setProperty("webdriver.ie.driver", "servers/IEDriverServer.exe");
+			System.setProperty("webdriver.gecko.driver", "servers/geckodriver.exe");
+			System.setProperty("webdriver.edge.driver", "servers/MicrosoftWebDriver.exe");
+			System.setProperty("phantomjs.binary.path", "servers/phantomjs.exe");
+		}
 	}
 	protected static final Logger logger = LoggerFactory.getLogger(WebDriverManager.class);
 	private BrowserMobProxy proxy;

@@ -1,8 +1,10 @@
 package com.sachin.qa.app.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
@@ -178,5 +181,17 @@ public class HelperUtils {
 		// throw new Exception("Diff-run and DeleteData both should be set to
 		// true");
 		// }
+	}
+
+	public static void loadWebDriverServers() {
+		Properties pro = new Properties();
+		try {
+			InputStream is = new FileInputStream(new File(HelperUtils.getResourceFile("webdriver.properties")));
+			pro.load(is);
+			is.close();
+			System.setProperties(pro);
+		} catch (IOException e) {
+			LoggerFactory.getLogger(HelperUtils.class).error("Unable to load webdriver servers", e);
+		}
 	}
 }
