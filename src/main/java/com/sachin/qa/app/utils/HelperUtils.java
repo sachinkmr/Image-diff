@@ -65,7 +65,7 @@ public class HelperUtils {
 			file = new File(new File(AppConstants.CRAWLER_DATA).getParentFile(), fileName);
 			FileUtils.write(file, str, "utf-8");
 		} catch (IOException e) {
-			e.printStackTrace();
+			LoggerFactory.getLogger(HelperUtils.class).debug("Error", e);
 		}
 		return file.getAbsolutePath();
 	}

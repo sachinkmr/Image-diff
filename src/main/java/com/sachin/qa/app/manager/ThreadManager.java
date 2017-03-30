@@ -20,12 +20,12 @@ public class ThreadManager {
 	protected static final Logger logger = LoggerFactory.getLogger(ThreadManager.class);
 
 	static {
-		try {
-			drivers = new ArrayList<>(AppConstants.BROWSERS.size());
-			services = new ArrayList<>(AppConstants.BROWSERS.size());
-			for (Browser browser : AppConstants.BROWSERS) {
-				services.add(Executors.newFixedThreadPool(1));
-				switch (browser.getName()) {
+
+		drivers = new ArrayList<>(AppConstants.BROWSERS.size());
+		services = new ArrayList<>(AppConstants.BROWSERS.size());
+		for (Browser browser : AppConstants.BROWSERS) {
+			try {
+				switch (browser.getName().toLowerCase()) {
 				case "chrome":
 					WebDriverManager mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
@@ -47,7 +47,7 @@ public class ThreadManager {
 				case "phantom":
 					mngr = new WebDriverManager();
 					mngr.setName(browser.getName());
-					mngr.getPhantumDriver();
+					mngr.getPhantomDriver();
 					drivers.add(mngr);
 					break;
 				case "edge":
@@ -75,10 +75,12 @@ public class ThreadManager {
 					drivers.add(mngr);
 					break;
 				}
-			}
-		} catch (Exception ex) {
-		}
+				services.add(Executors.newFixedThreadPool(1));
+			} catch (Exception ex) {
+				logger.error("Error in launching browser" + ex);
 
+			}
+		}
 	}
 
 	public static void processUrl(String url) {
@@ -92,7 +94,7 @@ public class ThreadManager {
 		for (int i = 0; i < services.size(); i++) {
 			services.get(i).shutdown();
 			while (!services.get(i).isTerminated()) {
-				logger.info("Waiting 10 seconds for browsers to complete requests...");
+				logger.warn("Waiting 10 seconds for browsers and threads to complete requests...");
 				try {
 					Thread.sleep(10000);
 				} catch (InterruptedException e) {

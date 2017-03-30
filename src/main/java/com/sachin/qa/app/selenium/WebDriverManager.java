@@ -1,7 +1,6 @@
 package com.sachin.qa.app.selenium;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +16,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerDriverLogLevel;
 import org.openqa.selenium.ie.InternetExplorerDriverService;
@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
 
-import net.jsourcerer.webdriver.jserrorcollector.JavaScriptError;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
@@ -58,17 +57,18 @@ public class WebDriverManager {
 	}
 
 	public WebDriverManager() {
-		proxy = new BrowserMobProxyServer();
-		proxy.setTrustAllServers(true);
-		proxy.setConnectTimeout(30, TimeUnit.SECONDS);
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty()) {
+			proxy = new BrowserMobProxyServer();
+			proxy.setTrustAllServers(true);
+			proxy.setConnectTimeout(30, TimeUnit.SECONDS);
 			proxy.addRequestFilter((request, contents, messageInfo) -> {
 				final String login = AppConstants.USERNAME + ":" + AppConstants.PASSWORD;
 				final String base64login = new String(Base64.encodeBase64(login.getBytes()));
 				request.headers().add("Authorization", "Basic " + base64login);
 				return null;
 			});
-		proxy.start(0);
+			proxy.start(0);
+		}
 	}
 
 	/***
@@ -80,12 +80,12 @@ public class WebDriverManager {
 	 * @return WebDriver
 	 * 
 	 ***/
-	public WebDriver getChromeDriver() {
+	public WebDriver getChromeDriver() throws Exception {
 		ChromeOptions options = new ChromeOptions();
 		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 		capabilities.setJavascriptEnabled(true);
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			capabilities.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
 		capabilities.setCapability(ChromeOptions.CAPABILITY, options);
@@ -105,22 +105,27 @@ public class WebDriverManager {
 	 * @return WebDriver
 	 * 
 	 **/
-	public WebDriver getFireFoxDriver() {
-		FirefoxProfile profile = new FirefoxProfile();
-		try {
-			JavaScriptError.addExtension(profile);
-		} catch (IOException e) {
-			LoggerFactory.getLogger(WebDriverManager.class).debug("ubable to add extention", e);
+	public WebDriver getFireFoxDriver() throws Exception {
+		ProfilesIni pro = new ProfilesIni();
+		FirefoxProfile profile = pro.getProfile("Automation");
+
+		if (null != proxy && proxy.isStarted()) {
+			profile.setPreference("network.proxy.http", "localhost");
+			profile.setPreference("network.proxy.http_port", proxy.getPort());
+			profile.setPreference("network.proxy.ssl", "localhost");
+			profile.setPreference("network.proxy.ssl_port", proxy.getPort());
+			profile.setPreference("network.proxy.type", 1);
 		}
-		profile.setPreference("network.proxy.http", "localhost");
-		profile.setPreference("network.proxy.http_port", proxy.getPort());
-		profile.setPreference("network.proxy.ssl", "localhost");
-		profile.setPreference("network.proxy.ssl_port", proxy.getPort());
-		profile.setPreference("network.proxy.type", 1);
+		profile.setPreference("setAcceptUntrustedCertificates", "true");
+		profile.setPreference("setAssumeUntrustedCertificateIssuer", "false");
+		profile.setPreference("acceptSslCerts", "true");
+		profile.setAcceptUntrustedCertificates(true);
+		profile.setAssumeUntrustedCertificateIssuer(false);
+		profile.setEnableNativeEvents(true);
 		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 		capabilities.setCapability(FirefoxDriver.PROFILE, profile);
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			capabilities.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		capabilities.setJavascriptEnabled(true);
 		capabilities.setCapability("takesScreenshot", true);
@@ -141,13 +146,13 @@ public class WebDriverManager {
 	 * 
 	 **/
 
-	public WebDriver getIEDriver() {
+	public WebDriver getIEDriver() throws Exception {
 		DesiredCapabilities capabilitiesIE = DesiredCapabilities.internetExplorer();
 		capabilitiesIE.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 		capabilitiesIE.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
 		capabilitiesIE.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
 		capabilitiesIE.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			capabilitiesIE.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		InternetExplorerDriverService.Builder serviceBuilder = new InternetExplorerDriverService.Builder();
 		serviceBuilder.usingAnyFreePort();
@@ -161,13 +166,13 @@ public class WebDriverManager {
 		return driver;
 	}
 
-	public WebDriver getPhantumDriver() {
+	public WebDriver getPhantomDriver() throws Exception {
 		DesiredCapabilities caps = DesiredCapabilities.phantomjs();
 		caps.setJavascriptEnabled(true);
 		caps.setCapability("takesScreenshot", true);
 		caps.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX, "Y");
 		caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, addCommandLineArguments());
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			caps.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		caps.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new PhantomJSDriver(caps);
@@ -176,12 +181,12 @@ public class WebDriverManager {
 		return driver;
 	}
 
-	public WebDriver getEdgeDriver() {
+	public WebDriver getEdgeDriver() throws Exception {
 		DesiredCapabilities cap = DesiredCapabilities.edge();
 		cap.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 		cap.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
 		cap.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			cap.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		cap.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new EdgeDriver(cap);
@@ -190,14 +195,14 @@ public class WebDriverManager {
 		return driver;
 	}
 
-	public WebDriver getiPhoneDriver() {
+	public WebDriver getiPhoneDriver() throws Exception {
 		Map<String, String> mobileEmulation = new HashMap<String, String>();
 		mobileEmulation.put("deviceName", "Apple iPhone 6");
 		Map<String, Object> chromeOptions = new HashMap<String, Object>();
 		chromeOptions.put("mobileEmulation", mobileEmulation);
 		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			capabilities.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
 		capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
@@ -207,14 +212,14 @@ public class WebDriverManager {
 		return driver;
 	}
 
-	public WebDriver getiPadDriver() {
+	public WebDriver getiPadDriver() throws Exception {
 		Map<String, String> mobileEmulation = new HashMap<String, String>();
 		mobileEmulation.put("deviceName", "Apple iPad");
 		Map<String, Object> chromeOptions = new HashMap<String, Object>();
 		chromeOptions.put("mobileEmulation", mobileEmulation);
 		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			capabilities.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
 		capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
@@ -224,14 +229,14 @@ public class WebDriverManager {
 		return driver;
 	}
 
-	public WebDriver getAndriodDriver() {
+	public WebDriver getAndriodDriver() throws Exception {
 		Map<String, String> mobileEmulation = new HashMap<String, String>();
 		mobileEmulation.put("deviceName", "Google Nexus 6");
 		Map<String, Object> chromeOptions = new HashMap<String, Object>();
 		chromeOptions.put("mobileEmulation", mobileEmulation);
 		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty())
+		if (null != proxy && proxy.isStarted())
 			capabilities.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(proxy));
 		capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
 		capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
@@ -266,7 +271,12 @@ public class WebDriverManager {
 
 	private LoggingPreferences getLoggingLevel() {
 		LoggingPreferences logPrefs = new LoggingPreferences();
-		logPrefs.enable(LogType.BROWSER, Level.ALL);
+		logPrefs.enable(LogType.BROWSER, Level.SEVERE);
+		logPrefs.enable(LogType.CLIENT, Level.OFF);
+		logPrefs.enable(LogType.DRIVER, Level.OFF);
+		logPrefs.enable(LogType.PERFORMANCE, Level.OFF);
+		logPrefs.enable(LogType.PROFILER, Level.OFF);
+		logPrefs.enable(LogType.SERVER, Level.OFF);
 		return logPrefs;
 	}
 }

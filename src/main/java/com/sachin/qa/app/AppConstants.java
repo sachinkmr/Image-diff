@@ -51,10 +51,12 @@ public class AppConstants {
 	public static String ERROR_TEXT, DIFF_FOLDER, FOLDER, BUILD_VERSION;
 	public static boolean ERROR;
 	public static final String TIME_STAMP;
-	public static boolean URL_IS_CASE_SENSITIVE, HAS_DIFF;
+	public static boolean URL_IS_CASE_SENSITIVE, HAS_DIFF, IMAGE_DIFF, JS_DIFF, HTML_DIFF;
 	public static int IGNORED_PIXELS;
 	public static int HEADER_PIXELS;
 	public static int FOOTER_PIXELS;
+	public static int PAGE_WAIT;
+	public static int SCROLL_DELAY;
 	public static int BROWSER_INSTANCE = 1;
 	public static Set<Browser> BROWSERS;
 	public static Map<WebDriver, Boolean> DRIVERS;
@@ -66,16 +68,16 @@ public class AppConstants {
 		USERNAME = System.getProperty("Username");
 		PASSWORD = System.getProperty("Password");
 		BRAND_NAME = System.getProperty("BrandName");
-		boolean IMAGE_DIFF = System.getProperty("imageDiff") != null && !System.getProperty("imageDiff").isEmpty()
+		IMAGE_DIFF = System.getProperty("imageDiff") != null && !System.getProperty("imageDiff").isEmpty()
 				&& System.getProperty("imageDiff").equalsIgnoreCase("Yes");
-		boolean JS_DIFF = System.getProperty("jsDiff") != null && !System.getProperty("jsDiff").isEmpty()
+		JS_DIFF = System.getProperty("jsDiff") != null && !System.getProperty("jsDiff").isEmpty()
 				&& System.getProperty("jsDiff").equalsIgnoreCase("Yes");
-		boolean HTML_DIFF = System.getProperty("htmlDiff") != null && !System.getProperty("htmlDiff").isEmpty()
+		HTML_DIFF = System.getProperty("htmlDiff") != null && !System.getProperty("htmlDiff").isEmpty()
 				&& System.getProperty("htmlDiff").equalsIgnoreCase("Yes");
 		URL_TEXT = !StringUtils.isBlank(System.getProperty("UrlsTextFile")) ? System.getProperty("UrlsTextFile") : "";
 		TIME_STAMP = HelperUtils.generateTimeString();
 		BUILD_TYPE = !StringUtils.isBlank(System.getProperty("BuildType"))
-				&& System.getProperty("BuildType").toUpperCase() == "PRE" ? BuildType.PRE : BuildType.POST;
+				&& System.getProperty("BuildType").equalsIgnoreCase("pre") ? BuildType.PRE : BuildType.POST;
 		HAS_DIFF = (IMAGE_DIFF || HTML_DIFF || JS_DIFF);
 		boolean flag = false;
 		try {
@@ -120,7 +122,8 @@ public class AppConstants {
 						+ File.separator + "diff" + File.separator + "Pre_" + PRE_BUILD + "_" + PRE_TIME
 						+ File.separator + "Post_" + BUILD_VERSION + "_" + TIME_STAMP;
 				PRE_DATA = System.getProperty("user.dir") + File.separator + "data" + File.separator + BRAND_NAME
-						+ File.separator + PRE_BUILD + File.separator + "PRE" + File.separator + PRE_TIME;
+						+ File.separator + PRE_BUILD + File.separator + "app-data" + File.separator + "PRE"
+						+ File.separator + PRE_TIME;
 				createFolder(DIFF_FOLDER);
 			}
 			file = null;
@@ -177,6 +180,8 @@ public class AppConstants {
 			HEADER_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.header.pixels", "0"));
 			FOOTER_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.footer.pixels", "0"));
 			IGNORED_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.pixel", "0"));
+			PAGE_WAIT = Integer.parseInt(PROPERTIES.getProperty("page.screen.wait", "1000"));
+			SCROLL_DELAY = Integer.parseInt(PROPERTIES.getProperty("page.scroll.delay", "1000"));
 			// browsers info instantiation
 
 			String browserLoc = "";
@@ -231,7 +236,7 @@ public class AppConstants {
 			document = document.substring(document.indexOf("<html"), document.indexOf("<head"));
 			int in = document.indexOf("<!--\"Release version - ");
 			document = document.substring(in).replaceAll("<!--\"Release version - ", "").replaceAll("\"-->", "");
-			return document;
+			return document.trim();
 		} catch (IOException e) {
 			LoggerFactory.getLogger(AppConstants.class).error("Error fetching build version.\n", e);
 		}

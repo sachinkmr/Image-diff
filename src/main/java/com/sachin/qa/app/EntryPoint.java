@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.manager.ThreadManager;
-import com.sachin.qa.app.utils.StreamUtils;
 import com.sachin.qa.spider.Spider;
 import com.sachin.qa.spider.SpiderConfig;
 import com.sachin.qa.spider.SpiderController;
@@ -21,13 +20,18 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("BrandName", "AXE");
+		System.setProperty("BrandName", "Sunsilk");
 		System.setProperty("BuildVersion", "2.17");
-		System.setProperty("SiteAddress", "http://www.dove.com/");
-		// System.setProperty("Username", "axed2stage");
-		// System.setProperty("Password", "S@pient123");
-		// System.setProperty("Diff-run", "No");
-		// System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
+		// System.setProperty("SiteAddress", "http://www.dove.com/");
+		System.setProperty("Username", "axed2stage");
+		System.setProperty("Password", "S@pient123");
+		System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
+		System.setProperty("imageDiff", "no");
+		System.setProperty("jsDiff", "no");
+		System.setProperty("htmlDiff", "No");
+		System.setProperty("BuildType", "pre");
+		// System.setProperty("PreBuildVersion", "2.18.1");
+		// System.setProperty("PreBuildTime", "29-March-2017_12-32PM");
 		// HelperUtils.validate();
 		File file = new File(AppConstants.URL_TEXT);
 		if (file.exists() && file.isFile()) {
@@ -35,7 +39,7 @@ public class EntryPoint {
 				for (String url : FileUtils.readLines(file, "UTF-8")) {
 					ThreadManager.processUrl(url);
 				}
-				StreamUtils.generateReportCSV();
+				// StreamUtils.generateReportCSV();
 			} catch (IOException e) {
 				logger.debug("Error in controller", e);
 			}
@@ -53,7 +57,7 @@ public class EntryPoint {
 				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
 				controller.start(Spider.class, numberOfCrawlers);
 				AppConstants.CRAWLING_TIME = System.currentTimeMillis() - start;
-				StreamUtils.generateReportCSV();
+				// StreamUtils.generateReportCSV();
 			} catch (Exception e) {
 				logger.debug("Error in controller", e);
 				System.out.println("Error in application: " + e);

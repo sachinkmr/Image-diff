@@ -1,13 +1,19 @@
 package com.sachin.qa.page.html;
 
-import com.sachin.qa.page.DifferenceType;
+import java.io.File;
 
-public class HtmlType extends DifferenceType {
-	public HtmlType(String url) {
-		super(url, ".html");
-	}
+import com.sachin.qa.app.AppConstants;
+import com.sachin.qa.app.selenium.WebDriverManager;
+import com.sachin.qa.page.Featurable;
 
+public class HtmlType extends Featurable {
 	private static final long serialVersionUID = 1L;
+
+	public HtmlType(String url, WebDriverManager webDriverManager) {
+		super(url, ".html", webDriverManager);
+		this.resourcePath = AppConstants.FOLDER + File.separator + "html" + File.separator + fileName;
+		new File(this.resourcePath).getParentFile().mkdirs();
+	}
 
 	@Override
 	public void apply() throws Exception {
@@ -16,12 +22,6 @@ public class HtmlType extends DifferenceType {
 
 	@Override
 	public void close() throws Exception {
-
-	}
-
-	@Override
-	public void differ(DifferenceType type) throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 

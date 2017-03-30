@@ -1,11 +1,14 @@
 package com.sachin.qa.page;
 
+import java.io.Serializable;
+
 import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.WebDriver;
 
 import com.sachin.qa.app.selenium.WebDriverManager;
 
-public abstract class DifferenceType implements Differentiable, AutoCloseable {
+public abstract class Featurable implements AutoCloseable, Serializable {
+
 	private static final long serialVersionUID = 1L;
 	protected String type;
 	protected String url;
@@ -13,14 +16,11 @@ public abstract class DifferenceType implements Differentiable, AutoCloseable {
 	protected transient String fileName;
 	protected transient WebDriverManager webDriverManager;
 
-	protected DifferenceType(String url, String type) {
+	protected Featurable(String url, String type, WebDriverManager webDriverManager) {
 		this.url = url;
 		this.type = type;
-		this.fileName = Base64.encodeBase64URLSafeString((url + webDriverManager.getName()).getBytes()) + type;
-	}
-
-	public void setWebDriverManager(WebDriverManager webDriverManager) {
 		this.webDriverManager = webDriverManager;
+		this.fileName = Base64.encodeBase64URLSafeString((url + webDriverManager.getName()).getBytes()) + type;
 	}
 
 	public String getFileName() {
@@ -47,4 +47,5 @@ public abstract class DifferenceType implements Differentiable, AutoCloseable {
 		return resourcePath;
 	}
 
+	public abstract void apply() throws Exception;
 }

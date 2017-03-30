@@ -1,4 +1,4 @@
-package com.sachin.qa.page.diff;
+package com.sachin.qa.page.image;
 
 // 
 //  GifSequenceWriter.java
