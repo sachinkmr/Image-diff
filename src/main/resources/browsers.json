@@ -2,10 +2,10 @@
 	"instances": 5,
 	"broswers": {
 		"chrome": {
-			"enable": false
+			"enable": true
 		},
 		"firefox": {
-			"enable": true
+			"enable": false
 		},
 		"ie": {
 			"enable": false

@@ -30,26 +30,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
-import com.sachin.qa.app.utils.HelperUtils;
 
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
+import net.lightbody.bmp.filters.RequestFilter;
+import net.lightbody.bmp.util.HttpMessageContents;
+import net.lightbody.bmp.util.HttpMessageInfo;
 
-public class WebDriverManager {
-	static {
-		try {
-			HelperUtils.loadWebDriverServers();
-		} catch (Exception e) {
-			LoggerFactory.getLogger(WebDriverManager.class).info("Error loading browser servers from property file.");
-			LoggerFactory.getLogger(WebDriverManager.class).info("Falling back to in build servers.");
-			System.setProperty("webdriver.chrome.driver", "servers/chromedriver.exe");
-			System.setProperty("webdriver.ie.driver", "servers/IEDriverServer.exe");
-			System.setProperty("webdriver.gecko.driver", "servers/geckodriver.exe");
-			System.setProperty("webdriver.edge.driver", "servers/MicrosoftWebDriver.exe");
-			System.setProperty("phantomjs.binary.path", "servers/phantomjs.exe");
-		}
-	}
+public class WebDriverManager {	
 	protected static final Logger logger = LoggerFactory.getLogger(WebDriverManager.class);
 	private BrowserMobProxy proxy;
 	private WebDriver driver;
@@ -64,18 +55,23 @@ public class WebDriverManager {
 	}
 
 	public WebDriverManager() {
-		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty()) {
-			proxy = new BrowserMobProxyServer();
-			proxy.setTrustAllServers(true);
-			proxy.setConnectTimeout(30, TimeUnit.SECONDS);
-			proxy.addRequestFilter((request, contents, messageInfo) -> {
-				final String login = AppConstants.USERNAME + ":" + AppConstants.PASSWORD;
-				final String base64login = new String(Base64.encodeBase64(login.getBytes()));
-				request.headers().add("Authorization", "Basic " + base64login);
-				return null;
-			});
-			proxy.start(0);
+	  
+	if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty()) {
+	    proxy = new BrowserMobProxyServer();
+//	    proxy.setTrustAllServers(true);
+	    proxy.setConnectTimeout(30, TimeUnit.SECONDS);
+	    proxy.addRequestFilter(new RequestFilter() {
+		@Override
+		public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents,
+			HttpMessageInfo messageInfo) {
+		    final String login = AppConstants.USERNAME + ":" + AppConstants.PASSWORD;
+		    final String base64login = new String(Base64.encodeBase64(login.getBytes()));
+		    request.headers().add("Authorization", "Basic " + base64login);
+		    return null;
 		}
+	    });
+	    proxy.start(0);
+	}
 	}
 
 	/***

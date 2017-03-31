@@ -77,7 +77,7 @@ public class ThreadManager {
 				}
 				services.add(Executors.newFixedThreadPool(1));
 			} catch (Exception ex) {
-				logger.error("Error in launching browser" + ex);
+				logger.error("Error in launching browser" , ex);
 
 			}
 		}
