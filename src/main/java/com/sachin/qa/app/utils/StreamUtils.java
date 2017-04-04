@@ -30,18 +30,18 @@ public class StreamUtils {
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			logger.debug("Error in Writing File: " + file.getAbsolutePath(), e);
+			logger.error("Error in Writing File: " + file.getAbsolutePath(), e);
 		}
 	}
 
-	public static PageInfo fetchInfo(File file) {
+	public static PageInfo readPageInfo(File file) {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
 			PageInfo link = (PageInfo) in.readObject();
 			in.close();
 			return link;
-		} catch (IOException | ClassNotFoundException e) {
-			logger.debug("Error in Reading File: " + file.getAbsolutePath(), e);
+		} catch (Exception e) {
+			logger.error("Error in Reading File: " + file.getAbsolutePath(), e);
 		}
 		return null;
 	}
@@ -56,7 +56,7 @@ public class StreamUtils {
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			logger.debug("Error in Writing File: " + file.getAbsolutePath(), e);
+			logger.error("Error in Writing File: " + file.getAbsolutePath(), e);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class StreamUtils {
 			in.close();
 			return info;
 		} catch (IOException | ClassNotFoundException e) {
-			logger.debug("Error in Reading File: " + file.getAbsolutePath(), e);
+			logger.error("Error in Reading File: " + file.getAbsolutePath(), e);
 		}
 		return null;
 	}
@@ -83,7 +83,7 @@ public class StreamUtils {
 			in.close();
 			return info;
 		} catch (IOException | ClassNotFoundException e) {
-			logger.debug("Error in Reading File: " + file.getAbsolutePath(), e);
+			logger.error("Error in Reading File: " + file.getAbsolutePath(), e);
 		}
 		return null;
 	}
@@ -112,5 +112,17 @@ public class StreamUtils {
 		} catch (IOException e) {
 			logger.error("Error in Writing File: " + file.getAbsolutePath(), e);
 		}
+	}
+
+	public static Differentiator readDiffInfo(File file) {
+		try {
+			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+			Differentiator diff = (Differentiator) in.readObject();
+			in.close();
+			return diff;
+		} catch (IOException | ClassNotFoundException e) {
+			logger.error("Error in Writing File: " + file.getAbsolutePath(), e);
+		}
+		return null;
 	}
 }

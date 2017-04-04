@@ -2,7 +2,6 @@ package com.sachin.qa.page.image;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -16,6 +15,7 @@ import com.sachin.qa.app.AppConstants;
 import com.sachin.qa.page.Featurable;
 import com.sachin.qa.page.PageInfo;
 import com.sachin.qa.page.diff.DiffInfo;
+import com.sachin.qa.page.js.JsDiffInfo;
 
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
@@ -30,17 +30,17 @@ public class ImageDiffInfo extends DiffInfo {
 	}
 
 	@Override
-	public DiffInfo call() throws Exception {
-		File png = new File(this.resourceFolder, super.name + ".png");
-		png.getParentFile().mkdirs();
-		File gif = new File(AppConstants.DIFF_FOLDER + File.separator + "gif", super.name + ".gif");
-		gif.getParentFile().mkdirs();
-		properties.put("png", "");
-		properties.put("gif", "");
-		diffSize = 0;
-		String preImage = getFeatureType(preInfo.getTypes()).getResourcePath();
-		String postImage = getFeatureType(postInfo.getTypes()).getResourcePath();
+	public DiffInfo call() {
 		try {
+			File png = new File(this.resourceFolder, super.name + ".png");
+			png.getParentFile().mkdirs();
+			File gif = new File(AppConstants.DIFF_FOLDER + File.separator + "gif", super.name + ".gif");
+			gif.getParentFile().mkdirs();
+			properties.put("png", "");
+			properties.put("gif", "");
+			diffSize = 0;
+			String preImage = getFeatureType(preInfo.getTypes()).getResourcePath();
+			String postImage = getFeatureType(postInfo.getTypes()).getResourcePath();
 			BufferedImage img1 = ImageIO.read(Files.newInputStream(Paths.get(preImage)));
 			BufferedImage img2 = ImageIO.read(Files.newInputStream(Paths.get(postImage)));
 			ImageDiff diff = new ImageDiffer().makeDiff(img1, img2).withDiffSizeTrigger(AppConstants.IGNORED_PIXELS);
@@ -54,8 +54,9 @@ public class ImageDiffInfo extends DiffInfo {
 				properties.put("gif", gif.getAbsolutePath());
 			}
 			processed = true;
-		} catch (IOException e) {
-			logger.warn("Unable to write image to disk", e);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(JsDiffInfo.class).error("Error in calculating image diff", e);
+			this.errors.put(preInfo.getPageUrl(), e);
 		}
 		return this;
 	}

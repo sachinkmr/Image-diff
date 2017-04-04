@@ -64,7 +64,7 @@ public class HelperUtils {
 	public static String getResourceFile(String fileName) {
 		File file = null;
 		try {
-			String str = IOUtils.toString(HelperUtils.class.getClassLoader().getResourceAsStream(fileName));
+			String str = IOUtils.toString(HelperUtils.class.getClassLoader().getResourceAsStream(fileName), "utf-8");
 			file = new File(new File(AppConstants.CRAWLER_DATA).getParentFile(), fileName);
 			FileUtils.write(file, str, "utf-8");
 		} catch (IOException e) {
@@ -174,13 +174,6 @@ public class HelperUtils {
 		if (!(x & y) && !(!x & !y)) {
 			throw new Exception("Please enter site or brand name and URL text file");
 		}
-		// if (StringUtils.isBlank(AppConstants.BUILD_VERSION)) {
-		// throw new Exception("Please enter build version");
-		// }
-		// if (!(AppConstants.DELETE_DATA && AppConstants.IS_DIFF)) {
-		// throw new Exception("Diff-run and DeleteData both should be set to
-		// true");
-		// }
 	}
 
 	public static void loadWebDriverServers() {

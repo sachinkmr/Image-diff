@@ -18,6 +18,7 @@ public abstract class DiffInfo implements Serializable, Callable<DiffInfo> {
 	protected int diffSize;
 	protected String resourceFolder;
 	protected Map<String, String> properties;
+	protected Map<String, Exception> errors;
 	protected String name;
 	protected String type;
 
@@ -28,6 +29,23 @@ public abstract class DiffInfo implements Serializable, Callable<DiffInfo> {
 		this.resourceFolder = AppConstants.DIFF_FOLDER;
 		this.name = preInfo.getPageName().replaceAll(".info", "");
 		this.properties = new HashMap<>();
+		this.errors = new HashMap<>();
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
+
+	public Map<String, Exception> getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map<String, Exception> errors) {
+		this.errors = errors;
 	}
 
 	public String getResourceFolder() {

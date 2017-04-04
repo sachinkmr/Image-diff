@@ -9,10 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sachin.qa.app.AppConstants;
+import com.sachin.qa.app.BuildType;
+import com.sachin.qa.app.report.Reporter;
 import com.sachin.qa.app.selenium.Browser;
 import com.sachin.qa.app.selenium.WebDriverManager;
 import com.sachin.qa.app.site.UrlHandler;
-import com.sachin.qa.app.utils.SeleniumUtils;
 
 public class ThreadManager {
 	public static List<WebDriverManager> drivers;
@@ -77,7 +78,7 @@ public class ThreadManager {
 				}
 				services.add(Executors.newFixedThreadPool(1));
 			} catch (Exception ex) {
-				logger.error("Error in launching browser" , ex);
+				logger.error("Error in launching browser", ex);
 
 			}
 		}
@@ -103,11 +104,15 @@ public class ThreadManager {
 			}
 			drivers.get(i).close();
 		}
-		SeleniumUtils.killService("chromedriver.exe");
-		SeleniumUtils.killService("IEDriverServer.exe");
-		SeleniumUtils.killService("geckodriver.exe");
-		SeleniumUtils.killService("MicrosoftWebDriver.exe");
-		SeleniumUtils.killService("phantomjs.exe");
+		Reporter.generateReportAsCSV();
+		if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
+			Reporter.generateDIffReportAsCSV();
+		}
+		// SeleniumUtils.killService("chromedriver.exe");
+		// SeleniumUtils.killService("IEDriverServer.exe");
+		// SeleniumUtils.killService("geckodriver.exe");
+		// SeleniumUtils.killService("MicrosoftWebDriver.exe");
+		// SeleniumUtils.killService("phantomjs.exe");
 	}
 
 }

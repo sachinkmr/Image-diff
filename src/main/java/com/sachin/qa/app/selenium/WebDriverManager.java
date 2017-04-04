@@ -1,6 +1,7 @@
 package com.sachin.qa.app.selenium;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ import net.lightbody.bmp.filters.RequestFilter;
 import net.lightbody.bmp.util.HttpMessageContents;
 import net.lightbody.bmp.util.HttpMessageInfo;
 
-public class WebDriverManager {	
+public class WebDriverManager {
 	protected static final Logger logger = LoggerFactory.getLogger(WebDriverManager.class);
 	private BrowserMobProxy proxy;
 	private WebDriver driver;
@@ -55,23 +56,23 @@ public class WebDriverManager {
 	}
 
 	public WebDriverManager() {
-	  
-	if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty()) {
-	    proxy = new BrowserMobProxyServer();
-//	    proxy.setTrustAllServers(true);
-	    proxy.setConnectTimeout(30, TimeUnit.SECONDS);
-	    proxy.addRequestFilter(new RequestFilter() {
-		@Override
-		public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents,
-			HttpMessageInfo messageInfo) {
-		    final String login = AppConstants.USERNAME + ":" + AppConstants.PASSWORD;
-		    final String base64login = new String(Base64.encodeBase64(login.getBytes()));
-		    request.headers().add("Authorization", "Basic " + base64login);
-		    return null;
+		proxy = new BrowserMobProxyServer();
+		proxy.setTrustAllServers(true);
+		proxy.setConnectTimeout(30, TimeUnit.SECONDS);
+		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty()) {
+			proxy.addRequestFilter(new RequestFilter() {
+				@Override
+				public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents,
+						HttpMessageInfo messageInfo) {
+					final String login = AppConstants.USERNAME + ":" + AppConstants.PASSWORD;
+					final String base64login = new String(Base64.encodeBase64(login.getBytes()));
+					request.headers().add("Authorization", "Basic " + base64login);
+					return null;
+				}
+			});
 		}
-	    });
-	    proxy.start(0);
-	}
+		proxy.start(0);
+
 	}
 
 	/***
@@ -113,9 +114,9 @@ public class WebDriverManager {
 		FirefoxProfile profile = pro.getProfile("Automation");
 
 		if (null != proxy && proxy.isStarted()) {
-			profile.setPreference("network.proxy.http", "localhost");
+			profile.setPreference("network.proxy.http", InetAddress.getLocalHost().getHostName());
 			profile.setPreference("network.proxy.http_port", proxy.getPort());
-			profile.setPreference("network.proxy.ssl", "localhost");
+			profile.setPreference("network.proxy.ssl", InetAddress.getLocalHost().getHostName());
 			profile.setPreference("network.proxy.ssl_port", proxy.getPort());
 			profile.setPreference("network.proxy.type", 1);
 		}
@@ -124,7 +125,6 @@ public class WebDriverManager {
 		profile.setPreference("acceptSslCerts", "true");
 		profile.setAcceptUntrustedCertificates(true);
 		profile.setAssumeUntrustedCertificateIssuer(false);
-		profile.setEnableNativeEvents(true);
 		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
 		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 		capabilities.setCapability(FirefoxDriver.PROFILE, profile);

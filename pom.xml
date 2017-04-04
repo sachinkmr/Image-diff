@@ -2,8 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sachin.qa</groupId>
-	<artifactId>image-diff</artifactId>
+	<artifactId>Differentiator</artifactId>
 	<version>1.0</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<selenium.version>3.3.0</selenium.version>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -21,7 +25,12 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>3.0.1</version>
+			<version>${selenium.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>${selenium.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.lightbody.bmp</groupId>
@@ -32,8 +41,13 @@
 			<groupId>ru.yandex.qatools.ashot</groupId>
 			<artifactId>ashot</artifactId>
 			<version>1.5.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>org.seleniumhq.selenium</artifactId>
+					<groupId>selenium-remote-driver</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>

@@ -10,11 +10,11 @@ import com.sachin.qa.app.utils.StreamUtils;
 import com.sachin.qa.page.Featurable;
 import com.sachin.qa.page.PageInfo;
 import com.sachin.qa.page.Scroller;
-import com.sachin.qa.page.console.ConsoleDiffInfo;
-import com.sachin.qa.page.console.ConsoleType;
 import com.sachin.qa.page.diff.Differentiator;
 import com.sachin.qa.page.image.ImageDiffInfo;
 import com.sachin.qa.page.image.ImageType;
+import com.sachin.qa.page.js.JsDiffInfo;
+import com.sachin.qa.page.js.JsType;
 
 public class UrlHandler implements Runnable {
 	private WebDriverManager webDriverManager;
@@ -25,7 +25,7 @@ public class UrlHandler implements Runnable {
 		this.webDriverManager = webDriverManager;
 		pageInfo = new PageInfo(url, webDriverManager.getName());
 		pageInfo.register(new ImageType(url, webDriverManager));
-		pageInfo.register(new ConsoleType(url, webDriverManager));
+		pageInfo.register(new JsType(url, webDriverManager));
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class UrlHandler implements Runnable {
 				if (AppConstants.IMAGE_DIFF)
 					differ.register(new ImageDiffInfo(pageInfoPre, pageInfo));
 				if (AppConstants.JS_DIFF)
-					differ.register(new ConsoleDiffInfo(pageInfoPre, pageInfo));
+					differ.register(new JsDiffInfo(pageInfoPre, pageInfo));
 				new Thread(differ).start();
 			}
 		} catch (Exception ex) {

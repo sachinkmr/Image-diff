@@ -12,7 +12,7 @@ public class HtmlDiffInfo extends DiffInfo {
 	}
 
 	@Override
-	public DiffInfo call() throws Exception {
+	public DiffInfo call() {
 		return this;
 	}
 
