@@ -1,7 +1,6 @@
 package com.sachin.qa.app.selenium;
 
 import java.io.File;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerDriverLogLevel;
 import org.openqa.selenium.ie.InternetExplorerDriverService;
@@ -56,10 +54,11 @@ public class WebDriverManager {
 	}
 
 	public WebDriverManager() {
-		proxy = new BrowserMobProxyServer();
-		proxy.setTrustAllServers(true);
-		proxy.setConnectTimeout(30, TimeUnit.SECONDS);
+
 		if (null != AppConstants.USERNAME && !AppConstants.USERNAME.isEmpty()) {
+			proxy = new BrowserMobProxyServer();
+			proxy.setTrustAllServers(true);
+			proxy.setConnectTimeout(30, TimeUnit.SECONDS);
 			proxy.addRequestFilter(new RequestFilter() {
 				@Override
 				public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents,
@@ -70,8 +69,8 @@ public class WebDriverManager {
 					return null;
 				}
 			});
+			proxy.start(0);
 		}
-		proxy.start(0);
 
 	}
 
@@ -110,13 +109,11 @@ public class WebDriverManager {
 	 * 
 	 **/
 	public WebDriver getFireFoxDriver() throws Exception {
-		ProfilesIni pro = new ProfilesIni();
-		FirefoxProfile profile = pro.getProfile("Automation");
-
+		FirefoxProfile profile = new FirefoxProfile(new File(System.getProperty("firefox.automation.profile.path")));
 		if (null != proxy && proxy.isStarted()) {
-			profile.setPreference("network.proxy.http", InetAddress.getLocalHost().getHostName());
+			profile.setPreference("network.proxy.http", "localhost");
 			profile.setPreference("network.proxy.http_port", proxy.getPort());
-			profile.setPreference("network.proxy.ssl", InetAddress.getLocalHost().getHostName());
+			profile.setPreference("network.proxy.ssl", "localhost");
 			profile.setPreference("network.proxy.ssl_port", proxy.getPort());
 			profile.setPreference("network.proxy.type", 1);
 		}
