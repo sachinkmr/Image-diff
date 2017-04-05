@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import org.apache.http.HttpStatus;
 import org.apache.http.impl.EnglishReasonPhraseCatalog;
 
-import com.sachin.qa.dgt.AppConstants;
+import com.sapient.unilever.d2.qa.dgt.AppConstants;
 
 import edu.uci.ics.crawler4j.crawler.exceptions.ContentFetchException;
 import edu.uci.ics.crawler4j.crawler.exceptions.ExternalLinkException;

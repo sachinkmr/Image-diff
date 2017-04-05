@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sachin.qa.dgt.AppConstants;
+import com.sapient.unilever.d2.qa.dgt.AppConstants;
 
 import edu.uci.ics.crawler4j.url.WebURL;
 
