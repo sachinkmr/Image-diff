@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sapient.unilever.d2.qa.dgt.AppConstants;
-import com.sapient.unilever.d2.qa.dgt.BuildType;
-import com.sapient.unilever.d2.qa.dgt.report.Reporter;
 import com.sapient.unilever.d2.qa.dgt.selenium.Browser;
 import com.sapient.unilever.d2.qa.dgt.selenium.WebDriverManager;
 import com.sapient.unilever.d2.qa.dgt.site.UrlHandler;
@@ -104,10 +102,7 @@ public class ThreadManager {
 			}
 			drivers.get(i).close();
 		}
-		Reporter.generateReportAsCSV();
-		if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-			Reporter.generateDIffReportAsCSV();
-		}
+
 		// SeleniumUtils.killService("chromedriver.exe");
 		// SeleniumUtils.killService("IEDriverServer.exe");
 		// SeleniumUtils.killService("geckodriver.exe");
