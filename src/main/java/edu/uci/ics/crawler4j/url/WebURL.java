@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 import org.apache.http.Header;
 
-import com.sachin.qa.app.AppConstants;
+import com.sachin.qa.dgt.AppConstants;
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
 
