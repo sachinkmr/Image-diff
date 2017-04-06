@@ -21,6 +21,7 @@ public class Reporter {
 		File[] files = new File(AppConstants.FOLDER).listFiles((File dir, String name) -> {
 			return name.endsWith(".info");
 		});
+		String path = "";
 		List<String> rows = new ArrayList<>();
 		rows.add(new StringBuilder("\"URL\",").append("\"Browser\",").append("\"Image Path\",")
 				.append("\"JS Logs Path\",").append("\"JS Error\",").append("\"Build Type\",").toString());
@@ -32,7 +33,13 @@ public class Reporter {
 			builder.append("\"" + pageInfo.getTypes().get(1).getResourcePath() + "\",");
 			builder.append("\"" + ((JsType) pageInfo.getTypes().get(1)).hasError() + "\",");
 			builder.append("\"" + pageInfo.getBuildType() + "\",");
-			rows.add(builder.toString());
+			String str = builder.toString();
+			if (AppConstants.WEB) {
+				path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
+						AppConstants.FOLDER.indexOf("DGT") + 1);
+				str.replaceAll(path, "http://10.207.16.9/");
+			}
+			rows.add(str);
 		}
 		File file = new File(AppConstants.FOLDER, "Report.csv");
 		try {

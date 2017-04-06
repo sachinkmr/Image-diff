@@ -21,19 +21,18 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-
-		System.setProperty("BrandName", "Dove");
-		// System.setProperty("BuildVersion", "2.17");
+		// System.setProperty("BuildType", "pre");
+		// System.setProperty("BrandName", "Dove");
+		// System.setProperty("Username", "unileverwebpr");
+		// System.setProperty("Password", "d2prA890");
+		// System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
 		// System.setProperty("SiteAddress",
-		// "http://www.axe.com/us/en/home.html");
-		// System.setProperty("Username", "axed2stage");
-		// System.setProperty("Password", "S@pient123");
-		System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
-		System.setProperty("imageDiff", "no");
-		System.setProperty("jsDiff", "no");
-		System.setProperty("htmlDiff", "No");
-		System.setProperty("BuildType", "pre");
-		System.setProperty("web", "false");
+		// "http://showcase-eu-rel.unileversolutions.com/uk/home.html");
+
+		// System.setProperty("imageDiff", "no");
+		// System.setProperty("jsDiff", "no");
+		// System.setProperty("htmlDiff", "No");
+
 		// System.setProperty("PreBuildVersion", "2.18.1");
 		// System.setProperty("PreBuildTime", "03-April-2017_01-42PM");
 		// HelperUtils.validate();
@@ -43,6 +42,7 @@ public class EntryPoint {
 				for (String url : FileUtils.readLines(file, "UTF-8")) {
 					ThreadManager.processUrl(url);
 				}
+				ThreadManager.cleanup();
 				Reporter.generateReportAsCSV();
 				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
 					Reporter.generateDIffReportAsCSV();
@@ -64,6 +64,7 @@ public class EntryPoint {
 				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
 				controller.start(Spider.class, numberOfCrawlers);
 				AppConstants.CRAWLING_TIME = System.currentTimeMillis() - start;
+				ThreadManager.cleanup();
 				Reporter.generateReportAsCSV();
 				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
 					Reporter.generateDIffReportAsCSV();
@@ -77,6 +78,9 @@ public class EntryPoint {
 			}
 		}
 		ThreadManager.cleanup();
-
+		Reporter.generateReportAsCSV();
+		if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
+			Reporter.generateDIffReportAsCSV();
+		}
 	}
 }

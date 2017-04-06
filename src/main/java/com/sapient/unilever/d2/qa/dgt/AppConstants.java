@@ -115,8 +115,7 @@ public class AppConstants {
 			File storage = new File(System.getProperty("app.dir") + File.separator + "data" + File.separator
 					+ BRAND_NAME + File.separator + BUILD_VERSION);
 			FOLDER = storage.getAbsolutePath() + File.separator + BUILD_TYPE + File.separator + TIME_STAMP;
-			createFolder(FOLDER);
-			new File(FOLDER).mkdirs();
+			FOLDER = createFolder(FOLDER);
 			if (BUILD_TYPE == BuildType.POST && HAS_DIFF) {
 				String PRE_BUILD = !StringUtils.isBlank(System.getProperty("PreBuildVersion"))
 						? System.getProperty("PreBuildVersion") : "";
@@ -127,7 +126,7 @@ public class AppConstants {
 						+ File.separator + "Post_" + BUILD_VERSION + "_" + TIME_STAMP;
 				PRE_DATA = System.getProperty("app.dir") + File.separator + "data" + File.separator + BRAND_NAME
 						+ File.separator + PRE_BUILD + File.separator + "PRE" + File.separator + PRE_TIME;
-				createFolder(DIFF_FOLDER);
+				DIFF_FOLDER = createFolder(DIFF_FOLDER);
 			}
 			storage = null;
 
@@ -219,11 +218,10 @@ public class AppConstants {
 
 	}
 
-	private static void createFolder(String bEFORE_FOLDER2) {
+	private static String createFolder(String bEFORE_FOLDER2) {
 		File file = new File(bEFORE_FOLDER2);
-		if (file.exists())
-			FileUtils.deleteQuietly(file);
 		file.mkdirs();
+		return file.getAbsolutePath();
 	}
 
 	private static String getBuildVersion() throws IOException {

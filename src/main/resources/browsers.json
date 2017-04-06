@@ -5,7 +5,7 @@
 			"enable": false
 		},
 		"firefox": {
-			"enable": true
+			"enable": false
 		},
 		"ie": {
 			"enable": false
@@ -17,7 +17,7 @@
 			"enable": false
 		},
 		"iphone_with_chrome_emulation": {
-			"enable": false
+			"enable": true
 		},
 		"andriod_with_chrome_emulation": {
 			"enable": false

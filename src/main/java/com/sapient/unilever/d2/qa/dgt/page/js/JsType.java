@@ -75,16 +75,8 @@ public class JsType extends Featurable {
 	public void close() throws Exception {
 		try {
 			FileUtils.writeLines(new File(this.resourcePath), "UTF-8", list);
-			if (list.size() > 3) {
-				list.remove(0);
-				list.remove(1);
-				list.remove(2);
-			} else {
-				list.clear();
-			}
 		} catch (Exception e) {
 			logger.warn("unable to read console log for: " + url, e);
 		}
 	}
-
 }
