@@ -44,7 +44,7 @@ public class AppConstants {
 	public static Pattern IMAGE_PATTERN;
 	public static Pattern ASSETS_PATTERN;
 	public static String USER_AGENT, PRE_DATA;
-	public static long CRAWLING_TIME;
+	public static long START_TIME, END_TIME;
 	public static String ERROR_TEXT, DIFF_FOLDER, FOLDER, BUILD_VERSION;
 	public static boolean ERROR;
 	public static final String TIME_STAMP;

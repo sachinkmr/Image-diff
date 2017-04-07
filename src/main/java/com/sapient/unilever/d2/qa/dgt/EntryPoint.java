@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
-import com.sapient.unilever.d2.qa.dgt.report.Reporter;
+import com.sapient.unilever.d2.qa.dgt.report.CSVReporter;
 import com.sapient.unilever.d2.qa.dgt.spider.Spider;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderConfig;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderController;
@@ -21,11 +21,11 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("BuildType", "pre");
-		// System.setProperty("BrandName", "Dove");
+		System.setProperty("BuildType", "pre");
+		System.setProperty("BrandName", "Dove");
 		// System.setProperty("Username", "unileverwebpr");
 		// System.setProperty("Password", "d2prA890");
-		// System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
+		System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
 		// System.setProperty("SiteAddress",
 		// "http://showcase-eu-rel.unileversolutions.com/uk/home.html");
 
@@ -36,6 +36,8 @@ public class EntryPoint {
 		// System.setProperty("PreBuildVersion", "2.18.1");
 		// System.setProperty("PreBuildTime", "03-April-2017_01-42PM");
 		// HelperUtils.validate();
+
+		AppConstants.START_TIME = System.currentTimeMillis();
 		File file = new File(AppConstants.URL_TEXT);
 		if (file.exists() && file.isFile()) {
 			try {
@@ -43,9 +45,9 @@ public class EntryPoint {
 					ThreadManager.processUrl(url);
 				}
 				ThreadManager.cleanup();
-				Reporter.generateReportAsCSV();
+				CSVReporter.generateReportAsCSV();
 				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-					Reporter.generateDIffReportAsCSV();
+					CSVReporter.generateDIffReportAsCSV();
 				}
 			} catch (IOException e) {
 				logger.debug("Error in controller", e);
@@ -58,16 +60,15 @@ public class EntryPoint {
 			RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
 			robotstxtConfig.setEnabled(false);
 			RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-			long start = System.currentTimeMillis();
+
 			try {
 				System.out.println("Please wait crawling site....");
 				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
 				controller.start(Spider.class, numberOfCrawlers);
-				AppConstants.CRAWLING_TIME = System.currentTimeMillis() - start;
 				ThreadManager.cleanup();
-				Reporter.generateReportAsCSV();
+				CSVReporter.generateReportAsCSV();
 				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-					Reporter.generateDIffReportAsCSV();
+					CSVReporter.generateDIffReportAsCSV();
 				}
 			} catch (Exception e) {
 				logger.debug("Error in controller", e);
@@ -78,9 +79,9 @@ public class EntryPoint {
 			}
 		}
 		ThreadManager.cleanup();
-		Reporter.generateReportAsCSV();
+		CSVReporter.generateReportAsCSV();
 		if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-			Reporter.generateDIffReportAsCSV();
+			CSVReporter.generateDIffReportAsCSV();
 		}
 	}
 }

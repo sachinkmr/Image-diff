@@ -271,7 +271,7 @@ public class WebDriverManager {
 
 	private LoggingPreferences getLoggingLevel() {
 		LoggingPreferences logPrefs = new LoggingPreferences();
-		logPrefs.enable(LogType.BROWSER, Level.SEVERE);
+		logPrefs.enable(LogType.BROWSER, Level.ALL);
 		logPrefs.enable(LogType.CLIENT, Level.OFF);
 		logPrefs.enable(LogType.DRIVER, Level.OFF);
 		logPrefs.enable(LogType.PERFORMANCE, Level.OFF);

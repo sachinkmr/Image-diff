@@ -43,7 +43,7 @@ public class JsType extends Featurable {
 				list.add("Browser Type: " + this.getWebDriverName());
 				list.add("----------------------------------------------------------------------");
 				for (LogEntry entry : logEntries) {
-					list.add(entry.getMessage());
+					list.add(entry.getLevel() + " : " + entry.getMessage());
 				}
 			}
 			// if (this.getWebDriver() instanceof FirefoxDriver) {
@@ -62,7 +62,7 @@ public class JsType extends Featurable {
 				list.add("Browser Type: " + this.getWebDriverName());
 				list.add("----------------------------------------------------------------------");
 				for (LogEntry entry : logEntries) {
-					list.add(entry.getMessage());
+					list.add(entry.getLevel() + " : " + entry.getMessage());
 				}
 			}
 			FileUtils.writeLines(new File(this.resourcePath), "UTF-8", list);

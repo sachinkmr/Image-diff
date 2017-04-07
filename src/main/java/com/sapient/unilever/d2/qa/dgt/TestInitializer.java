@@ -21,19 +21,17 @@ public class TestInitializer {
 
 	@BeforeSuite(enabled = true)
 	public void init() {
-		int numberOfCrawlers = Integer
-				.parseInt(AppConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
+		int numberOfCrawlers = Integer.parseInt(AppConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 		SpiderConfig config = new SpiderConfig().getConfig();
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
 		robotstxtConfig.setEnabled(false);
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-		long start = System.currentTimeMillis();
+		AppConstants.START_TIME = System.currentTimeMillis();
 		try {
 			System.out.println("Please wait crawling site....");
 			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 			controller.start(Spider.class, numberOfCrawlers);
-			AppConstants.CRAWLING_TIME = System.currentTimeMillis() - start;
 		} catch (Exception e) {
 			logger.debug("Error in controller", e);
 			System.out.println("Error in application: " + e);
