@@ -125,7 +125,6 @@ public class DashBoard {
 
 	public Map<String, String> getSystemInfo() {
 		Map<String, String> map = new LinkedHashMap<>();
-
 		try {
 			if (System.getProperty("machine") != null && !System.getProperty("machine").isEmpty()) {
 				map.put("Requester IP", System.getProperty("machine"));

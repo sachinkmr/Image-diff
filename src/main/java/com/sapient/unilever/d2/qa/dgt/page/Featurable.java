@@ -31,6 +31,10 @@ public abstract class Featurable implements AutoCloseable, Serializable {
 		return webDriverManager;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
 	public WebDriver getWebDriver() {
 		return webDriverManager.getWebDriver();
 	}

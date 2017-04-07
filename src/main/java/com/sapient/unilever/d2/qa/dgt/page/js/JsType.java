@@ -20,7 +20,6 @@ import com.sapient.unilever.d2.qa.dgt.selenium.WebDriverManager;
 public class JsType extends Featurable {
 	private static final long serialVersionUID = 1L;
 	protected static final Logger logger = LoggerFactory.getLogger(JsType.class);
-
 	private List<String> list;
 
 	public JsType(String url, WebDriverManager webDriverManager) {
