@@ -108,7 +108,7 @@ public class AppConstants {
 			BUILD_VERSION = getBuildVersion();
 			flag = true;
 		} catch (Exception e1) {
-			LoggerFactory.getLogger(EntryPoint.class).error("Error in initialization", e1);
+			LoggerFactory.getLogger(AppConstants.class).error("Error in initialization", e1);
 		}
 		if (flag) {
 			DRIVERS = new HashMap<>();

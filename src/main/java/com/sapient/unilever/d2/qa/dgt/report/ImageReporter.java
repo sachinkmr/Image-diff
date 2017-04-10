@@ -5,7 +5,7 @@ import com.sapient.unilever.d2.qa.dgt.page.diff.DiffInfo;
 public class ImageReporter extends Reporter {
 
 	@Override
-	protected void readData(String location) {
+	protected void readData() {
 
 	}
 
@@ -13,6 +13,12 @@ public class ImageReporter extends Reporter {
 	protected DiffInfo getDiffInfo() {
 
 		return null;
+	}
+
+	@Override
+	protected void dumpIntoDB() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
