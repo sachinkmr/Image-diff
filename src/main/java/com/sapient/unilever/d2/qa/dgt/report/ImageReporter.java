@@ -15,10 +15,4 @@ public class ImageReporter extends Reporter {
 		return null;
 	}
 
-	@Override
-	protected void dumpIntoDB() {
-		// TODO Auto-generated method stub
-
-	}
-
 }
