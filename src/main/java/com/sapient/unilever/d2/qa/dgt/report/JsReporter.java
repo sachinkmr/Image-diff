@@ -1,4 +1,4 @@
-package com.sapient.unilever.d2.qa.dgt.report.js;
+package com.sapient.unilever.d2.qa.dgt.report;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,11 @@ import com.sapient.unilever.d2.qa.dgt.AppConstants;
 import com.sapient.unilever.d2.qa.dgt.db.DBManager;
 import com.sapient.unilever.d2.qa.dgt.page.PageInfo;
 import com.sapient.unilever.d2.qa.dgt.page.diff.DiffInfo;
-import com.sapient.unilever.d2.qa.dgt.report.Reporter;
+import com.sapient.unilever.d2.qa.dgt.report.js.JsCategory;
+import com.sapient.unilever.d2.qa.dgt.report.js.JsCategoryType;
+import com.sapient.unilever.d2.qa.dgt.report.js.JsError;
+import com.sapient.unilever.d2.qa.dgt.report.js.JsErrorType;
+import com.sapient.unilever.d2.qa.dgt.report.js.JsPage;
 import com.sapient.unilever.d2.qa.dgt.utils.StreamUtils;
 
 public class JsReporter extends Reporter {
@@ -54,7 +58,6 @@ public class JsReporter extends Reporter {
     public JsReporter() {
 	super();
 	readData();
-
     }
 
     @Override
