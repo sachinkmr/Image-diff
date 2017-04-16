@@ -34,6 +34,7 @@ public class HTMLReporter {
 		} catch (IOException e) {
 			LOGGER.error("Unable to load template file", e);
 		}
+		
 	}
 
 	public void generateJSReport(JsReporter reporter) {

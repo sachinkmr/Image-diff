@@ -14,7 +14,7 @@ public class Demo {
 		System.setProperty("BrandName", "Dove");
 		// System.setProperty("Username", "unileverwebpr");
 		// System.setProperty("Password", "d2prA890");
-		System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
+		System.setProperty("UrlsTextFile", "e:\\DoveUrls.txt");
 		new HTMLReporter().generateJSReport(new JsReporter());
 	}
 }

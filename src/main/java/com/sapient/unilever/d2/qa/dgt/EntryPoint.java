@@ -27,7 +27,7 @@ public class EntryPoint {
 	System.setProperty("BrandName", "Dove");
 	// System.setProperty("Username", "unileverwebpr");
 	// System.setProperty("Password", "d2prA890");
-	System.setProperty("UrlsTextFile", "D:\\DoveUrls.txt");
+	System.setProperty("UrlsTextFile", "e:\\DoveUrls.txt");
 	// System.setProperty("SiteAddress",
 	// "http://showcase-eu-rel.unileversolutions.com/uk/home.html");
 
