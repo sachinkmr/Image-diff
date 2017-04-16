@@ -10,7 +10,7 @@
 		<meta name='description' content='' />
 		<meta name='robots' content='noindex, noodp, noydir' />
 		<meta name='viewport' content='width=device-width, initial-scale=1' />
-		<title>JSON Validator Report</title>
+		<title>DGT Report</title>
 		<link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
 		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
@@ -104,7 +104,7 @@
 						<li class='analysis waves-effect active'>
 							<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
 						</li>
-						<li class='analysis waves-effect'><a href='#!' class='category-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-language'></i> Categories</a></li>
+						<li class='analysis waves-effect'><a href='#!' class='category-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-language'></i> URLs</a></li>
 					<#if dashboard.diff=="yes">
 						<li class='analysis waves-effect'><a href='#!' class='diff-view' onclick="_updateCurrentStage(1)"><i class='mdi-action-language'></i> Difference</a></li>
 					</#if>
@@ -123,7 +123,7 @@
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-tests'> 
 							<span class='panel-name'><b>Total Pages</b></span> 
-							<span class='total-tests'> <span class='panel-lead'>${dashboard.totalPage}</span> </span> 
+							<span class='total-tests'> <span class='panel-lead'>${dashboard.pages?size}</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s6'>
@@ -161,7 +161,7 @@
 					<div class='col s12 m6 l4 fh'> 
 						<div class='card-panel'> 
 							<div>
-								<span class='panel-name'><b>Page Urls View</b></span>
+								<span class='panel-name'><b>Pages</b></span>
 							</div> 							
 							<div class='chart-box'>
 								<canvas class='text-centered' id='test-analysis'></canvas>
@@ -177,7 +177,7 @@
 					<div class='col s12 m6 l4 fh'> 
 						<div class='card-panel'> 
 							<div>
-								<span class='panel-name'><b>JS Logs View</b></span>
+								<span class='panel-name'><b>JS Logs</b></span>
 							</div> 							 
 							<div class='chart-box'>
 								<canvas class='text-centered' id='step-analysis'></canvas>
@@ -186,32 +186,39 @@
 								<span class='weight-light'>Errors: <span class='s-pass-count weight-normal'></span>${dashboard.errors} </span>
 							</div> 
 							<div>							
-								<span class='weight-light'>Warnings: <span class='s-fail-count weight-normal'></span>${dashboard.warnings} component(s)</span>
+								<span class='weight-light'>Warnings: <span class='s-fail-count weight-normal'></span>${dashboard.warnings} </span>
 							</div> 
 						</div> 
 					</div>
-					<div class='col s12 m12 l4 fh'> 
-						<div class='card-panel'> 
-							<span class='panel-name'><b>Pass Percentage</b></span> 
-							<div id='percentage-block'>								
-								<canvas class="text-centered" id='percentage'></canvas>
-								<span class='pass-percentage panel-lead'></span>
-							</div>
-							<div class='progress light-blue lighten-3'> 
-								<div class='determinate light-blue'></div> 
-							</div> 
-						</div> 
+					<div class='col l4 m12 s12 system-view'>
+						<div class='card-panel'>
+							<span class='label info outline right'><b>Environment</b></span>
+							<table class="striped">
+								<thead>
+									<tr>
+										<th>PARAM</th>
+										<th>VALUE</th>
+									</tr>
+								</thead>
+								<tbody>
+								<#list dashboard.systemInfo as key, value>
+										<tr>
+											<td>${key}</td>
+											<td>${value}</td>
+										</tr>
+									</#list>
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>				
-					<div class='category-summary-view'>
-						<div class='col l8 m6 s12'>
+					<div class='col l8 m6 s12 category-summary-view'>
 							<div class='card-panel'>
 								<table class="striped ">
 									<thead>
 										<tr>
 											<th rowspan="2">Category</th>
   											<th rowspan="2">URLs Count</th>
-                                          <th colspan="3">JS Logs Distribution</th>											
+                                          	<th colspan="3" style="text-align:center;">JS Logs Distribution</th>											
 										</tr>
 										<tr>
 											<th>Errors</th>
@@ -242,37 +249,14 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
-					</div>	
-				<div class='system-view'>
-					<div class='col l4 m12 s12'>
-						<div class='card-panel'>
-							<span class='label info outline right'><b>Environment</b></span>
-							<table class="striped">
-								<thead>
-									<tr>
-										<th>PARAM</th>
-										<th>VALUE</th>
-									</tr>
-								</thead>
-								<tbody>
-								<#list dashboard.systemInfo as key, value>
-										<tr>
-											<td>${key}</td>
-											<td>${value}</td>
-										</tr>
-									</#list>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-				
+						</div>				
+				</div>				
+					
 			</div>
 			<!-- /dashboard -->
 			
 			<!-- categories -->			
-				<div id='urls-view' class='row _addedTable hide'>
+				<div id='category-view' class='row _addedTable hide'>
 					<div class='col _addedCell1'>
 						<div class='contents'>
 							<div class='card-panel heading'>
@@ -304,7 +288,7 @@
 															<#list category.pages as page>
 																<tr>
 																	<td><span class="status label fail" title="Errors">${page.errorCount}</span> <span class="status label warn" title="Warning">${page.warningCount}</span></td>
-																	<td><a href="#" class='url-info' data-url='${page.url}' data-browser='${page.browser}'>${page.url}</td>																									
+																	<td><a href="#" class='url-info' data-url='${page.url}' data-browser='${page.browser}'>${page.url}</a></td>																									
 																	<td>${page.browser}</td>
 																</tr>
 															</#list>	
@@ -331,6 +315,10 @@
 		</div>
 		<div id='testDataCount' class='hide'>
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
+			<input type='hidden' id='passedPage' name='passedPage' value='${dashboard.passedPage}'>
+			<input type='hidden' id='failedPage' name='failedPage' value='${dashboard.failedPage}'>
+			<input type='hidden' id='errors' name='errors' value='${dashboard.errors}'>
+			<input type='hidden' id='warnings' name='warnings' value='${dashboard.warnings}'>
 		</div>
 		
 		<div id='modal1' class='modal modal-fixed-footer'>
@@ -350,10 +338,9 @@
 		<script   src="https://code.jquery.com/jquery-2.2.0.min.js"   integrity="sha256-ihAoc6M/JPfrIiIeayPE9xjin4UWjsx2mjW/rtmxLM4="   crossorigin="anonymous"></script>
 		<script   src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"   integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="   crossorigin="anonymous"></script>		
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js' type='text/javascript'></script>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>		
 		
-		<script src='https://cdn.rawgit.com/sachinkmr/Content/6fb00fae84b16867c6412dfc0197547f8973a861/JsonValidator/js/extent.js' type='text/javascript'></script>
+		<script src='d:/extent.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));

@@ -7,20 +7,17 @@ public class JsPage {
 	private final String url;
 	private final String browser;
 	private List<JsError> jsError;
-	private List<JsCategoryType> categories;
 	private int errorCount;
 	private int warningCount;
 
 	public JsPage(String url, String browser) {
 		this.url = url;
 		this.browser = browser;
-		categories = new ArrayList<>();
 		jsError = new ArrayList<>();
 	}
 
 	public void addJsError(JsError error) {
 		jsError.add(error);
-		categories.add(error.getCategory());
 	}
 
 	public JsErrorType addJsError(String errorString, String pageUrl, String browserName) {
@@ -57,10 +54,6 @@ public class JsPage {
 
 	public int getWarningCount() {
 		return warningCount;
-	}
-
-	public List<JsCategoryType> getCategories() {
-		return categories;
 	}
 
 	@Override

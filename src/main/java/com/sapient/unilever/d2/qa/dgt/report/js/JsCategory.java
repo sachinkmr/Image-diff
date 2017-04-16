@@ -6,21 +6,33 @@ import java.util.Set;
 public class JsCategory {
 	private final String name;
 	private Set<JsPage> pages;
-	private int errorCount;
-	private int warningCount;
 
 	public JsCategory(String name) {
 		super();
-		this.name = name;
+		this.name = name.trim();
 		pages = new HashSet<>();
 	}
 
 	public int getErrorCount() {
-		return errorCount;
+		int i = 0;
+		for (JsPage page : pages)
+			for (JsError error : page.getJsError()) {
+				if (error.getCategory().toString().equals(name) && error.getType().equals(JsErrorType.ERROR)) {
+					i++;
+				}
+			}
+		return i++;
 	}
 
 	public int getWarningCount() {
-		return warningCount;
+		int i = 0;
+		for (JsPage page : pages)
+			for (JsError error : page.getJsError()) {
+				if (error.getCategory().toString().equals(name) && error.getType().equals(JsErrorType.WARNING)) {
+					i++;
+				}
+			}
+		return i++;
 	}
 
 	public String getName() {
@@ -29,8 +41,7 @@ public class JsCategory {
 
 	public void addPage(JsPage page) {
 		pages.add(page);
-		errorCount += page.getErrorCount();
-		warningCount += page.getWarningCount();
+
 	}
 
 	public Set<JsPage> getPages() {
