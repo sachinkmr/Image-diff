@@ -255,55 +255,11 @@ function drawLegend(chart, id) {
 }
 
 
-function fetchURLResults() {
-	$('.details-container #loadMore').html('<i class="material-icons left">loop</i> Loading Results...');	
-	$('.details-container #loadMore').attr('data-clickable', 'false');
-	$('.details-container #loadMore').removeClass('hide');
-	if(totalLogs<limit){
-		$('.details-container #loadMore').addClass('hide');		
-		return;
-	}
-	//var url='http://10.207.60.191:'+port+'/JSON_validator/'+$('#testDataCount #report').val()+'/?filter_test_name='+testName+'&limit='+limit+'&skip='+page;
-	var url='http://10.207.16.9/JSON-Validator/FetchResults?report='+$('#testDataCount #report').val()+'&test_name='+testName+'&limit='+limit+'&skip='+page;
-	
-    $.ajax({
-        url: url,
-        type: 'get',		
-		dataType: 'jsonp',
-		crossDomain: true,
-		jsonp: 'jsonp', 		
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			console.error( errorThrown);
-		},
-        success: function (result) {
-			result=JSON.stringify(result);
-			result=result.substring(result.indexOf('({')+1,result.length);	
-			result=$.parseJSON(result);
-			totalLogs=result.total_rows;
-            page = page + limit;            
-			if(totalLogs<limit){
-				$('.details-container #loadMore').addClass('hide');
-			}
-			$('.details-container #loadMore').attr('data-clickable', 'true');
-			$('.details-container #loadMore').html('Load More Results');
-            $.each(result.rows, function (index, log) {   
-			//	log=$.parseJSON(log); <td><div class='status label capitalize "+log.status.toLowerCase()+"'>"+log.status+"</div></td>
-                $('.details-container .test-body .test-steps table.table-results tbody').append('<tr></tr>');
-                var ic = "<td class='status " + log.status.toLowerCase() + "' title='" + log.status + "' alt='" + log.status + "'><div class='status label capitalize "+log.status.toLowerCase()+"'>"+log.status+"</div></td><td class='timestamp'>" + log.time + "</td><td class='step-name'>" + log.step + "</td><td class='step-details'>" + log.detail + "</td>";
-                $('.details-container .test-body .test-steps table.table-results >tbody >tr:last-child').html(ic);	
-            });  
-			initDetails();			
-        }
-    });
-}
 
-function initDetails(){	
-	$('.modal-trigger').leanModal();
-}
 
 
 $(document).ready(function () {
-    /* init */
+    /* init */	
     $('select').material_select();
     /* select the first category item in categories view by default */
     $('.exception-item').eq(0).click();	
@@ -332,11 +288,54 @@ $(document).ready(function () {
 	drawLegend(stepChart1, 'percentage');
 	$('ul.doughnut-legend').addClass('right');
 	$('.pass-percentage.panel-lead').text(percentage + '%');
-	$('#dashboard-view .determinate').attr('style', 'width:' + percentage + '%');
-	
+	$('#dashboard-view .determinate').attr('style', 'width:' + percentage + '%');	
 	/*----- Charts Ends  ----*/
-});
 
+	// getting url info and dumping in popup
+	$('a.url-info').click(function(){		
+		var url=$(this).attr('data-url');
+		var browser=$(this).attr('data-browser');
+		var path='http://localhost:8080/DGTWeb/PageLogs?report='+$('#testDataCount #report').val()+'&url='+url+'&browser='+browser;	
+		$.ajax({
+			url: path,
+			type: 'get',		
+			dataType: 'jsonp',
+			crossDomain: true,
+			jsonp: 'jsonp', 		
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.error( errorThrown);
+			},
+			success: function (result) {
+				
+				result=JSON.stringify(result);
+				result=result.substring(result.indexOf('({')+1,result.length);	
+				result=$.parseJSON(result);		
+				var node=$('div#modal1 div.modal-content>p');
+				$(node).html('');				
+				$.each(result.rows, function (index, row) { 
+					$('#modal1 #browser').html(row.browser);
+					$('#modal1 #url').html(row.url);
+					
+					$.each(row.logs, function (index, table) {   
+						var appendData="<p><b>JS Log "+index+":</b></p><div class='dataTable'><table class='responsive-table striped'><tbody></tbody></table></div>";
+						$(node).append(appendData);
+						$.each(this,function (key, value){
+							var r="<tr><td>"+key+"</td><td>"+value+"</td></tr>"
+							$($(node).find('table:last-child tbody')[$(node).find('table:last-child tbody').length-1]).append(r);
+						});
+					
+						//	log=$.parseJSON(log); <td><div class='status label capitalize "+log.status.toLowerCase()+"'>"+log.status+"</div></td>
+						//	$('.details-container .test-body .test-steps table.table-results tbody').append('<tr></tr>');
+						//	var ic = "<td class='status " + log.status.toLowerCase() + "' title='" + log.status + "' alt='" + log.status + "'><div class='status label capitalize "+log.status.toLowerCase()+"'>"+log.status+"</div></td><td class='timestamp'>" + log.time + "</td><td class='step-name'>" + log.step + "</td><td class='step-details'>" + log.detail + "</td>";
+						//	$('.details-container .test-body .test-steps table.table-results >tbody >tr:last-child').html(ic);	
+						});  
+				 }); 
+				
+			}
+		});
+	});
+
+});
 
 // Category page switch
 $('.category-summary-view .pageCates').click(function(){		
@@ -346,3 +345,5 @@ $('.category-summary-view .pageCates').click(function(){
 	}).click();
 	$('.analysis >.category-view').click();
 });
+
+

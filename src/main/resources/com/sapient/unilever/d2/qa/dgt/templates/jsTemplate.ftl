@@ -304,7 +304,7 @@
 															<#list category.pages as page>
 																<tr>
 																	<td><span class="status label fail" title="Errors">${page.errorCount}</span> <span class="status label warn" title="Warning">${page.warningCount}</span></td>
-																	<td><a href="#" class='url-info' data-url='${page.url}' data-browser='${page.browser}'>${page.url}</a></td>																									
+																	<td><a href="#" class='url-info modal-trigger' data-url='${page.url}' data-browser='${page.browser}'>${page.url}</a></td>																									
 																	<td>${page.browser}</td>
 																</tr>
 															</#list>	
@@ -340,6 +340,10 @@
 		<div id='modal1' class='modal modal-fixed-footer'>
 		    <div class='modal-content'>
 		      <h4>JS Logs</h4>
+		      <div id='url'></div>
+			  <div id='browser'></div>
+		      
+		      <hr/>
 		      <p></p>
 		    </div>
 		    <div class='modal-footer'>
@@ -362,7 +366,7 @@
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
 			}
 			$(document).ready(function() {
-			  $('.modal-trigger').leanModal();
+			  $('.modal-trigger').leanModal();			  
 			});
 			
 			
