@@ -2,6 +2,8 @@ package com.sapient.unilever.d2.qa.dgt;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -21,8 +23,13 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class EntryPoint {
     protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
-
+    public static  Map<String,String> systemProperties =new HashMap<>();
+    
     public static void main(String[] args) {
+	systemProperties =new HashMap<>();
+	for(String key: System.getProperties().stringPropertyNames()){
+	    systemProperties.put(key, System.getProperty(key));
+	}
 	System.setProperty("BuildType", "pre");
 	System.setProperty("BrandName", "Dove");
 	// System.setProperty("Username", "unileverwebpr");

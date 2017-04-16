@@ -67,10 +67,9 @@ public class JsReporter extends Reporter {
     @Override
     protected void readData() {
 	categories = new ArrayList<>();
-	File[] files = new File("C:/Users/Sachin/workspace/Image-diff/data/Dove/2.18.1/PRE/16-April-2017_04-28PM")
-		.listFiles((File dir, String name) -> {
-		    return name.endsWith(".info");
-		});
+	File[] files = new File(AppConstants.FOLDER).listFiles((File dir, String name) -> {
+	    return name.endsWith(".info");
+	});
 	for (File file : files) {
 	    PageInfo pageInfo = StreamUtils.readPageInfo(file);
 	    String path = pageInfo.getTypes().get(1).getResourcePath();
@@ -133,9 +132,10 @@ public class JsReporter extends Reporter {
 		errorDocument.put("Error Type", error.getErrorType());
 		errorDocument.put("Error Category", error.getCategory().toString());
 		errorDocument.put("Error Message", error.getMessage());
-		errors.put(Integer.toString(i++), errorDocument);
+		if (error.getType() == JsErrorType.WARNING || error.getType() == JsErrorType.ERROR)
+		    errors.put(Integer.toString(i++), errorDocument);
 	    }
-	    arr.append("errors", Document.parse(errors.toString()));
+	    arr.append("errors", errors.toString());
 	    try {
 		manager.getMongoDB().getCollection(AppConstants.TIME_STAMP).insertOne(arr);
 	    } catch (Exception ex) {

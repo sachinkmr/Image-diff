@@ -1,6 +1,3 @@
-<#assign dateFormat = "dd-MMMM-YYYY">
-<#assign timeFormat = "h:mm:ss a">
-<#assign dateTimeFormat = "dd-MMMM-YYYY" + " " + "h:mm:ss a">
 
 <!DOCTYPE html>
 <html>
@@ -105,9 +102,6 @@
 							<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
 						</li>
 						<li class='analysis waves-effect'><a href='#!' class='category-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-language'></i> URLs</a></li>
-					<#if dashboard.diff=="yes">
-						<li class='analysis waves-effect'><a href='#!' class='diff-view' onclick="_updateCurrentStage(1)"><i class='mdi-action-language'></i> Difference</a></li>
-					</#if>
 					</ul>			
 				</nav>
 		<!-- /nav -->		
@@ -123,37 +117,37 @@
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-tests'> 
 							<span class='panel-name'><b>Total Pages</b></span> 
-							<span class='total-tests'> <span class='panel-lead'>${dashboard.pages?size}</span> </span> 
+							<span class='total-tests'> <span class='panel-lead'>1</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-steps'> 
 							<span class='panel-name'><b>Total JS Logs</b></span> 
-							<span class='total-steps'> <span class='panel-lead'>${dashboard.totalCount}</span> </span> 
+							<span class='total-steps'> <span class='panel-lead'>2</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s12'>
 						<div class='card suite-total-time-current'> 
 							<span class='panel-name'><b>Suite Execution Time</b></span> 
-							<span class='suite-total-time-current-value panel-lead'>${dashboard.runDuration}</span> 
+							<span class='suite-total-time-current-value panel-lead'>414539h 50m 34s+637ms</span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s12'>
 						<div class='card suite-total-time-overall'> 
 							<span class='panel-name'><b>Total Time Taken (Overall)</b></span> 
-							<span class='suite-total-time-overall-value panel-lead'>${dashboard.runDurationOverall}</span> 
+							<span class='suite-total-time-overall-value panel-lead'>414539h 50m 34s+638ms</span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s6 suite-start-time'>
 						<div class='card accent green-accent'> 
 							<span class='panel-name'><b>Report Start Time:</b></span> 
-							<span class='panel-lead suite-started-time'>${dashboard.startedTime?datetime?string(dateTimeFormat)}</span> 
+							<span class='panel-lead suite-started-time'>01-January-1970 5:30:00 AM</span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s6 suite-end-time'>
 						<div class='card accent pink-accent'> 
 							<span class='panel-name'><b>Report End Time:</b></span> 
-							<span class='panel-lead suite-ended-time'>${.now?datetime?string(dateTimeFormat)}</span> 
+							<span class='panel-lead suite-ended-time'>16-April-2017 5:20:34 PM</span> 
 						</div> 
 					</div>
 				</div>
@@ -167,10 +161,10 @@
 								<canvas class='text-centered' id='test-analysis'></canvas>
 							</div> 
 							<div>
-								<span class='weight-light'>Passed: <span class='t-pass-count weight-normal'>${dashboard.passedPage}</span> Page(s)</span>
+								<span class='weight-light'>Passed: <span class='t-pass-count weight-normal'>1</span> Page(s)</span>
 							</div> 
 							<div>
-								<span class='weight-light'>Failed: <span class='t-fail-count weight-normal'>${dashboard.failedPage}</span> Page(s)</span>
+								<span class='weight-light'>Failed: <span class='t-fail-count weight-normal'>0</span> Page(s)</span>
 							</div> 
 						</div> 
 					</div> 
@@ -183,10 +177,10 @@
 								<canvas class='text-centered' id='step-analysis'></canvas>
 							</div> 
 							<div>
-								<span class='weight-light'>Errors: <span class='s-pass-count weight-normal'></span>${dashboard.errors} </span>
+								<span class='weight-light'>Errors: <span class='s-pass-count weight-normal'></span>0 </span>
 							</div> 
 							<div>							
-								<span class='weight-light'>Warnings: <span class='s-fail-count weight-normal'></span>${dashboard.warnings} </span>
+								<span class='weight-light'>Warnings: <span class='s-fail-count weight-normal'></span>2 </span>
 							</div> 
 						</div> 
 					</div>					
@@ -220,25 +214,23 @@
  									 	</tr>									
 									</thead>
 									<tbody>
-										<#list dashboard.categories?sort as category>
-											<tr data-name='${category.name}'>
+											<tr data-name='MISCELLANEOUS'>
 												<td>
-												<a href='#' class='pageCates'>${category.name}</a>
+												<a href='#' class='pageCates'>MISCELLANEOUS</a>
 												</td>	
 												<td id='urlCount'>
-													${category.pages?size}	
+													1	
 												</td>											
 												<td>
-													${category.errorCount}
+													0
 												</td>
 												<td>													
-													${category.warningCount}
+													2
 												</td>
 												<td>
-													${category.warningCount+category.errorCount}
+													2
 												</td>
 											</tr>
-										</#list>
 									</tbody>
 								</table>
 							</div>
@@ -256,12 +248,26 @@
 									</tr>
 								</thead>
 								<tbody>
-								<#list dashboard.systemInfo as key, value>
 										<tr>
-											<td>${key}</td>
-											<td>${value}</td>
+											<td>Web Site</td>
+											<td>http://dove.com</td>
 										</tr>
-									</#list>
+										<tr>
+											<td>Build Type</td>
+											<td>PRE</td>
+										</tr>
+										<tr>
+											<td>Branch Version</td>
+											<td>2.18.1</td>
+										</tr>
+										<tr>
+											<td>Brand Name</td>
+											<td>Dove</td>
+										</tr>
+										<tr>
+											<td>Machine</td>
+											<td>MARK-III</td>
+										</tr>
 								</tbody>
 							</table>
 						</div>
@@ -281,14 +287,13 @@
 							<div class='card-panel no-padding-h no-padding-v'>
 								<div class='wrapper'>
 									<ul id='url-collection' class='url-collection exception-collection'>
-										<#list dashboard.categories?sort as category>
 											<li class='exception-item displayed'>
 												<div class='url-head exception-head'>
-													<span class='url-name'>${category.name}</span>
+													<span class='url-name'>MISCELLANEOUS</span>
 												</div>
 												<div class="card-panel details-view hide">
 													<div class="urls-header">
-														<h5 class="urls-cat-name left">${category.name}</h5>
+														<h5 class="urls-cat-name left">MISCELLANEOUS</h5>
 														<div class="url-close btn waves-effect text-darken-2 waves-light right hide">Close</div>
 													</div>
 													<div class="urls-cat-container">
@@ -301,19 +306,16 @@
 																</tr>
 															</thead>
 															<tbody>
-															<#list category.pages as page>
 																<tr>
-																	<td><span class="status label fail" title="Errors">${page.errorCount}</span> <span class="status label warn" title="Warning">${page.warningCount}</span></td>
-																	<td><a href="#" class='url-info' data-url='${page.url}' data-browser='${page.browser}'>${page.url}</a></td>																									
-																	<td>${page.browser}</td>
+																	<td><span class="status label fail" title="Errors">0</span> <span class="status label warn" title="Warning">2</span></td>
+																	<td><a href="#" class='url-info' data-url='http://dove.com' data-browser='iphone_with_chrome_emulation'>http://dove.com</a></td>																									
+																	<td>iphone_with_chrome_emulation</td>
 																</tr>
-															</#list>	
 															</tbody>
 														</table>								
 													</div>													
 												</div>	
 											</li>
-										</#list>
 									</ul>
 								</div>
 							</div>
@@ -330,16 +332,16 @@
 			</footer>
 		</div>
 		<div id='testDataCount' class='hide'>
-			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
-			<input type='hidden' id='passedPage' name='passedPage' value='${dashboard.passedPage}'>
-			<input type='hidden' id='failedPage' name='failedPage' value='${dashboard.failedPage}'>
-			<input type='hidden' id='errors' name='errors' value='${dashboard.errors}'>
-			<input type='hidden' id='warnings' name='warnings' value='${dashboard.warnings}'>
+			<input type='hidden' id='report' name='report' value='16-April-2017_05-20PM'>
+			<input type='hidden' id='passedPage' name='passedPage' value='1'>
+			<input type='hidden' id='failedPage' name='failedPage' value='0'>
+			<input type='hidden' id='errors' name='errors' value='0'>
+			<input type='hidden' id='warnings' name='warnings' value='2'>
 		</div>
 		
 		<div id='modal1' class='modal modal-fixed-footer'>
 		    <div class='modal-content'>
-		      <h4>JS Logs</h4>
+		      <h4>Errors in Component</h4>
 		      <p></p>
 		    </div>
 		    <div class='modal-footer'>

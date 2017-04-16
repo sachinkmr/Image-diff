@@ -16,7 +16,7 @@ public class DBManager implements AutoCloseable {
 	public DBManager() {
 		String host = AppConstants.PROPERTIES.getProperty("db.host", "10.207.16.9");
 		int port = Integer.parseInt(AppConstants.PROPERTIES.getProperty("db.port", "27017"));
-		String db = AppConstants.PROPERTIES.getProperty("db.host", "DGT");
+		String db = AppConstants.PROPERTIES.getProperty("db.name", "DGT");
 		mongo = new MongoClient(host, port);
 		mongoDB = mongo.getDatabase(db);
 	}
