@@ -201,7 +201,68 @@
 					</div>					
 				</div>	
 			</div>
-			<!-- /dashboard -->			
+			<!-- /dashboard -->	
+			<#if dashboard.diff==true>
+					<!-- categories -->			
+				<div id='category-view' class='row _addedTable hide'>
+					<div class='col _addedCell1'>
+						<div class='contents'>
+							<div class='card-panel heading'>
+								<h5>Image Categories</h5>
+							</div>			
+							<div class='card-panel no-padding-h no-padding-v'>
+								<div class='wrapper'>
+									<ul id='url-collection' class='url-collection exception-collection'>
+										<#list dashboard.category as cat, images>
+											<li class='exception-item displayed'>
+												<div class='url-head exception-head'>
+													<span class='url-name'>${cat}</span>
+												</div>
+												<div class="card-panel details-view hide">													
+													<div class="urls-cat-container">
+														<table class="bordered striped">
+															<thead>
+																<tr>			
+																	<th>Difference</th>														
+																	<th>URL</th>																									
+																	<th>Browser</th>
+																	<th>Details</th>
+																</tr>
+															</thead>
+															<tbody>
+															<#list images?sort as image>		
+																<tr>		
+																	<td><span class="status label info">${image.diff} px</span></td>															
+																	<td><a href="${image.url}" target="_blank">${image.url}</a></td>																									
+																	<td>${image.browser}</td>
+																	<td>
+																		<a href="${image.pre}" target="_blank">Pre Build Image</a> <br/>
+																		<a href="${image.post}" target="_blank">Post Build Image</a><br/>
+																		<#if image.matched == false>																
+																			<a href="png" target="_blank">Diff as PNG</a> <br/>
+																			<a href="gif" target="_blank">Diff as Gif</a>
+																		</#if>
+																	</td>
+																</tr>
+															</#list>	
+															</tbody>
+														</table>								
+													</div>													
+												</div>	
+											</li>
+										</#list>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id='url-details-wrapper' class='col _addedCell2'>
+						
+					</div>
+				</div>
+			<!-- /categories -->		
+			</#if>
+			<#if dashboard.diff==false>
 			<!-- categories -->			
 				<div id='category-view' class='row _addedTable hide'>
 					<div class=''>
@@ -216,7 +277,6 @@
 											<table class="bordered striped">
 												<thead>
 													<tr>
-														<th>Status</th>	
 														<th>URL</th>																									
 														<th>Browser</th>
 														<th>Details</th>
@@ -224,25 +284,11 @@
 												</thead>
 												<tbody>		
 												<#list dashboard.images?sort as image>														
-													<tr>
-														<td>
-															<#if image.matched == true>
-															  <span class="status label pass">Matched</span>
-															</#if>
-															<#if image.matched == false>
-															  <span class="status label fail">MisMatched</span>
-															</#if>
-														</td>
+													<tr>														
 														<td><a href="${image.url}" target="_blank">${image.url}</a></td>																									
 														<td>${image.browser}</td>
 														<td>
-															<a href="${image.pre}" target="_blank">Pre Build Image</a> 
-															<a href="${image.post}" target="_blank">Post Build Image</a><br/>
-															<#if image.matched == false>																
-																<a href="png" target="_blank">Diff as PNG</a> 
-																<a href="gif" target="_blank">Diff as Gif</a><br/>
-																<span>Differnce: ${image.diff} px</span><br/>
-															</#if>
+															<a href="${image.pre}" target="_blank">Preview Image</a> 
 														</td>
 													</tr>
 													</#list>
@@ -256,7 +302,7 @@
 					</div>
 				</div>
 			<!-- /categories -->
-			
+			</#if>
 			<footer id='report-footer'>
 				Created By <a href='mailto:skumar213@sapient.com'>Sachin Kumar</a>.
 			</footer>

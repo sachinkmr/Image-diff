@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
-import com.sapient.unilever.d2.qa.dgt.report.CSVReporter;
-import com.sapient.unilever.d2.qa.dgt.report.HTMLReporter;
-import com.sapient.unilever.d2.qa.dgt.report.ImageReporter;
-import com.sapient.unilever.d2.qa.dgt.report.JsReporter;
+import com.sapient.unilever.d2.qa.dgt.report.HTMLGenerator;
 import com.sapient.unilever.d2.qa.dgt.spider.Spider;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderConfig;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderController;
@@ -24,39 +21,35 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("BuildType", "POST");
+		// System.setProperty("BuildType", "Pre");
 		// System.setProperty("BrandName", "Dove");
-		// System.setProperty("Username", "unileverwebpr");
-		// System.setProperty("Password", "d2prA890");
+		// System.setProperty("Username", "d2showcase");
+		// System.setProperty("Password", "D2$0wca$3");
 		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
 		// System.setProperty("SiteAddress",
-		// "http://showcase-eu-rel.unileversolutions.com/uk/home.html");
+		// "http://d2showcase.unileversolutions.com/us/en/home.html");
 
 		// System.setProperty("imageDiff", "yes");
 		// System.setProperty("jsDiff", "yes");
 		// System.setProperty("htmlDiff", "No");
 
 		// System.setProperty("PreBuildVersion", "2.18.1");
-		// System.setProperty("PreBuildTime", "17-April-2017_04-51PM");
+		// System.setProperty("PreBuildTime", "18-April-2017_03-47PM");
 		// HelperUtils.validate();
 
 		AppConstants.START_TIME = System.currentTimeMillis();
 		File file = new File(AppConstants.URL_TEXT);
-		HTMLReporter reporter = null;
+		HTMLGenerator reporter = null;
 		if (file.exists() && file.isFile()) {
 			try {
 				for (String url : FileUtils.readLines(file, "UTF-8")) {
 					ThreadManager.processUrl(url);
 				}
 				ThreadManager.cleanup();
-				CSVReporter.generateReportAsCSV();
-				reporter = new HTMLReporter();
-				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-					CSVReporter.generateDIffReportAsCSV();
-					reporter.generateImageReport(new ImageReporter());
-				}
-				reporter = new HTMLReporter();
-				reporter.generateJSReport(new JsReporter());
+				// CSVReporter.generateReportAsCSV();
+				reporter = new HTMLGenerator();
+				reporter.generateImageReport();
+				reporter.generateJSReport();
 
 			} catch (IOException e) {
 				logger.debug("Error in controller", e);
@@ -75,14 +68,10 @@ public class EntryPoint {
 				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
 				controller.start(Spider.class, numberOfCrawlers);
 				ThreadManager.cleanup();
-				CSVReporter.generateReportAsCSV();
-				reporter = new HTMLReporter();
-				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-					CSVReporter.generateDIffReportAsCSV();
-					reporter.generateImageReport(new ImageReporter());
-				}
-				reporter = new HTMLReporter();
-				reporter.generateJSReport(new JsReporter());
+				// CSVReporter.generateReportAsCSV();
+				reporter = new HTMLGenerator();
+				reporter.generateImageReport();
+				reporter.generateJSReport();
 			} catch (Exception e) {
 				logger.debug("Error in controller", e);
 				System.out.println("Error in application: " + e);

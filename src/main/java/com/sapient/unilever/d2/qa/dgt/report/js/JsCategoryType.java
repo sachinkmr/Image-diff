@@ -1,13 +1,16 @@
 package com.sapient.unilever.d2.qa.dgt.report.js;
 
 public enum JsCategoryType {
-	NETWORK, MISCELLANEOUS, ANALYTICS, CQ_LIB, THIRD_PARTY, INTEGRATIONS, FONT_FILE, CODE, FILE;
+	NETWORK, MISCELLANEOUS, ANALYTICS, CQ_LIB, THIRD_PARTY, INTEGRATIONS, FONT_FILE, CODE, FILE, REQUEST;
 
 	public static JsCategoryType getJsCategoryType(String error) {
-		if (error.contains("404")) {
+		if (error.contains(" 404 ")) {
 			return NETWORK;
 		}
-		if (error.contains("500") || error.contains("501") || error.contains("502") || error.contains("503")) {
+		if (error.contains(" 400 ") || error.contains(" 401 ")) {
+			return REQUEST;
+		}
+		if (error.contains(" 500 ") || error.contains(" 501 ") || error.contains(" 502 ") || error.contains(" 503 ")) {
 			return FILE;
 		}
 		if (error.contains("/satellite-") || error.contains("/linkid.js") || error.contains("/ec.js")) {

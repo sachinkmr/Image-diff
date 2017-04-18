@@ -28,6 +28,14 @@ public class PageInfo implements Serializable {
 		return types;
 	}
 
+	public Featurable getType(String type) {
+		for (Featurable f : types) {
+			if (type.equals(f.getType()))
+				return f;
+		}
+		return null;
+	}
+
 	public String getBuildType() {
 		return buildType;
 	}

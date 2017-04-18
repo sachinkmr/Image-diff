@@ -34,9 +34,9 @@ public class CSVReporter {
 			PageInfo pageInfo = StreamUtils.readPageInfo(file);
 			StringBuilder builder = new StringBuilder("\"" + pageInfo.getPageUrl() + "\",");
 			builder.append("\"" + pageInfo.getBrowserName() + "\",");
-			builder.append("\"" + pageInfo.getTypes().get(0).getResourcePath() + "\",");
-			builder.append("\"" + pageInfo.getTypes().get(1).getResourcePath() + "\",");
-			builder.append("\"" + ((JsType) pageInfo.getTypes().get(1)).hasError() + "\",");
+			builder.append("\"" + pageInfo.getType(".png").getResourcePath() + "\",");
+			builder.append("\"" + pageInfo.getType(".jsLog").getResourcePath() + "\",");
+			builder.append("\"" + ((JsType) pageInfo.getType(".jsLog")).hasError() + "\",");
 			builder.append("\"" + pageInfo.getBuildType() + "\",");
 			String str = builder.toString();
 			if (AppConstants.WEB) {

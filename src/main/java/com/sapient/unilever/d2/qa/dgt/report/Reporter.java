@@ -18,15 +18,15 @@ public abstract class Reporter {
 	protected int passedPage;
 	protected int failedPage;
 	protected Date startedTime;
-	protected String diff;
+	protected boolean diff;
 
 	public Reporter() {
 		AppConstants.END_TIME = System.currentTimeMillis();
 		startedTime = new Date(AppConstants.START_TIME);
-		diff = "no";
+		diff = AppConstants.HAS_DIFF;
 	}
 
-	public String getDiff() {
+	public boolean getDiff() {
 		return diff;
 	}
 

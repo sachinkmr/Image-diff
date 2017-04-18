@@ -48,8 +48,8 @@ public class ImageData {
 			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
 					AppConstants.FOLDER.indexOf("DGT"));
 			this.pre = pre.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"), "/");
-		}
-		this.pre = pre;
+		} else
+			this.pre = pre;
 	}
 
 	public String getPost() {
@@ -62,8 +62,8 @@ public class ImageData {
 					AppConstants.FOLDER.indexOf("DGT"));
 			this.post = post.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"),
 					"/");
-		}
-		this.post = post;
+		} else
+			this.post = post;
 	}
 
 	public String getPng() {
@@ -75,8 +75,8 @@ public class ImageData {
 			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
 					AppConstants.FOLDER.indexOf("DGT"));
 			this.png = png.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"), "/");
-		}
-		this.png = png;
+		} else
+			this.png = png;
 	}
 
 	public String getGif() {

@@ -102,7 +102,7 @@ public class AppConstants {
 				LoggerFactory.getLogger(AppConstants.class).error("Unable to get branch version", e);
 			}
 			File storage = new File(System.getProperty("app.dir") + File.separator + "data" + File.separator
-					+ BRAND_NAME + File.separator + BUILD_VERSION);
+					+ BRAND_NAME + File.separator + "Data" + File.separator + BUILD_VERSION);
 			FOLDER = storage.getAbsolutePath() + File.separator + BUILD_TYPE + File.separator + TIME_STAMP;
 			FOLDER = createFolder(FOLDER);
 		} else {
@@ -111,9 +111,9 @@ public class AppConstants {
 			PRE_TIME = !StringUtils.isBlank(System.getProperty("PreBuildTime")) ? System.getProperty("PreBuildTime")
 					: "";
 			PRE_DATA = System.getProperty("app.dir") + File.separator + "data" + File.separator + BRAND_NAME
-					+ File.separator + PRE_BUILD + File.separator + "PRE" + File.separator + PRE_TIME;
+					+ File.separator + "Data" + File.separator + PRE_BUILD + File.separator + "PRE" + File.separator
+					+ PRE_TIME;
 
-			HAS_DIFF = (IMAGE_DIFF || HTML_DIFF || JS_DIFF);
 			readParam();
 			SITE = System.getProperty("SiteAddress");
 			URL_TEXT = !StringUtils.isBlank(System.getProperty("UrlsTextFile")) ? System.getProperty("UrlsTextFile")
@@ -126,7 +126,13 @@ public class AppConstants {
 			} else {
 				URL_TEXT = "";
 			}
-
+			IMAGE_DIFF = System.getProperty("imageDiff") != null && !System.getProperty("imageDiff").isEmpty()
+					&& System.getProperty("imageDiff").equalsIgnoreCase("Yes");
+			JS_DIFF = System.getProperty("jsDiff") != null && !System.getProperty("jsDiff").isEmpty()
+					&& System.getProperty("jsDiff").equalsIgnoreCase("Yes");
+			HTML_DIFF = System.getProperty("htmlDiff") != null && !System.getProperty("htmlDiff").isEmpty()
+					&& System.getProperty("htmlDiff").equalsIgnoreCase("Yes");
+			HAS_DIFF = (IMAGE_DIFF || HTML_DIFF || JS_DIFF);
 			USERNAME = System.getProperty("Username");
 			PASSWORD = System.getProperty("Password");
 			try {
@@ -135,13 +141,13 @@ public class AppConstants {
 				LoggerFactory.getLogger(AppConstants.class).error("Unable to get branch version", e);
 			}
 			File storage = new File(System.getProperty("app.dir") + File.separator + "data" + File.separator
-					+ BRAND_NAME + File.separator + BUILD_VERSION);
+					+ BRAND_NAME + File.separator + "Data" + File.separator + BUILD_VERSION);
 			FOLDER = storage.getAbsolutePath() + File.separator + BUILD_TYPE + File.separator + TIME_STAMP;
 			FOLDER = createFolder(FOLDER);
 
 			if (HAS_DIFF) {
 				DIFF_FOLDER = System.getProperty("app.dir") + File.separator + "data" + File.separator + BRAND_NAME
-						+ File.separator + "diff" + File.separator + "Pre_" + PRE_BUILD + "_" + PRE_TIME
+						+ File.separator + "Difference" + File.separator + "Pre_" + PRE_BUILD + "_" + PRE_TIME
 						+ File.separator + "Post_" + BUILD_VERSION + "_" + TIME_STAMP;
 				DIFF_FOLDER = createFolder(DIFF_FOLDER);
 			}

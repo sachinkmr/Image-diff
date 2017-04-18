@@ -105,7 +105,7 @@
 							<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
 						</li>
 						<li class='analysis waves-effect'><a href='#!' class='category-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-language'></i> URLs</a></li>
-					<#if dashboard.diff=="yes">
+					<#if dashboard.diff==true>
 						<li class='analysis waves-effect'><a href='#!' class='diff-view' onclick="_updateCurrentStage(1)"><i class='mdi-action-language'></i> Difference</a></li>
 					</#if>
 					</ul>			
@@ -245,7 +245,7 @@
 						</div>
 				</div>
 				<div  class='system-view'>
-					<div class='col l4 m12 s12 fh'>
+					<div class='col l4 m12 s12'>
 						<div class='card-panel'>
 							<span class='label info outline right'><b>Environment</b></span>
 							<table class="striped">

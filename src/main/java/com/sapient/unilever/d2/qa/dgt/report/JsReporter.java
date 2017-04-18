@@ -66,7 +66,7 @@ public class JsReporter extends Reporter {
 		});
 		for (File file : files) {
 			PageInfo pageInfo = StreamUtils.readPageInfo(file);
-			String path = pageInfo.getTypes().get(1).getResourcePath();
+			String path = pageInfo.getType(".jsLog").getResourcePath();
 			try {
 				List<String> list = FileUtils.readLines(new File(path), "utf-8");
 				if (list.size() > 3) {
@@ -109,7 +109,6 @@ public class JsReporter extends Reporter {
 
 	@Override
 	public void getDiffInfo() {
-		diff = "yes";
 
 	}
 
