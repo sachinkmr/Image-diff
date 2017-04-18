@@ -105,9 +105,6 @@
 							<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
 						</li>
 						<li class='analysis waves-effect'><a href='#!' class='category-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-language'></i> URLs</a></li>
-					<#if dashboard.diff=="yes">
-						<li class='analysis waves-effect'><a href='#!' class='diff-view' onclick="_updateCurrentStage(1)"><i class='mdi-action-language'></i> Difference</a></li>
-					</#if>
 					</ul>			
 				</nav>
 		<!-- /nav -->		
@@ -120,18 +117,12 @@
 			<!-- dashboard -->
 			<div id='dashboard-view' class='row'>
 				<div class='time-totals'>
-					<div class='col l2 m4 s6'>
+					<div class='col l4 m4 s6'>
 						<div class='card suite-total-tests'> 
 							<span class='panel-name'><b>Total Pages</b></span> 
-							<span class='total-tests'> <span class='panel-lead'>${dashboard.pages?size}</span> </span> 
+							<span class='total-tests'> <span class='panel-lead'>${dashboard.totalPage}</span> </span> 
 						</div> 
-					</div>
-					<div class='col l2 m4 s6'>
-						<div class='card suite-total-steps'> 
-							<span class='panel-name'><b>Total JS Logs</b></span> 
-							<span class='total-steps'> <span class='panel-lead'>${dashboard.totalCount}</span> </span> 
-						</div> 
-					</div>
+					</div>					
 					<div class='col l2 m4 s12'>
 						<div class='card suite-total-time-current'> 
 							<span class='panel-name'><b>Suite Execution Time</b></span> 
@@ -174,78 +165,20 @@
 							</div> 
 						</div> 
 					</div> 
-					<div class='col s12 m6 l4 fh'> 
-						<div class='card-panel'> 
-							<div>
-								<span class='panel-name'><b>JS Logs</b></span>
-							</div> 							 
-							<div class='chart-box'>
-								<canvas class='text-centered' id='step-analysis'></canvas>
-							</div> 
-							<div>
-								<span class='weight-light'>Errors: <span class='s-pass-count weight-normal'></span>${dashboard.errors} </span>
-							</div> 
-							<div>							
-								<span class='weight-light'>Warnings: <span class='s-fail-count weight-normal'></span>${dashboard.warnings} </span>
-							</div> 
-						</div> 
-					</div>					
+								
 					<div class='col s12 m6 l4 fh'> 
 						<div class='card-panel'> 
 							<span class='panel-name'><b>Pass Percentage</b></span> 
 							<div id='percentage-block'>								
-								<canvas class="text-centered" id='percentage' data-pass='1' data-total='1'></canvas>
+								<canvas class="text-centered" id='percentage' data-pass='${dashboard.passedPage}' data-total='${dashboard.passedPage+dashboard.failedPage}'></canvas>
 								<span class='pass-percentage panel-lead'></span>
 							</div>
 							<div class='progress light-blue lighten-3'> 
 								<div class='determinate light-blue'></div> 
 							</div> 
 						</div> 
-					</div>		
-				</div>
-				<div  class='category-summary-view'>
-					<div class='col l8 m6 s12 fh'>
-							<div class='card-panel'>
-								<table class="striped ">
-									<thead>
-										<tr>
-											<th rowspan="2">Category</th>
-  											<th rowspan="2">URLs Count</th>
-                                          	<th colspan="3" style="text-align:center;">JS Logs Distribution</th>											
-										</tr>
-										<tr>
-											<th>Errors</th>
-											<th>Warnings</th>
-											<th>Total</th>
- 									 	</tr>									
-									</thead>
-									<tbody>
-										<#list dashboard.categories?sort as category>
-											<tr data-name='${category.name}'>
-												<td>
-												<a href='#' class='pageCates'>${category.name}</a>
-												</td>	
-												<td id='urlCount'>
-													${category.pages?size}	
-												</td>											
-												<td>
-													${category.errorCount}
-												</td>
-												<td>													
-													${category.warningCount}
-												</td>
-												<td>
-													${category.warningCount+category.errorCount}
-												</td>
-											</tr>
-										</#list>
-									</tbody>
-								</table>
-							</div>
-						</div>
-				</div>
-				<div  class='system-view'>
-					<div class='col l4 m12 s12 fh'>
+					</div>
+					<div class='col l4 m12 s12'>
 						<div class='card-panel'>
 							<span class='label info outline right'><b>Environment</b></span>
 							<table class="striped">
@@ -265,62 +198,61 @@
 								</tbody>
 							</table>
 						</div>
-					</div>	
-				</div>						
-					
+					</div>					
+				</div>	
 			</div>
-			<!-- /dashboard -->
-			
+			<!-- /dashboard -->			
 			<!-- categories -->			
 				<div id='category-view' class='row _addedTable hide'>
-					<div class='col _addedCell1'>
+					<div class=''>
 						<div class='contents'>
 							<div class='card-panel heading'>
-								<h5>JS Categories</h5>
+								<h5>Images Details</h5>
 							</div>			
 							<div class='card-panel no-padding-h no-padding-v'>
-								<div class='wrapper'>
-									<ul id='url-collection' class='url-collection exception-collection'>
-										<#list dashboard.categories?sort as category>
-											<li class='exception-item displayed'>
-												<div class='url-head exception-head'>
-													<span class='url-name'>${category.name}</span>
-												</div>
-												<div class="card-panel details-view hide">
-													<div class="urls-header">
-														<h5 class="urls-cat-name left">${category.name}</h5>
-														<div class="url-close btn waves-effect text-darken-2 waves-light right hide">Close</div>
-													</div>
-													<div class="urls-cat-container">
-														<table class="bordered striped">
-															<thead>
-																<tr>
-																	<th>Details</th>	
-																	<th>URL</th>																									
-																	<th>Browser</th>
-																</tr>
-															</thead>
-															<tbody>
-															<#list category.pages as page>
-																<tr>
-																	<td><span class="status label fail" title="Errors">${page.errorCount}</span> <span class="status label warn" title="Warning">${page.warningCount}</span></td>
-																	<td><a href="#" class='url-info modal-trigger' data-url='${page.url}' data-browser='${page.browser}'>${page.url}</a></td>																									
-																	<td>${page.browser}</td>
-																</tr>
-															</#list>	
-															</tbody>
-														</table>								
-													</div>													
-												</div>	
-											</li>
-										</#list>
-									</ul>
+								<div class='wrapper'>																		
+									<div class="card-panel details-view">													
+										<div class="image-cat-container">
+											<table class="bordered striped">
+												<thead>
+													<tr>
+														<th>Status</th>	
+														<th>URL</th>																									
+														<th>Browser</th>
+														<th>Details</th>
+													</tr>
+												</thead>
+												<tbody>		
+												<#list dashboard.images?sort as image>														
+													<tr>
+														<td>
+															<#if image.matched == true>
+															  <span class="status label pass">Matched</span>
+															</#if>
+															<#if image.matched == false>
+															  <span class="status label fail">MisMatched</span>
+															</#if>
+														</td>
+														<td><a href="${image.url}" target="_blank">${image.url}</a></td>																									
+														<td>${image.browser}</td>
+														<td>
+															<a href="${image.pre}" target="_blank">Pre Build Image</a> 
+															<a href="${image.post}" target="_blank">Post Build Image</a><br/>
+															<#if image.matched == false>																
+																<a href="png" target="_blank">Diff as PNG</a> 
+																<a href="gif" target="_blank">Diff as Gif</a><br/>
+																<span>Differnce: ${image.diff} px</span><br/>
+															</#if>
+														</td>
+													</tr>
+													</#list>
+												</tbody>
+											</table>								
+										</div>													
+									</div>	
 								</div>
 							</div>
 						</div>
-					</div>
-					<div id='url-details-wrapper' class='col _addedCell2'>
-						
 					</div>
 				</div>
 			<!-- /categories -->
@@ -333,8 +265,6 @@
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
 			<input type='hidden' id='passedPage' name='passedPage' value='${dashboard.passedPage}'>
 			<input type='hidden' id='failedPage' name='failedPage' value='${dashboard.failedPage}'>
-			<input type='hidden' id='errors' name='errors' value='${dashboard.errors}'>
-			<input type='hidden' id='warnings' name='warnings' value='${dashboard.warnings}'>
 		</div>
 		
 		<div id='modal1' class='modal modal-fixed-footer'>
@@ -360,16 +290,14 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>		
 		
-		<script src='d:/extent.js' type='text/javascript'></script>
+		<script src='http://10.207.16.9/DGT/assets/js/image.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
 			}
 			$(document).ready(function() {
 			  $('.modal-trigger').leanModal();			  
-			});
-			
-			
+			});			
 		</script>
 	</body>
 </html>

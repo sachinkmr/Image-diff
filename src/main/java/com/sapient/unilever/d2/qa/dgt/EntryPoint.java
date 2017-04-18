@@ -2,8 +2,6 @@ package com.sapient.unilever.d2.qa.dgt;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -12,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
 import com.sapient.unilever.d2.qa.dgt.report.CSVReporter;
 import com.sapient.unilever.d2.qa.dgt.report.HTMLReporter;
+import com.sapient.unilever.d2.qa.dgt.report.ImageReporter;
 import com.sapient.unilever.d2.qa.dgt.report.JsReporter;
 import com.sapient.unilever.d2.qa.dgt.spider.Spider;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderConfig;
@@ -22,76 +21,75 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class EntryPoint {
-    protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
-    public static  Map<String,String> systemProperties =new HashMap<>();
-    
-    public static void main(String[] args) {
-	systemProperties =new HashMap<>();
-	for(String key: System.getProperties().stringPropertyNames()){
-	    systemProperties.put(key, System.getProperty(key));
-	}
-	System.setProperty("BuildType", "pre");
-	System.setProperty("BrandName", "Dove");
-	// System.setProperty("Username", "unileverwebpr");
-	// System.setProperty("Password", "d2prA890");
-	System.setProperty("UrlsTextFile", "e:\\DoveUrls.txt");
-	// System.setProperty("SiteAddress",
-	// "http://showcase-eu-rel.unileversolutions.com/uk/home.html");
+	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
-	// System.setProperty("imageDiff", "no");
-	// System.setProperty("jsDiff", "no");
-	// System.setProperty("htmlDiff", "No");
+	public static void main(String[] args) {
+		// System.setProperty("BuildType", "POST");
+		// System.setProperty("BrandName", "Dove");
+		// System.setProperty("Username", "unileverwebpr");
+		// System.setProperty("Password", "d2prA890");
+		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
+		// System.setProperty("SiteAddress",
+		// "http://showcase-eu-rel.unileversolutions.com/uk/home.html");
 
-	// System.setProperty("PreBuildVersion", "2.18.1");
-	// System.setProperty("PreBuildTime", "03-April-2017_01-42PM");
-	// HelperUtils.validate();
+		// System.setProperty("imageDiff", "yes");
+		// System.setProperty("jsDiff", "yes");
+		// System.setProperty("htmlDiff", "No");
 
-	AppConstants.START_TIME = System.currentTimeMillis();
-	File file = new File(AppConstants.URL_TEXT);
-	if (file.exists() && file.isFile()) {
-	    try {
-		for (String url : FileUtils.readLines(file, "UTF-8")) {
-		    ThreadManager.processUrl(url);
+		// System.setProperty("PreBuildVersion", "2.18.1");
+		// System.setProperty("PreBuildTime", "17-April-2017_04-51PM");
+		// HelperUtils.validate();
+
+		AppConstants.START_TIME = System.currentTimeMillis();
+		File file = new File(AppConstants.URL_TEXT);
+		HTMLReporter reporter = null;
+		if (file.exists() && file.isFile()) {
+			try {
+				for (String url : FileUtils.readLines(file, "UTF-8")) {
+					ThreadManager.processUrl(url);
+				}
+				ThreadManager.cleanup();
+				CSVReporter.generateReportAsCSV();
+				reporter = new HTMLReporter();
+				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
+					CSVReporter.generateDIffReportAsCSV();
+					reporter.generateImageReport(new ImageReporter());
+				}
+				reporter = new HTMLReporter();
+				reporter.generateJSReport(new JsReporter());
+
+			} catch (IOException e) {
+				logger.debug("Error in controller", e);
+			}
+		} else if (!AppConstants.SITE.isEmpty()) {
+			int numberOfCrawlers = Integer
+					.parseInt(AppConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
+			SpiderConfig config = new SpiderConfig().getConfig();
+			PageFetcher pageFetcher = new PageFetcher(config);
+			RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+			robotstxtConfig.setEnabled(false);
+			RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+
+			try {
+				System.out.println("Please wait crawling site....");
+				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
+				controller.start(Spider.class, numberOfCrawlers);
+				ThreadManager.cleanup();
+				CSVReporter.generateReportAsCSV();
+				reporter = new HTMLReporter();
+				if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
+					CSVReporter.generateDIffReportAsCSV();
+					reporter.generateImageReport(new ImageReporter());
+				}
+				reporter = new HTMLReporter();
+				reporter.generateJSReport(new JsReporter());
+			} catch (Exception e) {
+				logger.debug("Error in controller", e);
+				System.out.println("Error in application: " + e);
+				AppConstants.ERROR = true;
+				AppConstants.ERROR_TEXT = "Something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
+						+ e.getMessage();
+			}
 		}
-		ThreadManager.cleanup();
-		CSVReporter.generateReportAsCSV();
-		if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-		    CSVReporter.generateDIffReportAsCSV();
-		}
-		new HTMLReporter().generateJSReport(new JsReporter());
-	    } catch (IOException e) {
-		logger.debug("Error in controller", e);
-	    }
-	} else if (!AppConstants.SITE.isEmpty()) {
-	    int numberOfCrawlers = Integer
-		    .parseInt(AppConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
-	    SpiderConfig config = new SpiderConfig().getConfig();
-	    PageFetcher pageFetcher = new PageFetcher(config);
-	    RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-	    robotstxtConfig.setEnabled(false);
-	    RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-
-	    try {
-		System.out.println("Please wait crawling site....");
-		SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
-		controller.start(Spider.class, numberOfCrawlers);
-		ThreadManager.cleanup();
-		CSVReporter.generateReportAsCSV();
-		if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-		    CSVReporter.generateDIffReportAsCSV();
-		}
-	    } catch (Exception e) {
-		logger.debug("Error in controller", e);
-		System.out.println("Error in application: " + e);
-		AppConstants.ERROR = true;
-		AppConstants.ERROR_TEXT = "Something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
-			+ e.getMessage();
-	    }
 	}
-	ThreadManager.cleanup();
-	CSVReporter.generateReportAsCSV();
-	if (AppConstants.HAS_DIFF && AppConstants.BUILD_TYPE == BuildType.POST) {
-	    CSVReporter.generateDIffReportAsCSV();
-	}
-    }
 }

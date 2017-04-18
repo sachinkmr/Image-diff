@@ -2,6 +2,10 @@ package com.sapient.unilever.d2.qa.dgt.report;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -48,8 +52,17 @@ public class CSVReporter {
 			LoggerFactory.getLogger(CSVReporter.class).debug("Error writing report csv", e);
 		}
 		if (AppConstants.WEB) {
-			System.out.println("Report at: " + file.getAbsolutePath()
-					.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"), "/"));
+			path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0, AppConstants.FOLDER.indexOf("DGT"));
+			try {
+				URL url = new URL(file.getAbsolutePath().replaceAll(Pattern.quote(path), "http://10.207.16.9/")
+						.replaceAll(Pattern.quote("\\"), "/"));
+				URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+						url.getQuery(), url.getRef());
+				url = uri.toURL();
+				System.out.println("Report at: " + uri);
+			} catch (MalformedURLException | URISyntaxException e) {
+				LoggerFactory.getLogger(CSVReporter.class).debug("Error encoding report path", e);
+			}
 		} else {
 			System.out.println("Report at: " + file.getAbsolutePath());
 		}
@@ -95,8 +108,16 @@ public class CSVReporter {
 			LoggerFactory.getLogger(CSVReporter.class).debug("Error writing report csv", e);
 		}
 		if (AppConstants.WEB) {
-			System.out.println("Report at: " + file.getAbsolutePath()
-					.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"), "/"));
+			try {
+				URL url = new URL(file.getAbsolutePath().replaceAll(Pattern.quote(path), "http://10.207.16.9/")
+						.replaceAll(Pattern.quote("\\"), "/"));
+				URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+						url.getQuery(), url.getRef());
+				url = uri.toURL();
+				System.out.println("Report at: " + uri);
+			} catch (MalformedURLException | URISyntaxException e) {
+				LoggerFactory.getLogger(CSVReporter.class).debug("Error encoding report path", e);
+			}
 		} else {
 			System.out.println("Report at: " + file.getAbsolutePath());
 		}

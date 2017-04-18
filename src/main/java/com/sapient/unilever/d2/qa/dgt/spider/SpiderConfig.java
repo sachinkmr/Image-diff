@@ -20,6 +20,7 @@ public class SpiderConfig extends CrawlConfig {
 				LoggerFactory.getLogger(SpiderConfig.class).debug("Error in controller", e);
 			}
 		}
+		this.setCrawlStorageFolder(System.getProperty("user.dir"));
 		this.setUserAgentString(AppConstants.USER_AGENT);
 		this.setUserAgentString(AppConstants.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));

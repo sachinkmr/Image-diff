@@ -26,23 +26,12 @@
 			"enable": false
 		}
 	},
-		
-	"custom":[
-		{
-			"enable":false,
-			"name":"browser1",
-			"emulatedBy":"",
-			"height":0,
-			"width":0,
-			"userAgent":""
-		},
-		{
-			"enable":false,
-			"name":"browser2",
-			"emulatedBy":"",
-			"height":0,
-			"width":0,
-			"userAgent":""
-		}
-	]
+	"custom": {
+		"enable": false,
+		"name": "browser2",
+		"emulatedBy": "",
+		"height": 0,
+		"width": 0,
+		"userAgent": ""
+	}
 }
