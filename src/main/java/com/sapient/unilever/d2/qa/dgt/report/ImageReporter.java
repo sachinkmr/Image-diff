@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sapient.unilever.d2.qa.dgt.AppConstants;
-import com.sapient.unilever.d2.qa.dgt.page.diff.DiffInfo;
+import com.sapient.unilever.d2.qa.dgt.page.PageInfo;
 import com.sapient.unilever.d2.qa.dgt.page.diff.Differentiator;
 import com.sapient.unilever.d2.qa.dgt.page.image.ImageDiffInfo;
 import com.sapient.unilever.d2.qa.dgt.report.image.ImageData;
@@ -17,7 +17,12 @@ public class ImageReporter extends Reporter {
 	public ImageReporter() {
 		super();
 		this.images = new ArrayList<>();
-		readData();
+		if (AppConstants.HAS_DIFF) {
+			getDiffInfo();
+		} else {
+			readData();
+		}
+
 	}
 
 	public List<ImageData> getImages() {
@@ -26,6 +31,21 @@ public class ImageReporter extends Reporter {
 
 	@Override
 	protected void readData() {
+		File[] files = new File(AppConstants.FOLDER).listFiles((File dir, String name) -> {
+			return name.endsWith(".info");
+		});
+		for (File file : files) {
+			PageInfo pageInfo = StreamUtils.readPageInfo(file);
+			ImageData data = new ImageData();
+			data.setUrl(pageInfo.getPageUrl());
+			data.setBrowser(pageInfo.getBrowserName());
+			data.setPre(pageInfo.getTypes().get(0).getResourcePath());
+			images.add(data);
+		}
+	}
+
+	@Override
+	protected void getDiffInfo() {
 		File[] files = new File(AppConstants.DIFF_FOLDER).listFiles((File dir, String name) -> {
 			return name.endsWith(".diff");
 		});
@@ -48,13 +68,6 @@ public class ImageReporter extends Reporter {
 			image = null;
 			images.add(data);
 		}
-		System.out.println(images.size());
-	}
-
-	@Override
-	protected DiffInfo getDiffInfo() {
-
-		return null;
 	}
 
 }

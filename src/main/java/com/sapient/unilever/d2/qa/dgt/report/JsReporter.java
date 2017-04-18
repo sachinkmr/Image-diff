@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.sapient.unilever.d2.qa.dgt.AppConstants;
 import com.sapient.unilever.d2.qa.dgt.db.DBManager;
 import com.sapient.unilever.d2.qa.dgt.page.PageInfo;
-import com.sapient.unilever.d2.qa.dgt.page.diff.DiffInfo;
 import com.sapient.unilever.d2.qa.dgt.report.js.JsCategory;
 import com.sapient.unilever.d2.qa.dgt.report.js.JsCategoryType;
 import com.sapient.unilever.d2.qa.dgt.report.js.JsError;
@@ -27,13 +26,8 @@ import com.sapient.unilever.d2.qa.dgt.utils.StreamUtils;
 public class JsReporter extends Reporter {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(JsReporter.class);
 	private List<JsCategory> categories;
-	private String diff = "no";
 	private int errors;
 	private int warnings;
-
-	public String getDiff() {
-		return diff;
-	}
 
 	public List<JsCategory> getCategories() {
 		return categories;
@@ -114,9 +108,9 @@ public class JsReporter extends Reporter {
 	}
 
 	@Override
-	public DiffInfo getDiffInfo() {
+	public void getDiffInfo() {
 		diff = "yes";
-		return null;
+
 	}
 
 	public void dumpIntoDB(JsPage page) {

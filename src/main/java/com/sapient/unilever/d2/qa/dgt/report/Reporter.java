@@ -12,17 +12,22 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import com.sapient.unilever.d2.qa.dgt.AppConstants;
-import com.sapient.unilever.d2.qa.dgt.page.diff.DiffInfo;
 import com.sapient.unilever.d2.qa.dgt.utils.DateTimeUtil;
 
 public abstract class Reporter {
 	protected int passedPage;
 	protected int failedPage;
-	private Date startedTime;
+	protected Date startedTime;
+	protected String diff;
 
 	public Reporter() {
 		AppConstants.END_TIME = System.currentTimeMillis();
 		startedTime = new Date(AppConstants.START_TIME);
+		diff = "no";
+	}
+
+	public String getDiff() {
+		return diff;
 	}
 
 	public Date getStartedTime() {
@@ -43,7 +48,7 @@ public abstract class Reporter {
 		return AppConstants.TIME_STAMP;
 	}
 
-	protected abstract DiffInfo getDiffInfo();
+	protected abstract void getDiffInfo();
 
 	public int getPassedPage() {
 		return passedPage;
