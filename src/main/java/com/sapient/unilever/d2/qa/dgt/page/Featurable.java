@@ -2,9 +2,9 @@ package com.sapient.unilever.d2.qa.dgt.page;
 
 import java.io.Serializable;
 
-import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.WebDriver;
 
+import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
 import com.sapient.unilever.d2.qa.dgt.selenium.WebDriverManager;
 
 public abstract class Featurable implements AutoCloseable, Serializable {
@@ -20,7 +20,7 @@ public abstract class Featurable implements AutoCloseable, Serializable {
 		this.url = url;
 		this.type = type;
 		this.webDriverManager = webDriverManager;
-		this.fileName = Base64.encodeBase64URLSafeString((url + webDriverManager.getName()).getBytes()) + type;
+		this.fileName = Integer.toString(ThreadManager.pushURL(url) + webDriverManager.getName().hashCode()) + type;
 	}
 
 	public String getFileName() {

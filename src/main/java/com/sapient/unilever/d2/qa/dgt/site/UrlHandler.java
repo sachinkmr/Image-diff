@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sapient.unilever.d2.qa.dgt.AppConstants;
 import com.sapient.unilever.d2.qa.dgt.BuildType;
+import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
 import com.sapient.unilever.d2.qa.dgt.page.Featurable;
 import com.sapient.unilever.d2.qa.dgt.page.PageInfo;
 import com.sapient.unilever.d2.qa.dgt.page.Scroller;
@@ -47,8 +48,11 @@ public class UrlHandler implements Runnable {
 					differ.register(new ImageDiffInfo(pageInfoPre, pageInfo));
 				if (AppConstants.JS_DIFF)
 					differ.register(new JsDiffInfo(pageInfoPre, pageInfo));
-				new Thread(differ).start();
+				ThreadManager.dgtService.execute(differ);
 			}
+
+		} catch (org.openqa.selenium.TimeoutException e) {
+			logger.error("Timeout in to capture URL: " + pageInfo.getPageUrl(), e);
 		} catch (Exception ex) {
 			logger.error("Unable to capture URL: " + pageInfo.getPageUrl(), ex);
 		}

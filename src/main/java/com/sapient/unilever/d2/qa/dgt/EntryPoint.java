@@ -21,8 +21,9 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
+		FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "crawler-data"));
 		// System.setProperty("BuildType", "Pre");
-		// System.setProperty("BrandName", "Dove");
+		// System.setProperty("BrandName", "D2 Showcase");
 		// System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
@@ -32,9 +33,9 @@ public class EntryPoint {
 		// System.setProperty("imageDiff", "yes");
 		// System.setProperty("jsDiff", "yes");
 		// System.setProperty("htmlDiff", "No");
-
+		//
 		// System.setProperty("PreBuildVersion", "2.18.1");
-		// System.setProperty("PreBuildTime", "18-April-2017_03-47PM");
+		// System.setProperty("PreBuildTime", "21-April-2017_10-12AM");
 		// HelperUtils.validate();
 
 		AppConstants.START_TIME = System.currentTimeMillis();
@@ -80,5 +81,6 @@ public class EntryPoint {
 						+ e.getMessage();
 			}
 		}
+		FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "crawler-data"));
 	}
 }

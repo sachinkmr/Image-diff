@@ -2,6 +2,8 @@ package com.sapient.unilever.d2.qa.dgt.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,10 +18,18 @@ import com.sapient.unilever.d2.qa.dgt.site.UrlHandler;
 public class ThreadManager {
 	public static List<WebDriverManager> drivers;
 	public static List<ExecutorService> services;
+	public static ExecutorService dgtService;
 	protected static final Logger logger = LoggerFactory.getLogger(ThreadManager.class);
+	public static Map<String, Integer> URLs;
+	private static int i = 0;
+
+	public static synchronized int getCount() {
+		return ++i;
+	}
 
 	static {
-
+		URLs = new ConcurrentHashMap<>();
+		dgtService = Executors.newCachedThreadPool();
 		drivers = new ArrayList<>(AppConstants.BROWSERS.size());
 		services = new ArrayList<>(AppConstants.BROWSERS.size());
 		for (Browser browser : AppConstants.BROWSERS) {
@@ -93,7 +103,7 @@ public class ThreadManager {
 		for (int i = 0; i < services.size(); i++) {
 			services.get(i).shutdown();
 			while (!services.get(i).isTerminated()) {
-				logger.warn("Waiting 10 seconds for browsers and threads to complete requests...");
+				logger.warn("Waiting 10 seconds for browsers to complete requests...");
 				try {
 					Thread.sleep(10000);
 				} catch (InterruptedException e) {
@@ -102,12 +112,25 @@ public class ThreadManager {
 			}
 			drivers.get(i).close();
 		}
+		dgtService.shutdown();
+		while (!dgtService.isTerminated()) {
+			logger.warn("Waiting 5 seconds for threads to complete requests...");
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-		// SeleniumUtils.killService("chromedriver.exe");
-		// SeleniumUtils.killService("IEDriverServer.exe");
-		// SeleniumUtils.killService("geckodriver.exe");
-		// SeleniumUtils.killService("MicrosoftWebDriver.exe");
-		// SeleniumUtils.killService("phantomjs.exe");
+	public static int pushURL(String pageUrl) {
+		if (URLs.containsKey(pageUrl)) {
+			return URLs.get(pageUrl);
+		} else {
+			int i = getCount();
+			URLs.put(pageUrl, i);
+			return i;
+		}
 	}
 
 }

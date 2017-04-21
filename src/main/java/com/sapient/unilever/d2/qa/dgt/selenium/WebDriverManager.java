@@ -94,7 +94,8 @@ public class WebDriverManager {
 		capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		driver.manage().window().maximize();
 		return driver;
 	}
@@ -132,7 +133,8 @@ public class WebDriverManager {
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new FirefoxDriver(capabilities);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -162,7 +164,8 @@ public class WebDriverManager {
 		InternetExplorerDriverService service = serviceBuilder.build();
 		driver = new InternetExplorerDriver(service, capabilitiesIE);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -177,7 +180,8 @@ public class WebDriverManager {
 		caps.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new PhantomJSDriver(caps);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -191,7 +195,8 @@ public class WebDriverManager {
 		cap.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new EdgeDriver(cap);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -208,7 +213,8 @@ public class WebDriverManager {
 		capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -225,7 +231,8 @@ public class WebDriverManager {
 		capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -242,7 +249,8 @@ public class WebDriverManager {
 		capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -257,11 +265,11 @@ public class WebDriverManager {
 	}
 
 	public void close() {
-		if (null != driver) {
-			driver.quit();
-		}
 		if (null != proxy && proxy.isStarted()) {
 			proxy.stop();
+		}
+		if (null != driver) {
+			driver.quit();
 		}
 	}
 

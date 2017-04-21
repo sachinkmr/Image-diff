@@ -27,7 +27,7 @@ public abstract class DiffInfo implements Serializable, Callable<DiffInfo> {
 		this.preInfo = preInfo;
 		this.postInfo = postInfo;
 		this.resourceFolder = AppConstants.DIFF_FOLDER;
-		this.name = preInfo.getPageName().replaceAll(".info", "");
+		this.name = postInfo.getPageName().replaceAll(".info", "");
 		this.properties = new HashMap<>();
 		this.errors = new HashMap<>();
 	}

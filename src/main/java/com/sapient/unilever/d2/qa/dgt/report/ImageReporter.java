@@ -49,7 +49,7 @@ public class ImageReporter extends Reporter {
 			ImageData data = new ImageData();
 			data.setUrl(pageInfo.getPageUrl());
 			data.setBrowser(pageInfo.getBrowserName());
-			data.setPre(pageInfo.getType(".png").getResourcePath());
+			data.setImg(pageInfo.getType(".png").getResourcePath());
 			images.add(data);
 			passedPage++;
 		}
@@ -73,8 +73,8 @@ public class ImageReporter extends Reporter {
 			ImageData data = new ImageData();
 			data.setUrl(image.getPreInfo().getPageUrl());
 			data.setBrowser(image.getPreInfo().getBrowserName());
+			data.setImg(image.getPostInfo().getType(".png").getResourcePath());
 			data.setPre(image.getPreInfo().getType(".png").getResourcePath());
-			data.setPost(image.getPostInfo().getType(".png").getResourcePath());
 			data.setMatched(image.isMatched());
 			data.setPng(image.getProperties().get("png"));
 			data.setGif(image.getProperties().get("gif"));

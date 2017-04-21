@@ -13,7 +13,7 @@
 		<title>DGT Report</title>
 		<link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
-		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
+		<link href='http://10.207.16.9/DGT/assets/css/dgt.css' type='text/css' rel='stylesheet' />	
 		<style type="text/css">
 			.category-summary-view thead th{
 		  		border: 1px solid #ddd !important;
@@ -82,6 +82,7 @@
 				display: inline-block;
 			    border-bottom: 1px solid #ddd;
 			    width: 100%;		
+			    padding-bottom:15px;
 			}
 			.urls-cat-container{
 				padding-top:10px;
@@ -105,9 +106,6 @@
 							<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
 						</li>
 						<li class='analysis waves-effect'><a href='#!' class='category-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-language'></i> URLs</a></li>
-					<#if dashboard.diff==true>
-						<li class='analysis waves-effect'><a href='#!' class='diff-view' onclick="_updateCurrentStage(1)"><i class='mdi-action-language'></i> Difference</a></li>
-					</#if>
 					</ul>			
 				</nav>
 		<!-- /nav -->		
@@ -123,7 +121,7 @@
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-tests'> 
 							<span class='panel-name'><b>Total Pages</b></span> 
-							<span class='total-tests'> <span class='panel-lead'>${dashboard.pages?size}</span> </span> 
+							<span class='total-tests'> <span class='panel-lead'>${dashboard.failedPage+dashboard.passedPage}</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s6'>
@@ -286,34 +284,30 @@
 												<div class='url-head exception-head'>
 													<span class='url-name'>${category.name}</span>
 												</div>
-												<div class="card-panel details-view hide">
-													<div class="urls-header">
-														<h5 class="urls-cat-name left">${category.name}</h5>
-														<div class="url-close btn waves-effect text-darken-2 waves-light right hide">Close</div>
-													</div>
-													<div class="urls-cat-container">
-														<table class="bordered striped">
-															<thead>
-																<tr>
-																	<th>Details</th>	
-																	<th>URL</th>																									
-																	<th>Browser</th>
-																	<th>Details</th>
-																</tr>
-															</thead>
-															<tbody>
+												
+												<div class="table-data hide">	
+													<table class="bordered striped">
+														<thead>
+															<tr>
+																<th>Categories</th><th>URL</th><th>Browser</th><th>Logs</th>
+															</tr>
+														</thead>
+														<tbody>
 															<#list category.pages as page>
-																<tr>
-																	<td><span class="status label fail" title="Errors">${page.errorCount}</span> <span class="status label warn" title="Warning">${page.warningCount}</span></td>
+																<tr>																	
+																	<td>
+																		<#list page.errorCategories as key, value>
+																			<span class="status label ${key}" title="${key}">${value}</span>
+																		</#list>
+																	</td>	
 																	<td><a href="${page.url}" target="_blank">${page.url}</a></td>																									
 																	<td>${page.browser}</td>
-																	<td><a href="#modal1" class='url-info modal-trigger waves-effect waves-light btn' data-url='${page.url}' data-browser='${page.browser}'>View Logs</a></td>
+																	<td><a href="#modal1" class='url-info modal-trigger waves-effect waves-light btn' data-url='${page.url}' data-browser='${page.browser}'>View</a></td>
 																</tr>
-															</#list>	
-															</tbody>
-														</table>								
-													</div>													
-												</div>	
+															</#list>
+														</tbody>
+													</table>	
+												</div>
 											</li>
 										</#list>
 									</ul>
@@ -321,8 +315,28 @@
 							</div>
 						</div>
 					</div>
-					<div id='url-details-wrapper' class='col _addedCell2'>
-						
+					<div id='url-details-wrapper' class='col _addedCell2'>						
+						<div class="card-panel details-view">
+							<div class="urls-header">
+								<div class="  ">
+									<h6>Category Color Codes:</h6>
+									<span class="status label MISCELLANEOUS">MISCELLANEOUS</span>
+									<span class="status label ANALYTICS">ANALYTICS</span>
+									<span class="status label CQ_LIB">CQ_LIB</span>
+									<span class="status label THIRD_PARTY">THIRD_PARTY</span>
+									<span class="status label NETWORK">NETWORK</span>
+									<span class="status label INTEGRATIONS">INTEGRATIONS</span>
+									<span class="status label FONT_FILE">FONT_FILE</span>
+									<span class="status label CODE">CODE</span>
+									<span class="status label FILE">FILE</span>
+									<span class="status label REQUEST">REQUEST</span>
+									<br/>
+								</div>
+							</div>
+							<div class="urls-cat-container">
+														
+							</div>													
+						</div>
 					</div>
 				</div>
 			<!-- /categories -->

@@ -55,12 +55,13 @@ public class AppConstants {
 	public static int HEADER_PIXELS;
 	public static int FOOTER_PIXELS;
 	public static int PAGE_WAIT;
-	public static int SCROLL_DELAY;
+	public static int SCROLL_DELAY, PAGE_TIMEOUT;
 	public static int BROWSER_INSTANCE = 1;
 	public static Set<Browser> BROWSERS;
 	public static Map<WebDriver, Boolean> DRIVERS;
 	public static Set<D2Page> PAGES;
 	public static BuildType BUILD_TYPE;
+
 	static {
 		TIME_STAMP = HelperUtils.generateTimeString();
 		PAGES = new CopyOnWriteArraySet<>(new HashSet<>());
@@ -152,7 +153,6 @@ public class AppConstants {
 				DIFF_FOLDER = createFolder(DIFF_FOLDER);
 			}
 		}
-
 		boolean flag = false;
 		try {
 			HelperUtils.validate();
@@ -213,6 +213,7 @@ public class AppConstants {
 			IGNORED_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.pixel", "0"));
 			PAGE_WAIT = Integer.parseInt(PROPERTIES.getProperty("page.screen.wait", "1000"));
 			SCROLL_DELAY = Integer.parseInt(PROPERTIES.getProperty("page.scroll.delay", "1000"));
+			PAGE_TIMEOUT = Integer.parseInt(PROPERTIES.getProperty("page.time.out", "30000"));
 			// browsers info instantiation
 
 			String browserLoc = "";

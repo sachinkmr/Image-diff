@@ -1,5 +1,6 @@
 package com.sapient.unilever.d2.qa.dgt.spider;
 
+import java.io.File;
 import java.net.MalformedURLException;
 
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public class SpiderConfig extends CrawlConfig {
 				LoggerFactory.getLogger(SpiderConfig.class).debug("Error in controller", e);
 			}
 		}
-		this.setCrawlStorageFolder(System.getProperty("user.dir"));
+		this.setCrawlStorageFolder(System.getProperty("user.dir") + File.separator + "crawler-data");
 		this.setUserAgentString(AppConstants.USER_AGENT);
 		this.setUserAgentString(AppConstants.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));

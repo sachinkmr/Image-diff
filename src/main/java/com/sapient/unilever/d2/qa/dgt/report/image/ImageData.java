@@ -10,10 +10,24 @@ public class ImageData {
 	private String browser;
 	private boolean matched;
 	private String pre;
-	private String post;
 	private String png;
 	private String gif;
 	private int diff;
+	private String img;
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		if (AppConstants.WEB) {
+			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
+					AppConstants.FOLDER.indexOf("DGT"));
+			this.img = img.replaceAll(Pattern.quote(path), "http://10.207.16.9/");
+		} else
+			this.img = img;
+		this.img = this.img.replaceAll(Pattern.quote("\\"), "/");
+	}
 
 	public String getUrl() {
 		return url;
@@ -47,23 +61,10 @@ public class ImageData {
 		if (AppConstants.WEB) {
 			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
 					AppConstants.FOLDER.indexOf("DGT"));
-			this.pre = pre.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"), "/");
+			this.pre = pre.replaceAll(Pattern.quote(path), "http://10.207.16.9/");
 		} else
 			this.pre = pre;
-	}
-
-	public String getPost() {
-		return post;
-	}
-
-	public void setPost(String post) {
-		if (AppConstants.WEB) {
-			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
-					AppConstants.FOLDER.indexOf("DGT"));
-			this.post = post.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"),
-					"/");
-		} else
-			this.post = post;
+		this.pre = this.pre.replaceAll(Pattern.quote("\\"), "/");
 	}
 
 	public String getPng() {
@@ -74,9 +75,10 @@ public class ImageData {
 		if (AppConstants.WEB) {
 			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
 					AppConstants.FOLDER.indexOf("DGT"));
-			this.png = png.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"), "/");
+			this.png = png.replaceAll(Pattern.quote(path), "http://10.207.16.9/");
 		} else
 			this.png = png;
+		this.png = this.png.replaceAll(Pattern.quote("\\"), "/");
 	}
 
 	public String getGif() {
@@ -87,9 +89,10 @@ public class ImageData {
 		if (AppConstants.WEB) {
 			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
 					AppConstants.FOLDER.indexOf("DGT"));
-			this.gif = gif.replaceAll(Pattern.quote(path), "http://10.207.16.9/").replaceAll(Pattern.quote("\\"), "/");
+			this.gif = gif.replaceAll(Pattern.quote(path), "http://10.207.16.9/");
 		}
 		this.gif = gif;
+		this.gif = this.gif.replaceAll(Pattern.quote("\\"), "/");
 	}
 
 	public int getDiff() {

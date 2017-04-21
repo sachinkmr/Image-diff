@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
@@ -60,6 +61,8 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sapient.unilever.d2.qa.dgt.AppConstants;
 
 import edu.uci.ics.crawler4j.crawler.Configurable;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -136,12 +139,16 @@ public class PageFetcher extends Configurable {
 			clientBuilder.setProxy(proxy);
 			logger.debug("Working through Proxy: {}", proxy.getHostName());
 		}
+		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 
-		httpClient = clientBuilder.setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
-		if ((config.getAuthInfos() != null) && !config.getAuthInfos().isEmpty()) {
-			doAuthetication(config.getAuthInfos());
+		if (!StringUtils.isEmpty(AppConstants.USERNAME)) {
+			logger.info("BASIC authentication for: " + AppConstants.SITE);
+			credentialsProvider.setCredentials(AuthScope.ANY,
+					new UsernamePasswordCredentials(AppConstants.USERNAME, AppConstants.PASSWORD));
+			// doAuthetication(config.getAuthInfos());
 		}
-
+		httpClient = clientBuilder.setSSLHostnameVerifier(new NoopHostnameVerifier())
+				.setDefaultCredentialsProvider(credentialsProvider).build();
 		if (connectionMonitorThread == null) {
 			connectionMonitorThread = new IdleConnectionMonitorThread(connectionManager);
 		}
@@ -168,9 +175,8 @@ public class PageFetcher extends Configurable {
 	 */
 	private void doBasicLogin(BasicAuthInfo authInfo) {
 		logger.info("BASIC authentication for: " + authInfo.getLoginTarget());
-		HttpHost targetHost = new HttpHost(authInfo.getHost(), authInfo.getPort(), authInfo.getProtocol());
 		CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		credsProvider.setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()),
+		credsProvider.setCredentials(AuthScope.ANY,
 				new UsernamePasswordCredentials(authInfo.getUsername(), authInfo.getPassword()));
 		httpClient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
 	}

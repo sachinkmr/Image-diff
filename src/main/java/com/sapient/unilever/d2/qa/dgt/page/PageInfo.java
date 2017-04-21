@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
-
 import com.sapient.unilever.d2.qa.dgt.AppConstants;
+import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
 
 public class PageInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,7 +18,7 @@ public class PageInfo implements Serializable {
 	public PageInfo(String pageUrl, String browserName) {
 		this.pageUrl = pageUrl;
 		this.browserName = browserName;
-		this.pageName = Base64.encodeBase64URLSafeString((pageUrl + browserName).getBytes()) + ".info";
+		this.pageName = ThreadManager.pushURL(pageUrl) + browserName.hashCode() + ".info";
 		types = new ArrayList<>();
 		this.buildType = AppConstants.BUILD_TYPE.name();
 	}

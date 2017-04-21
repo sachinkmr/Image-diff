@@ -218,6 +218,9 @@
 												<div class='url-head exception-head'>
 													<span class='url-name'>${cat}</span>
 												</div>
+												<div class="category-status-counts right">
+													<span class="<#if cat == 'Matched'>pass</#if><#if cat == 'MisMatched'>error</#if> label">${images?size}</span>
+												</div>
 												<div class="card-panel details-view hide">													
 													<div class="urls-cat-container">
 														<table class="bordered striped">
@@ -232,15 +235,15 @@
 															<tbody>
 															<#list images?sort as image>		
 																<tr>		
-																	<td><span class="status label info">${image.diff} px</span></td>															
+																	<td><span class="status label <#if image.matched == true>pass</#if><#if image.matched == false>error</#if>">${image.diff} px</span></td>															
 																	<td><a href="${image.url}" target="_blank">${image.url}</a></td>																									
 																	<td>${image.browser}</td>
 																	<td>
 																		<a href="${image.pre}" target="_blank">Pre Build Image</a> <br/>
-																		<a href="${image.post}" target="_blank">Post Build Image</a><br/>
+																		<a href="${image.img}" target="_blank">Post Build Image</a><br/>
 																		<#if image.matched == false>																
-																			<a href="png" target="_blank">Diff as PNG</a> <br/>
-																			<a href="gif" target="_blank">Diff as Gif</a>
+																			<a href="${image.png}" target="_blank">Diff as PNG</a> <br/>
+																			<a href="${image.gif}" target="_blank">Diff as Gif</a>
 																		</#if>
 																	</td>
 																</tr>
@@ -265,7 +268,7 @@
 			<#if dashboard.diff==false>
 			<!-- categories -->			
 				<div id='category-view' class='row _addedTable hide'>
-					<div class=''>
+					<div class='_addedCell2'>
 						<div class='contents'>
 							<div class='card-panel heading'>
 								<h5>Images Details</h5>
@@ -288,7 +291,7 @@
 														<td><a href="${image.url}" target="_blank">${image.url}</a></td>																									
 														<td>${image.browser}</td>
 														<td>
-															<a href="${image.pre}" target="_blank">Preview Image</a> 
+															<a href="${image.img}" target="_blank">Preview Image</a> 	
 														</td>
 													</tr>
 													</#list>

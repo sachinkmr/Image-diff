@@ -52,11 +52,6 @@ public class HTMLGenerator {
 				Template temp = cfg.getTemplate("jsTemplate.ftl");
 				File file = null;
 				file = new File(AppConstants.FOLDER, "JsReport.html");
-				// if (AppConstants.JS_DIFF) {
-				// file = new File(AppConstants.DIFF_FOLDER, "JsReport.html");
-				// } else {
-				// file = new File(AppConstants.FOLDER, "JsReport.html");
-				// }
 				Writer out = new FileWriter(file);
 				temp.process(root, out);
 				out.close();

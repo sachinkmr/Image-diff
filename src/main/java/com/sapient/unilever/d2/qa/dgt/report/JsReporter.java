@@ -74,23 +74,28 @@ public class JsReporter extends Reporter {
 					String browserName = list.get(1).replace("Browser Type: ", "").trim();
 					JsPage page = new JsPage(pageUrl, browserName);
 					for (int i = 3; i < list.size(); i++) {
-						JsErrorType type = page.addJsError(list.get(i), pageUrl, browserName);
-						if (type.equals(JsErrorType.ERROR))
-							errors++;
-						if (type.equals(JsErrorType.WARNING))
-							warnings++;
-						String cat = JsCategoryType.getJsCategoryType(list.get(i)).toString();
-						JsCategory category = new JsCategory(cat);
-						category = getCategory(category);
-						category.addPage(page);
-						categories.add(category);
+						if (!list.get(i).trim().isEmpty()) {
+							JsErrorType type = page.addJsError(list.get(i).trim(), pageUrl, browserName);
+							if (type == JsErrorType.WARNING || type == JsErrorType.ERROR) {
+								String cat = JsCategoryType.getJsCategoryType(list.get(i)).toString();
+								JsCategory category = new JsCategory(cat);
+								category = getCategory(category);
+								category.addPage(page);
+								categories.add(category);
+								if (type == JsErrorType.ERROR)
+									errors++;
+								if (type == JsErrorType.WARNING)
+									warnings++;
+
+							}
+						}
 					}
 					dumpIntoDB(page);
 					if (list.toString().contains("SEVERE")) {
 						failedPage++;
 					}
 				}
-				if (list.size() > 3 && !list.toString().contains("SEVERE")) {
+				if (list.size() <= 3 || !list.toString().contains("SEVERE")) {
 					passedPage++;
 				}
 			} catch (IOException e) {
