@@ -44,7 +44,7 @@ public class EntryPoint {
 		if (file.exists() && file.isFile()) {
 			try {
 				for (String url : FileUtils.readLines(file, "UTF-8")) {
-					ThreadManager.processUrl(url);
+					ThreadManager.processUrl(url, false);
 				}
 				ThreadManager.cleanup();
 				// CSVReporter.generateReportAsCSV();

@@ -35,7 +35,7 @@ public class Spider extends WebCrawler {
 					D2Page d2page = new D2Page(html, true);
 					d2page.setSite(page.getWebURL().getURL());
 					if (AppConstants.PAGES.add(d2page)) {
-						ThreadManager.processUrl(page.getWebURL().getURL());
+						ThreadManager.processUrl(page.getWebURL().getURL(), false);
 					}
 				}
 			} catch (Exception e) {

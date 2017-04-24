@@ -287,4 +287,5 @@ public class WebDriverManager {
 		logPrefs.enable(LogType.SERVER, Level.OFF);
 		return logPrefs;
 	}
+
 }

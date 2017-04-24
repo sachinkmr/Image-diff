@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.sapient.unilever.d2.qa.dgt.AppConstants;
 import com.sapient.unilever.d2.qa.dgt.selenium.Browser;
 import com.sapient.unilever.d2.qa.dgt.selenium.WebDriverManager;
+import com.sapient.unilever.d2.qa.dgt.site.MultiThreadedUrlHandler;
 import com.sapient.unilever.d2.qa.dgt.site.UrlHandler;
 
 public class ThreadManager {
@@ -22,6 +23,7 @@ public class ThreadManager {
 	protected static final Logger logger = LoggerFactory.getLogger(ThreadManager.class);
 	public static Map<String, Integer> URLs;
 	private static int i = 0;
+	private static boolean multiThreads;
 
 	public static synchronized int getCount() {
 		return ++i;
@@ -92,11 +94,20 @@ public class ThreadManager {
 		}
 	}
 
-	public static void processUrl(String url) {
+	public static void processUrl(String url, boolean multiThreaded) {
+		multiThreads = multiThreaded;
 		logger.info("Capturing URL: " + url);
-		for (int i = 0; i < services.size(); i++) {
-			services.get(i).execute(new UrlHandler(drivers.get(i), url));
+		if (multiThreads) {
+			// webDrivers = new ArrayList<>();
+			for (int i = 0; i < services.size(); i++) {
+				services.get(i).execute(new MultiThreadedUrlHandler(drivers.get(i).getName(), url));
+			}
+		} else {
+			for (int i = 0; i < services.size(); i++) {
+				services.get(i).execute(new UrlHandler(drivers.get(i), url));
+			}
 		}
+
 	}
 
 	public static void cleanup() {
