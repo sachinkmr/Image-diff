@@ -90,8 +90,8 @@ public class ImageData {
 			String path = new File(AppConstants.FOLDER).getAbsolutePath().substring(0,
 					AppConstants.FOLDER.indexOf("DGT"));
 			this.gif = gif.replaceAll(Pattern.quote(path), "http://10.207.16.9/");
-		}
-		this.gif = gif;
+		} else
+			this.gif = gif;
 		this.gif = this.gif.replaceAll(Pattern.quote("\\"), "/");
 	}
 
