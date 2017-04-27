@@ -33,6 +33,8 @@ public class UrlHandler implements Runnable {
 
 	@Override
 	public void run() {
+		logger.info("Executing URL: " + pageInfo.getPageUrl());
+		System.out.println("Executing URL: " + pageInfo.getPageUrl());
 		Scroller.scrollPage(webDriverManager.getWebDriver(), pageInfo.getPageUrl());
 		try {
 			Thread.sleep(AppConstants.PAGE_WAIT);
