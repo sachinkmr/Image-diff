@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Test;
 
 import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
 import com.sapient.unilever.d2.qa.dgt.report.HTMLGenerator;
@@ -25,6 +26,12 @@ public class TestInitializer {
 	@BeforeSuite(enabled = true)
 	public void init() {
 		AppConstants.START_TIME = System.currentTimeMillis();
+	}
+
+	@Test
+	public void executeSuite() {
+		System.out.println("Running Suite ");
+		System.out.println("---------------------------------------");
 		File file = new File(AppConstants.URL_TEXT);
 		HTMLGenerator reporter = null;
 		if (file.exists() && file.isFile()) {
@@ -33,7 +40,8 @@ public class TestInitializer {
 					ThreadManager.processUrl(url, false);
 				}
 				ThreadManager.cleanup();
-				// CSVReporter.generateReportAsCSV();
+				System.out.println("\nGenerating Report ");
+				System.out.println("---------------------------------------");
 				reporter = new HTMLGenerator();
 				reporter.generateImageReport();
 				reporter.generateJSReport();
@@ -55,7 +63,8 @@ public class TestInitializer {
 				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
 				controller.start(Spider.class, numberOfCrawlers);
 				ThreadManager.cleanup();
-				// CSVReporter.generateReportAsCSV();
+				System.out.println("\nGenerating Report ");
+				System.out.println("---------------------------------------");
 				reporter = new HTMLGenerator();
 				reporter.generateImageReport();
 				reporter.generateJSReport();
