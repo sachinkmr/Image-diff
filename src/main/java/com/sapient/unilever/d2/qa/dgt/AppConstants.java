@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -127,6 +128,7 @@ public class AppConstants {
 			} else {
 				URL_TEXT = "";
 			}
+
 			IMAGE_DIFF = System.getProperty("imageDiff") != null && !System.getProperty("imageDiff").isEmpty()
 					&& System.getProperty("imageDiff").equalsIgnoreCase("Yes");
 			JS_DIFF = System.getProperty("jsDiff") != null && !System.getProperty("jsDiff").isEmpty()
@@ -237,9 +239,9 @@ public class AppConstants {
 			} catch (JSONException | IOException e) {
 				LoggerFactory.getLogger(AppConstants.class).error("Error in loading browser file", e);
 			}
-			if (BUILD_TYPE == BuildType.PRE) {
-				saveParam();
-			}
+			// if (BUILD_TYPE == BuildType.PRE) {
+			// saveParam();
+			// }
 			try {
 				HelperUtils.loadWebDriverServers();
 			} catch (Exception e) {
@@ -260,11 +262,17 @@ public class AppConstants {
 		return file.getAbsolutePath();
 	}
 
-	private static void saveParam() {
+	public static void saveParam() {
 		Map<String, String> map = new HashMap<>();
 		Properties p = System.getProperties();
 		for (String key : p.stringPropertyNames()) {
 			map.put(key, System.getProperty(key));
+		}
+		if (!StringUtils.isEmpty(SITE)) {
+			File file = new File(FOLDER, "urls.txt");
+			map.put("UrlsTextFileLocation", file.getAbsolutePath());
+			System.setProperty("SiteAddress", "");
+			writeUrlsToFile(file);
 		}
 		p = null;
 		try {
@@ -277,14 +285,32 @@ public class AppConstants {
 
 	}
 
+	/**
+	 * @param file
+	 */
+	private static void writeUrlsToFile(File file) {
+		List<String> list = new ArrayList<>();
+		for (D2Page page : PAGES) {
+			list.add(page.getSite());
+		}
+		Collections.sort(list);
+		try {
+			FileUtils.writeLines(file, "UTF-8", list);
+		} catch (IOException e) {
+			LoggerFactory.getLogger(AppConstants.class).error("Unable to store urls", e);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	private static void readParam() {
 		LoggerFactory.getLogger(AppConstants.class).info("Reading properties from previuos build");
 		try {
 			ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File(PRE_DATA, "Suite.data")));
 			Map<String, String> map = (Map<String, String>) is.readObject();
-			map.remove("BuildType");
 			is.close();
+			map.remove("BuildType");
+			map.remove("PreBuildVersion");
+			map.remove("PreBuildTime");
 			for (String key : map.keySet()) {
 				try {
 					System.setProperty(key, map.get(key));

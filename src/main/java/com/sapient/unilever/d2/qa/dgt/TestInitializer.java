@@ -1,6 +1,7 @@
 package com.sapient.unilever.d2.qa.dgt;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -8,10 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
+import com.sapient.unilever.d2.qa.dgt.manager.ThreadManager;
+import com.sapient.unilever.d2.qa.dgt.report.HTMLGenerator;
 import com.sapient.unilever.d2.qa.dgt.spider.Spider;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderConfig;
+import com.sapient.unilever.d2.qa.dgt.spider.SpiderController;
 
-import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
@@ -21,30 +24,57 @@ public class TestInitializer {
 
 	@BeforeSuite(enabled = true)
 	public void init() {
-		int numberOfCrawlers = Integer.parseInt(AppConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
-		SpiderConfig config = new SpiderConfig().getConfig();
-		PageFetcher pageFetcher = new PageFetcher(config);
-		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		robotstxtConfig.setEnabled(false);
-		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
 		AppConstants.START_TIME = System.currentTimeMillis();
-		try {
-			System.out.println("Please wait crawling site....");
-			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
-			controller.start(Spider.class, numberOfCrawlers);
-		} catch (Exception e) {
-			logger.debug("Error in controller", e);
-			System.out.println("Error in application: " + e);
-			AppConstants.ERROR = true;
-			AppConstants.ERROR_TEXT = "URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
-					+ e.getMessage();
+		File file = new File(AppConstants.URL_TEXT);
+		HTMLGenerator reporter = null;
+		if (file.exists() && file.isFile()) {
+			try {
+				for (String url : FileUtils.readLines(file, "UTF-8")) {
+					ThreadManager.processUrl(url, false);
+				}
+				ThreadManager.cleanup();
+				// CSVReporter.generateReportAsCSV();
+				reporter = new HTMLGenerator();
+				reporter.generateImageReport();
+				reporter.generateJSReport();
+
+			} catch (IOException e) {
+				logger.debug("Error in controller", e);
+			}
+		} else if (!AppConstants.SITE.isEmpty()) {
+			int numberOfCrawlers = Integer
+					.parseInt(AppConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "10"));
+			SpiderConfig config = new SpiderConfig().getConfig();
+			PageFetcher pageFetcher = new PageFetcher(config);
+			RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+			robotstxtConfig.setEnabled(false);
+			RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+
+			try {
+				System.out.println("Please wait crawling site....");
+				SpiderController controller = new SpiderController(config, pageFetcher, robotstxtServer);
+				controller.start(Spider.class, numberOfCrawlers);
+				ThreadManager.cleanup();
+				// CSVReporter.generateReportAsCSV();
+				reporter = new HTMLGenerator();
+				reporter.generateImageReport();
+				reporter.generateJSReport();
+			} catch (Exception e) {
+				logger.debug("Error in controller", e);
+				System.out.println("Error in application: " + e);
+				AppConstants.ERROR = true;
+				AppConstants.ERROR_TEXT = "Something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
+						+ e.getMessage();
+			}
 		}
-		System.out.println("\nExecuting Test Cases");
-		System.out.println("---------------------------------------");
 	}
 
 	@AfterSuite(enabled = true)
 	public void afterSuite() {
+		if (AppConstants.BUILD_TYPE == BuildType.PRE) {
+			AppConstants.saveParam();
+		}
 		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
+		FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "crawler-data"));
 	}
 }

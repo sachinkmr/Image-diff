@@ -159,9 +159,9 @@ public class HelperUtils {
 
 	public static void validate() throws Exception {
 		boolean x = StringUtils.isBlank(AppConstants.SITE);
-		boolean y = !StringUtils.isBlank(AppConstants.BRAND_NAME) && !StringUtils.isBlank(AppConstants.URL_TEXT);
-		if (!(x & y) && !(!x & !y)) {
-			throw new Exception("Please enter site or brand name and URL text file");
+		boolean y = StringUtils.isBlank(AppConstants.URL_TEXT);
+		if (x && y) {
+			throw new Exception("Please enter site or URL text file");
 		}
 	}
 
