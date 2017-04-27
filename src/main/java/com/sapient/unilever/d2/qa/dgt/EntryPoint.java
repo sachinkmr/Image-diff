@@ -22,16 +22,15 @@ public class EntryPoint {
 
 	public static void main(String[] args) {
 		FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "crawler-data"));
-		// System.setProperty("BuildType", "Pre");
-		// System.setProperty("BrandName", "D2 Showcase");
+		System.setProperty("BuildType", "Pre");
+		System.setProperty("BrandName", "D2 Showcase");
 		// System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
-		// System.setProperty("SiteAddress",
-		// "http://d2showcase.unileversolutions.com/us/en/home.html");
+		System.setProperty("SiteAddress", "https://www.knorr.com/br/home.html");
 
-		// System.setProperty("imageDiff", "yes");
-		// System.setProperty("jsDiff", "yes");
+		System.setProperty("imageDiff", "yes");
+		System.setProperty("jsDiff", "yes");
 		// System.setProperty("htmlDiff", "No");
 		//
 		// System.setProperty("PreBuildVersion", "2.18.1");
