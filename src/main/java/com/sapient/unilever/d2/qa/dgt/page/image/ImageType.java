@@ -1,7 +1,7 @@
 package com.sapient.unilever.d2.qa.dgt.page.image;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -21,33 +21,36 @@ import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 public class ImageType extends Featurable {
 
-	private static final long serialVersionUID = 1L;
-	protected static transient final Logger logger = LoggerFactory.getLogger(ImageType.class);
-	private transient Screenshot shot;
+    private static final long serialVersionUID = 1L;
+    protected static transient final Logger logger = LoggerFactory.getLogger(ImageType.class);
+    private transient Screenshot shot;
 
-	public ImageType(String url, WebDriverManager webDriverManager) {
-		super(url, ".png", webDriverManager);
-		this.resourcePath = AppConstants.FOLDER + File.separator + "images" + File.separator + fileName;
-		new File(this.resourcePath).getParentFile().mkdirs();
-	}
+    public ImageType(String url, WebDriverManager webDriverManager) {
+	super(url, ".png", webDriverManager);
+	this.resourcePath = AppConstants.FOLDER + File.separator + "images" + File.separator + fileName;
+	new File(this.resourcePath).getParentFile().mkdirs();
+    }
 
-	@Override
-	public void apply() throws Exception {
-		if (this.getWebDriver() instanceof InternetExplorerDriver) {
-			throw new Exception("IE driver is not supported");
-		}
-		shot = new AShot().shootingStrategy(ShootingStrategies.viewportNonRetina(AppConstants.SCROLL_DELAY,
-				AppConstants.HEADER_PIXELS, AppConstants.FOOTER_PIXELS)).takeScreenshot(this.getWebDriver());
+    @Override
+    public void apply() throws Exception {
+	if (this.getWebDriver() instanceof InternetExplorerDriver) {
+	    throw new Exception("IE driver is not supported");
 	}
+	shot = new AShot().shootingStrategy(ShootingStrategies.viewportNonRetina(AppConstants.SCROLL_DELAY,
+		AppConstants.HEADER_PIXELS, AppConstants.FOOTER_PIXELS)).takeScreenshot(this.getWebDriver());
+    }
 
-	@Override
-	public void close() throws Exception {
-		try {
-			ImageIO.write(shot.getImage(), "png", Files.newOutputStream(Paths.get(this.resourcePath)));
-			shot = null;
-		} catch (IOException e) {
-			logger.error("Unable to Store Image: " + url, e);
-		}
+    @Override
+    public void close() throws Exception {
+	try {
+	    OutputStream stream=Files.newOutputStream(Paths.get(this.resourcePath));
+	    ImageIO.write(shot.getImage(), "png", stream);
+	    shot = null;
+	    stream.flush();
+	    stream.close();
+	} catch (Exception e) {
+	    logger.error("Unable to Store Image: " + url, e);
 	}
+    }
 
 }

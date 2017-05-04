@@ -10,40 +10,39 @@ import org.testng.TestNG;
 import com.sapient.unilever.d2.qa.dgt.utils.HelperUtils;
 
 public class EntryPoint {
-	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
+    protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		System.setProperty("BuildType", "Pre");
-		System.setProperty("BrandName", "D2 Showcase");
-		// System.setProperty("Username", "d2showcase");
-		// System.setProperty("Password", "D2$0wca$3");
-		System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
-		// System.setProperty("SiteAddress",
-		// "https://www.knorr.com/br/home.html");
+//	System.setProperty("BuildType", "post");
+//	System.setProperty("BrandName", "D2 Test");
+	// System.setProperty("Username", "d2showcase");
+	// System.setProperty("Password", "D2$0wca$3");
+//	System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
+//	System.setProperty("SiteAddress", "https://www.suredeodorant.co.uk/home.html");
 
-		System.setProperty("imageDiff", "yes");
-		System.setProperty("jsDiff", "yes");
-		// System.setProperty("htmlDiff", "No");
-		//
-		// System.setProperty("PreBuildVersion", "2.19.0.3");
-		// System.setProperty("PreBuildTime", "27-April-2017_10-25AM");
-		// HelperUtils.validate();
+//	System.setProperty("imageDiff", "yes");
+//	System.setProperty("jsDiff", "yes");
+	// System.setProperty("htmlDiff", "No");
+	//
+//	 System.setProperty("PreBuildVersion", "2.19.0.3");
+//	 System.setProperty("PreBuildTime", "04-May-2017_02-35PM");
+	// HelperUtils.validate();
 
-		try {
-			List<String> suites = new ArrayList<>();
-			suites.add(HelperUtils.getResourceFile("testng.xml"));
-			TestNG testng = new TestNG();
-			testng.setTestSuites(suites);
-			testng.setUseDefaultListeners(false);
-			testng.setVerbose(0);
-			testng.run();
-		} catch (Exception e) {
-			logger.error("Error in application: ", e);
-			AppConstants.ERROR = true;
-			AppConstants.ERROR_TEXT = "URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
-					+ e.getMessage();
-		}
-
+	try {
+	    List<String> suites = new ArrayList<>();
+	    suites.add(HelperUtils.getResourceFile("testng.xml"));
+	    TestNG testng = new TestNG();
+	    testng.setTestSuites(suites);
+	    testng.setUseDefaultListeners(false);
+	    testng.setVerbose(0);
+	    testng.run();
+	} catch (Exception e) {
+	    logger.error("Error in application: ", e);
+	    AppConstants.ERROR = true;
+	    AppConstants.ERROR_TEXT = "URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
+		    + e.getMessage();
 	}
+
+    }
 }
