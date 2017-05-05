@@ -14,8 +14,8 @@ public class EntryPoint {
 
 	public static void main(String[] args) {
 
-		// System.setProperty("BuildType", "Pre");
-		// System.setProperty("BrandName", "D2 Test");
+		System.setProperty("BuildType", "Post");
+		System.setProperty("BrandName", "D2 Test");
 		// System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
@@ -26,8 +26,8 @@ public class EntryPoint {
 		// System.setProperty("jsDiff", "yes");
 		// System.setProperty("htmlDiff", "No");
 		//
-		// System.setProperty("PreBuildVersion", "2.19.0.3");
-		// System.setProperty("PreBuildTime", "04-May-2017_02-35PM");
+		System.setProperty("PreBuildVersion", "2.19.0.3");
+		System.setProperty("PreBuildTime", "05-May-2017_03-29PM");
 		// HelperUtils.validate();
 
 		try {

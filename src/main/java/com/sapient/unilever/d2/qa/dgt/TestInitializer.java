@@ -83,9 +83,10 @@ public class TestInitializer {
 		if (AppConstants.BUILD_TYPE == BuildType.PRE) {
 			AppConstants.saveParam();
 		}
-		FileUtils.deleteQuietly(new File(AppConstants.FOLDER, "browsers.json"));
-		FileUtils.deleteQuietly(new File(AppConstants.FOLDER, "Config.properties"));
-		FileUtils.deleteQuietly(new File(AppConstants.FOLDER, "testng.xml"));
+		File file = new File(AppConstants.FOLDER).getParentFile();
+		FileUtils.deleteQuietly(new File(file, "browsers.json"));
+		FileUtils.deleteQuietly(new File(file, "Config.properties"));
+		FileUtils.deleteQuietly(new File(file, "testng.xml"));
 		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
 		FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "crawler-data"));
 	}
