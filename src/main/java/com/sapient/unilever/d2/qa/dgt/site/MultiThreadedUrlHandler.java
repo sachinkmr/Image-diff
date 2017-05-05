@@ -10,26 +10,26 @@ import com.sapient.unilever.d2.qa.dgt.selenium.WebDriverManager;
 import com.sapient.unilever.d2.qa.dgt.selenium.WebDriverManagerProvider;
 
 public class MultiThreadedUrlHandler implements Runnable {
-    public static ExecutorService services;
-    public List<WebDriverManager> drivers;
-    private String url;
-    static {
-	services = Executors.newFixedThreadPool(AppConstants.BROWSER_INSTANCE);
-    }
-
-    public MultiThreadedUrlHandler(String browserName, String url) {
-	this.url = url;
-	drivers = new ArrayList<>(AppConstants.BROWSER_INSTANCE);
-	for (int i = 0; i < AppConstants.BROWSER_INSTANCE; i++) {
-	    drivers.add(WebDriverManagerProvider.getWebDrivermanager(browserName));
+	public static ExecutorService services;
+	public List<WebDriverManager> drivers;
+	private String url;
+	static {
+		services = Executors.newFixedThreadPool(AppConstants.BROWSER_INSTANCE);
 	}
-    }
 
-    @Override
-    public void run() {
-	for (int i = 0; i < AppConstants.BROWSER_INSTANCE; i++) {
-	    
+	public MultiThreadedUrlHandler(String browserName, String url) {
+		this.url = url;
+		drivers = new ArrayList<>(AppConstants.BROWSER_INSTANCE);
+		for (int i = 0; i < AppConstants.BROWSER_INSTANCE; i++) {
+			drivers.add(WebDriverManagerProvider.getWebDrivermanager(browserName));
+		}
 	}
-    }
+
+	@Override
+	public void run() {
+		for (int i = 0; i < AppConstants.BROWSER_INSTANCE; i++) {
+
+		}
+	}
 
 }

@@ -8,60 +8,60 @@ import com.sapient.unilever.d2.qa.dgt.AppConstants;
 import com.sapient.unilever.d2.qa.dgt.utils.HelperUtils;
 
 public class PageInfo implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private String pageUrl;
-    private String browserName;
-    private String pageName;
-    private String buildType;
-    private List<Featurable> types;
+	private static final long serialVersionUID = 1L;
+	private String pageUrl;
+	private String browserName;
+	private String pageName;
+	private String buildType;
+	private List<Featurable> types;
 
-    public PageInfo(String pageUrl, String browserName) {
-	this.pageUrl = pageUrl;
-	this.browserName = browserName;
-	this.pageName = HelperUtils.getUniqueName(pageUrl + browserName) + ".info";
-	types = new ArrayList<>();
-	this.buildType = AppConstants.BUILD_TYPE.name();
-    }
-
-    public List<Featurable> getTypes() {
-	return types;
-    }
-
-    public Featurable getType(String type) {
-	for (Featurable f : types) {
-	    if (type.equals(f.getType()))
-		return f;
+	public PageInfo(String pageUrl, String browserName) {
+		this.pageUrl = pageUrl;
+		this.browserName = browserName;
+		this.pageName = HelperUtils.getUniqueName(pageUrl + browserName) + ".info";
+		types = new ArrayList<>();
+		this.buildType = AppConstants.BUILD_TYPE.name();
 	}
-	return null;
-    }
 
-    public String getBuildType() {
-	return buildType;
-    }
+	public List<Featurable> getTypes() {
+		return types;
+	}
 
-    public String getPageName() {
-	return pageName;
-    }
+	public Featurable getType(String type) {
+		for (Featurable f : types) {
+			if (type.equals(f.getType()))
+				return f;
+		}
+		return null;
+	}
 
-    public void register(Featurable type) {
-	types.add(type);
-    }
+	public String getBuildType() {
+		return buildType;
+	}
 
-    public String getPageUrl() {
-	return pageUrl;
-    }
+	public String getPageName() {
+		return pageName;
+	}
 
-    public void setPageUrl(String pageUrl) {
-	this.pageUrl = pageUrl;
-    }
+	public void register(Featurable type) {
+		types.add(type);
+	}
 
-    public String getBrowserName() {
-	return browserName;
-    }
+	public String getPageUrl() {
+		return pageUrl;
+	}
 
-    @Override
-    public String toString() {
-	return String.format("Url: %s, on %s, for %s build.", pageUrl, browserName, buildType);
-    }
+	public void setPageUrl(String pageUrl) {
+		this.pageUrl = pageUrl;
+	}
+
+	public String getBrowserName() {
+		return browserName;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Url: %s, on %s, for %s build.", pageUrl, browserName, buildType);
+	}
 
 }
