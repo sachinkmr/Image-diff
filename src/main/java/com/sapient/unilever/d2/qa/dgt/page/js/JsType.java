@@ -18,64 +18,64 @@ import com.sapient.unilever.d2.qa.dgt.page.Featurable;
 import com.sapient.unilever.d2.qa.dgt.selenium.WebDriverManager;
 
 public class JsType extends Featurable {
-	private static final long serialVersionUID = 1L;
-	protected static final Logger logger = LoggerFactory.getLogger(JsType.class);
-	private Set<String> list;
+    private static final long serialVersionUID = 1L;
+    protected static final Logger logger = LoggerFactory.getLogger(JsType.class);
+    private Set<String> list;
 
-	public JsType(String url, WebDriverManager webDriverManager) {
-		super(url, ".jsLog", webDriverManager);
-		list = new LinkedHashSet<>();
-		this.resourcePath = AppConstants.FOLDER + File.separator + "jsLogs" + File.separator + fileName;
-		new File(this.resourcePath).getParentFile().mkdirs();
-	}
+    public JsType(String url, WebDriverManager webDriverManager) {
+	super(url, ".jsLog", webDriverManager);
+	list = new LinkedHashSet<>();
+	this.resourcePath = AppConstants.FOLDER + File.separator + "jsLogs" + File.separator + fileName;
+	new File(this.resourcePath).getParentFile().mkdirs();
+    }
 
-	public boolean hasError() {
-		return list.size() > 3;
-	}
+    public boolean hasError() {
+	return list.size() > 3;
+    }
 
-	@Override
-	public void apply() throws Exception {
-		try {
-			if (this.getWebDriver() instanceof ChromeDriver) {
-				LogEntries logEntries = this.getWebDriver().manage().logs().get(LogType.BROWSER);
-				list.add("Logging console logs for: " + this.url);
-				list.add("Browser Type: " + this.getWebDriverName());
-				list.add("----------------------------------------------------------------------");
-				for (LogEntry entry : logEntries) {
-					list.add(entry.getLevel() + " : " + entry.getMessage());
-				}
-			}
-			// if (this.getWebDriver() instanceof FirefoxDriver) {
-			// LogEntries logEntries =
-			// this.getWebDriver().manage().logs().get(LogType.BROWSER);
-			// list.add("Logging console logs for: " + this.url);
-			// list.add("Browser Type: " + this.getWebDriverName());
-			// list.add("----------------------------------------------------------------------");
-			// for (LogEntry entry : logEntries) {
-			// list.add(entry.getLevel() + " : " + entry.getMessage());
-			// }
-			// }
-			if (this.getWebDriver() instanceof PhantomJSDriver) {
-				LogEntries logEntries = ((PhantomJSDriver) this.getWebDriver()).manage().logs().get("browser");
-				list.add("Logging console logs for: " + this.url);
-				list.add("Browser Type: " + this.getWebDriverName());
-				list.add("----------------------------------------------------------------------");
-				for (LogEntry entry : logEntries) {
-					list.add(entry.getLevel() + " : " + entry.getMessage());
-				}
-			}
-			FileUtils.writeLines(new File(this.resourcePath), "UTF-8", list);
-		} catch (Exception e) {
-			logger.warn("unable to read console log for: " + url, e);
+    @Override
+    public void apply() throws Exception {
+	try {
+	    if (this.getWebDriver() instanceof ChromeDriver) {
+		LogEntries logEntries = this.getWebDriver().manage().logs().get(LogType.BROWSER);
+		list.add("Logging console logs for: " + this.url);
+		list.add("Browser Type: " + this.getWebDriverName());
+		list.add("----------------------------------------------------------------------");
+		for (LogEntry entry : logEntries) {
+		    list.add(entry.getLevel() + " : " + entry.getMessage());
 		}
-	}
-
-	@Override
-	public void close() throws Exception {
-		try {
-			FileUtils.writeLines(new File(this.resourcePath), "UTF-8", list);
-		} catch (Exception e) {
-			logger.warn("unable to read console log for: " + url, e);
+	    }
+	    // if (this.getWebDriver() instanceof FirefoxDriver) {
+	    // LogEntries logEntries =
+	    // this.getWebDriver().manage().logs().get(LogType.BROWSER);
+	    // list.add("Logging console logs for: " + this.url);
+	    // list.add("Browser Type: " + this.getWebDriverName());
+	    // list.add("----------------------------------------------------------------------");
+	    // for (LogEntry entry : logEntries) {
+	    // list.add(entry.getLevel() + " : " + entry.getMessage());
+	    // }
+	    // }
+	    if (this.getWebDriver() instanceof PhantomJSDriver) {
+		LogEntries logEntries = ((PhantomJSDriver) this.getWebDriver()).manage().logs().get("browser");
+		list.add("Logging console logs for: " + this.url);
+		list.add("Browser Type: " + this.getWebDriverName());
+		list.add("----------------------------------------------------------------------");
+		for (LogEntry entry : logEntries) {
+		    list.add(entry.getLevel() + " : " + entry.getMessage());
 		}
+	    }
+	    FileUtils.writeLines(new File(this.resourcePath), "UTF-8", list);
+	} catch (Exception e) {
+	    logger.warn("unable to read console log for: " + url, e);
 	}
+    }
+
+    @Override
+    public void close() throws Exception {
+	try {
+	    FileUtils.writeLines(new File(this.resourcePath), "UTF-8", list);
+	} catch (Exception e) {
+	    logger.warn("unable to read console log for: " + url, e);
+	}
+    }
 }

@@ -10,16 +10,16 @@ import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 public class Scroller {
-	protected static final Logger logger = LoggerFactory.getLogger(Scroller.class);
+    protected static final Logger logger = LoggerFactory.getLogger(Scroller.class);
 
-	public static void scrollPage(WebDriver driver, String url) {
-		try {
-			driver.navigate().to(url);
-			new AShot().shootingStrategy(ShootingStrategies.viewportPasting(AppConstants.SCROLL_DELAY))
-					.takeScreenshot(driver);
-		} catch (Exception e) {
-			logger.warn("Error in scrolling page: " + url, e);
-		}
-
+    public static void scrollPage(WebDriver driver, String url) {
+	try {
+	    driver.navigate().to(url);
+	    new AShot().shootingStrategy(ShootingStrategies.viewportPasting(AppConstants.SCROLL_DELAY))
+		    .takeScreenshot(driver);
+	} catch (Exception e) {
+	    logger.warn("Error in scrolling page: " + url, e);
 	}
+
+    }
 }
