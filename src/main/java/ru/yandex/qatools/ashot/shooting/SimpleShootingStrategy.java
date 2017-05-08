@@ -18,7 +18,12 @@ import java.util.Set;
  */
 public class SimpleShootingStrategy implements ShootingStrategy {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public BufferedImage getScreenshot(WebDriver wd) {
 	ByteArrayInputStream imageArrayStream = null;
 	TakesScreenshot takesScreenshot;

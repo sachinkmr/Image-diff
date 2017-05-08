@@ -10,7 +10,12 @@ import java.awt.image.BufferedImage;
  */
 
 public class MonochromeFilter implements IndentFilter {
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public BufferedImage apply(BufferedImage image) {
 	return darken(image);
     }

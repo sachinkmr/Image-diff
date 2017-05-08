@@ -9,7 +9,12 @@ import ru.yandex.qatools.ashot.util.JsCoords;
  */
 public class JqueryCoordsProvider extends CoordsProvider {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Coords ofElement(WebDriver driver, WebElement element) {
 	return JsCoords.findCoordsWithJquery(driver, element);
     }

@@ -6,7 +6,11 @@ import java.util.Set;
 
 abstract class ShootingDecorator implements ShootingStrategy {
 
-    private ShootingStrategy shootingStrategy;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private ShootingStrategy shootingStrategy;
 
     public ShootingDecorator(ShootingStrategy shootingStrategy) {
 	this.shootingStrategy = shootingStrategy;

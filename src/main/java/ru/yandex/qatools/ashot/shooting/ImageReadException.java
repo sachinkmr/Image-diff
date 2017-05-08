@@ -5,7 +5,12 @@ package ru.yandex.qatools.ashot.shooting;
  */
 public class ImageReadException extends RuntimeException {
 
-    public ImageReadException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public ImageReadException(String message) {
 	super(message);
     }
 

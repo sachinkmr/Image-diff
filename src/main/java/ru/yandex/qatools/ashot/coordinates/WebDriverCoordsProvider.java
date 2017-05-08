@@ -10,7 +10,12 @@ import org.openqa.selenium.WebElement;
  */
 
 public class WebDriverCoordsProvider extends CoordsProvider {
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Coords ofElement(WebDriver driver, WebElement element) {
 	Point point = element.getLocation();
 	Dimension dimension = element.getSize();

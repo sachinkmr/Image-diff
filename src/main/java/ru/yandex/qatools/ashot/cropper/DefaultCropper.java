@@ -15,7 +15,12 @@ import static ru.yandex.qatools.ashot.coordinates.Coords.setReferenceCoords;
 
 public class DefaultCropper extends ImageCropper {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Screenshot cropScreenshot(BufferedImage image, Set<Coords> coordsToCompare) {
 	Coords cropArea = Coords.unity(coordsToCompare);
 

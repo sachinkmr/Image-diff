@@ -19,7 +19,11 @@ import static ru.yandex.qatools.ashot.util.InnerScript.*;
  */
 public class ViewportPastingDecorator extends ShootingDecorator {
 
-    protected int scrollTimeout = 0;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected int scrollTimeout = 0;
     private Coords shootingArea;
 
     public ViewportPastingDecorator(ShootingStrategy strategy) {

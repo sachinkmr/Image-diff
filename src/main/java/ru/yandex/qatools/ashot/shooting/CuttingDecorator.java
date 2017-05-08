@@ -16,7 +16,11 @@ import java.util.Set;
  */
 public class CuttingDecorator extends ShootingDecorator {
 
-    private CutStrategy cutStrategy;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private CutStrategy cutStrategy;
 
     public CuttingDecorator(ShootingStrategy strategy) {
 	super(strategy);

@@ -8,7 +8,11 @@ import org.openqa.selenium.WebDriver;
  * @author <a href="frolic@yandex-team.ru">Vyacheslav Frolov</a>
  */
 public class FixedCutStrategy implements CutStrategy {
-    private final int headerToCut;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final int headerToCut;
     private final int footerToCut;
 
     public FixedCutStrategy(int headerToCut, int footerToCut) {

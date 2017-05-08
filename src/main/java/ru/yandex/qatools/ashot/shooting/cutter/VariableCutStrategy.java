@@ -15,7 +15,11 @@ import ru.yandex.qatools.ashot.shooting.InvalidViewportHeightException;
  */
 public class VariableCutStrategy implements CutStrategy {
 
-    public static final String SCRIPT = "var h = window.innerHeight || document.documentElement.clientHeight; return h;";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public static final String SCRIPT = "var h = window.innerHeight || document.documentElement.clientHeight; return h;";
     private final int headerMin;
     private final int headerMax;
     private final int windowInnerHeightMin;

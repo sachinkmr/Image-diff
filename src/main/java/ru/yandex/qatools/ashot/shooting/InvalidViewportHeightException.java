@@ -5,7 +5,12 @@ package ru.yandex.qatools.ashot.shooting;
  */
 public class InvalidViewportHeightException extends RuntimeException {
 
-    public InvalidViewportHeightException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public InvalidViewportHeightException(String message) {
 	super(message);
     }
 

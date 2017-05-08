@@ -16,7 +16,11 @@ import static java.awt.image.BufferedImage.TYPE_4BYTE_ABGR;
 
 public class RotatingDecorator implements ShootingStrategy {
 
-    private CutStrategy cutStrategy;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private CutStrategy cutStrategy;
     private ShootingStrategy shootingStrategy;
 
     public RotatingDecorator(CutStrategy cutStrategy, ShootingStrategy shootingStrategy) {

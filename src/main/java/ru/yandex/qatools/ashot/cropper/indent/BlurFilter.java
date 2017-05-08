@@ -10,7 +10,12 @@ import java.awt.image.Kernel;
  */
 
 public class BlurFilter implements IndentFilter {
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public BufferedImage apply(BufferedImage image) {
 	Kernel kernel = new Kernel(3, 3,
 		new float[] { 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f, 1f / 9f });

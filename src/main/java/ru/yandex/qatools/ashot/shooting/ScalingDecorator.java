@@ -14,7 +14,11 @@ import java.util.Set;
  */
 public class ScalingDecorator extends ShootingDecorator {
 
-    private static final Float STANDARD_DRP = 1F;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static final Float STANDARD_DRP = 1F;
     private Float dprX = STANDARD_DRP;
     private Float dprY = STANDARD_DRP;
 

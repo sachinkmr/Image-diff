@@ -21,7 +21,12 @@ import static ru.yandex.qatools.ashot.coordinates.Coords.setReferenceCoords;
 
 public class IndentCropper extends DefaultCropper {
 
-    public static final int DEFAULT_INDENT = 50;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static final int DEFAULT_INDENT = 50;
 
     private int indent = DEFAULT_INDENT;
 

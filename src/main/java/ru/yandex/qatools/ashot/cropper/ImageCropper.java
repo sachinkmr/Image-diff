@@ -13,7 +13,12 @@ import java.util.Set;
 
 public abstract class ImageCropper implements Serializable {
 
-    public Screenshot crop(BufferedImage image, Set<Coords> cropArea) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public Screenshot crop(BufferedImage image, Set<Coords> cropArea) {
 	return cropArea.isEmpty() ? new Screenshot(image) : cropScreenshot(image, cropArea);
     }
 
