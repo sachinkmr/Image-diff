@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
@@ -16,7 +15,6 @@ import com.sapient.unilever.d2.qa.dgt.report.HTMLGenerator;
 import com.sapient.unilever.d2.qa.dgt.spider.Spider;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderConfig;
 import com.sapient.unilever.d2.qa.dgt.spider.SpiderController;
-import com.sapient.unilever.d2.qa.dgt.utils.Hosts;
 
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
@@ -24,16 +22,10 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class TestInitializer {
 	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
-	private Hosts host = null;
 
 	@BeforeSuite(enabled = true)
 	public void init() {
-		if (!StringUtils.isEmpty(System.getProperty("HostName"))
-				&& !StringUtils.isEmpty(System.getProperty("HostIP"))) {
-			host.add(System.getProperty("HostName"), System.getProperty("HostIP"));
-			logger.info("Added " + System.getProperty("HostIP") + "\t" + System.getProperty("HostName")
-					+ " in etc/hosts file");
-		}
+
 		AppConstants.START_TIME = System.currentTimeMillis();
 	}
 
@@ -92,11 +84,11 @@ public class TestInitializer {
 		if (AppConstants.BUILD_TYPE == BuildType.PRE) {
 			AppConstants.saveParam();
 		}
-		if (host != null) {
-			host.remove(System.getProperty("HostName"));
-			logger.info("Removeded " + System.getProperty("HostName") + " in etc/hosts file");
+		if (AppConstants.HOST != null) {
 			try {
-				host.close();
+				AppConstants.HOST.remove(System.getProperty("HostName"));
+				logger.info("Removeded " + System.getProperty("HostName") + " in etc/hosts file");
+				AppConstants.HOST.close();
 			} catch (Exception e) {
 				logger.debug("Not able to clear host object", e);
 			}
