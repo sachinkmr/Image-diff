@@ -46,7 +46,6 @@ public class TestInitializer {
 				reporter = new HTMLGenerator();
 				reporter.generateImageReport();
 				reporter.generateJSReport();
-
 			} catch (IOException e) {
 				logger.debug("Error in controller", e);
 			}

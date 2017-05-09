@@ -62,6 +62,7 @@ public class AppConstants {
 	public static Set<D2Page> PAGES;
 	public static BuildType BUILD_TYPE;
 	public static Hosts HOST;
+
 	static {
 		if (!StringUtils.isEmpty(System.getProperty("HostName"))
 				&& !StringUtils.isEmpty(System.getProperty("HostIP"))) {

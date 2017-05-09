@@ -31,7 +31,6 @@ public class EntryPoint {
 
 		// System.setProperty("PreBuildVersion", "2.19.0.3");
 		// System.setProperty("PreBuildTime", "04-May-2017_02-35PM");
-		// HelperUtils.validate();
 
 		try {
 			List<String> suites = new ArrayList<>();
