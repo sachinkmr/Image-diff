@@ -2,13 +2,13 @@
 	"instances": 5,
 	"broswers": {
 		"chrome": {
-			"enable": false
+			"enable": true
 		},
 		"firefox": {
 			"enable": false
 		},
 		"ie": {
-			"enable": true
+			"enable": false
 		},
 		"phantom": {
 			"enable": false
