@@ -57,11 +57,12 @@ public class AppConstants {
 	public static int FOOTER_PIXELS;
 	public static int PAGE_WAIT;
 	public static int SCROLL_DELAY, PAGE_TIMEOUT;
-	public static int BROWSER_INSTANCE = 1;
+	public static int BROWSER_INSTANCE;
 	public static Set<Browser> BROWSERS;
 	public static Set<D2Page> PAGES;
 	public static BuildType BUILD_TYPE;
 	public static Hosts HOST;
+	public static boolean MULTI_THREADED;
 
 	static {
 		if (!StringUtils.isEmpty(System.getProperty("HostName"))
@@ -222,8 +223,11 @@ public class AppConstants {
 			PAGE_WAIT = Integer.parseInt(PROPERTIES.getProperty("page.screen.wait", "1000"));
 			SCROLL_DELAY = Integer.parseInt(PROPERTIES.getProperty("page.scroll.delay", "1000"));
 			PAGE_TIMEOUT = Integer.parseInt(PROPERTIES.getProperty("page.time.out", "30000"));
-			// browsers info instantiation
+			MULTI_THREADED = Boolean.parseBoolean(PROPERTIES.getProperty("app.browsers.multiple-threads", "true"));
+			int val = Integer.parseInt(PROPERTIES.getProperty("app.browsers.threads", "3"));
+			BROWSER_INSTANCE = val > 3 ? 3 : val;
 
+			// browsers info instantiation
 			String browserLoc = "";
 			if (System.getProperty("BrowserConfigFile") != null && !System.getProperty("BrowserConfigFile").isEmpty()) {
 				LoggerFactory.getLogger(AppConstants.class).info("Loading user's browser file");
@@ -239,7 +243,6 @@ public class AppConstants {
 			try {
 				JSONObject BROWSER_PROPERTIES = new JSONObject(
 						FileUtils.readFileToString(new File(browserLoc), "UTF-8"));
-				BROWSER_INSTANCE = BROWSER_PROPERTIES.getInt("instances");
 				BROWSERS = HelperUtils.readBrowsers(BROWSER_PROPERTIES);
 				BROWSER_PROPERTIES = null;
 			} catch (JSONException | IOException e) {

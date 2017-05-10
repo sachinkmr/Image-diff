@@ -38,7 +38,7 @@ public class TestInitializer {
 		if (file.exists() && file.isFile()) {
 			try {
 				for (String url : FileUtils.readLines(file, "UTF-8")) {
-					ThreadManager.processUrl(url, false);
+					ThreadManager.processUrl(url);
 				}
 				ThreadManager.cleanup();
 				System.out.println("\nGenerating Report ");

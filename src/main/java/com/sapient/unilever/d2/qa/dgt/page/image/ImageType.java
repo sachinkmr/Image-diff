@@ -32,14 +32,8 @@ public class ImageType extends Featurable {
 
 	@Override
 	public void apply() throws Exception {
-		// if (this.getWebDriver() instanceof InternetExplorerDriver) {
-		// throw new Exception("IE driver is not supported");
-		// }
 		shot = new AShot().shootingStrategy(ShootingStrategies.viewportNonRetina(AppConstants.SCROLL_DELAY,
 				AppConstants.HEADER_PIXELS, AppConstants.FOOTER_PIXELS)).takeScreenshot(this.getWebDriver());
-		// shot = new
-		// AShot().shootingStrategy(ShootingStrategies.viewportPasting(AppConstants.SCROLL_DELAY))
-		// .takeScreenshot(this.getWebDriver());
 	}
 
 	@Override
@@ -47,9 +41,9 @@ public class ImageType extends Featurable {
 		try {
 			OutputStream stream = Files.newOutputStream(Paths.get(this.resourcePath));
 			ImageIO.write(shot.getImage(), "png", stream);
-			shot = null;
 			stream.flush();
 			stream.close();
+			shot = null;
 		} catch (Exception e) {
 			logger.error("Unable to Store Image: " + url, e);
 		}
