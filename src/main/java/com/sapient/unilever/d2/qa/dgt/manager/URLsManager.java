@@ -25,8 +25,20 @@ public class URLsManager implements AutoCloseable {
 		this.browserName = browserName;
 		if (AppConstants.MULTI_THREADED) {
 			managers = new ArrayList<>(AppConstants.BROWSER_INSTANCE);
+			for (int i = 0; i < AppConstants.BROWSER_INSTANCE; i++) {
+				try {
+					managers.add(WebDriverManagerProvider.getWebDrivermanager(browserName));
+				} catch (Exception e) {
+					logger.error("Unable to launch browser", e);
+				}
+			}
 		} else {
 			managers = new ArrayList<>(1);
+			try {
+				managers.add(WebDriverManagerProvider.getWebDrivermanager(browserName));
+			} catch (Exception e) {
+				logger.error("Unable to launch browser", e);
+			}
 		}
 		services = Executors.newFixedThreadPool(managers.size());
 	}
@@ -34,15 +46,8 @@ public class URLsManager implements AutoCloseable {
 	/**
 	 * @param url
 	 */
-	public void manageURL(String url) {
-		if (managers.size() < AppConstants.BROWSER_INSTANCE) {
-			try {
-				managers.add(WebDriverManagerProvider.getWebDrivermanager(browserName));
-			} catch (Exception e) {
-				logger.error("Unable to launch browser", e);
-			}
-		}
-		services.execute(new UrlHandler(managers.get(i++ % managers.size()), url));
+	public synchronized void manageURL(String url) {
+		services.execute(new UrlHandler(managers.get(getCounter() % managers.size()), url));
 	}
 
 	public List<WebDriverManager> getManagers() {
@@ -51,6 +56,10 @@ public class URLsManager implements AutoCloseable {
 
 	public ExecutorService getServices() {
 		return services;
+	}
+
+	public String getBrowserName() {
+		return browserName;
 	}
 
 	/*
@@ -63,6 +72,7 @@ public class URLsManager implements AutoCloseable {
 		services.shutdown();
 		while (!services.isTerminated()) {
 			logger.warn("Waiting 10 seconds for browsers to complete requests...");
+
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
@@ -74,8 +84,8 @@ public class URLsManager implements AutoCloseable {
 		}
 	}
 
-	// public synchronized int getCounter() {
-	// return i++;
-	// }
+	private synchronized int getCounter() {
+		return i++;
+	}
 
 }

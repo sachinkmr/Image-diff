@@ -39,6 +39,8 @@ public class ImageType extends Featurable {
 	@Override
 	public void close() throws Exception {
 		try {
+			if (!Files.exists(Paths.get(this.resourcePath).getParent()))
+				Files.createDirectories(Paths.get(this.resourcePath).getParent());
 			OutputStream stream = Files.newOutputStream(Paths.get(this.resourcePath));
 			ImageIO.write(shot.getImage(), "png", stream);
 			stream.flush();

@@ -3,3 +3,6 @@ target/
 Logs/
 Reports/
 data/
+/Logs/
+/Reports/
+/data/

@@ -95,8 +95,7 @@ public class WebDriverManager {
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		driver.manage().window().maximize();
 		return driver;
 	}
@@ -135,8 +134,7 @@ public class WebDriverManager {
 		driver = new FirefoxDriver(capabilities);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -167,8 +165,7 @@ public class WebDriverManager {
 		driver = new InternetExplorerDriver(service, capabilitiesIE);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -184,8 +181,7 @@ public class WebDriverManager {
 		driver = new PhantomJSDriver(caps);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -200,8 +196,7 @@ public class WebDriverManager {
 		driver = new EdgeDriver(cap);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -219,8 +214,7 @@ public class WebDriverManager {
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -238,8 +232,7 @@ public class WebDriverManager {
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 
@@ -257,8 +250,7 @@ public class WebDriverManager {
 		capabilities.setCapability(CapabilityType.LOGGING_PREFS, getLoggingLevel());
 		driver = new ChromeDriver(capabilities);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT,
-		// TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(AppConstants.PAGE_TIMEOUT, TimeUnit.MILLISECONDS);
 		return driver;
 	}
 

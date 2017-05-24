@@ -62,7 +62,7 @@ public class AppConstants {
 	public static Set<D2Page> PAGES;
 	public static BuildType BUILD_TYPE;
 	public static Hosts HOST;
-	public static boolean MULTI_THREADED;
+	public static boolean MULTI_THREADED, SCROLLER;
 
 	static {
 		if (!StringUtils.isEmpty(System.getProperty("HostName"))
@@ -221,11 +221,12 @@ public class AppConstants {
 			FOOTER_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.footer.pixels", "0"));
 			IGNORED_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.pixel", "0"));
 			PAGE_WAIT = Integer.parseInt(PROPERTIES.getProperty("page.screen.wait", "1000"));
+			SCROLLER = Boolean.parseBoolean(PROPERTIES.getProperty("page.scroll", "true"));
 			SCROLL_DELAY = Integer.parseInt(PROPERTIES.getProperty("page.scroll.delay", "1000"));
 			PAGE_TIMEOUT = Integer.parseInt(PROPERTIES.getProperty("page.time.out", "30000"));
 			MULTI_THREADED = Boolean.parseBoolean(PROPERTIES.getProperty("app.browsers.multiple-threads", "true"));
-			int val = Integer.parseInt(PROPERTIES.getProperty("app.browsers.threads", "3"));
-			BROWSER_INSTANCE = val > 3 ? 3 : val;
+			int val = Integer.parseInt(PROPERTIES.getProperty("app.browsers.threads", "2"));
+			BROWSER_INSTANCE = val > 2 ? 2 : val;
 
 			// browsers info instantiation
 			String browserLoc = "";

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
@@ -75,6 +76,9 @@ public class TestInitializer {
 				AppConstants.ERROR_TEXT = "Something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
 						+ e.getMessage();
 			}
+		}
+		if (reporter != null && !StringUtils.isEmpty(reporter.getReports())) {
+			System.setProperty("Reports", reporter.getReports());
 		}
 	}
 
