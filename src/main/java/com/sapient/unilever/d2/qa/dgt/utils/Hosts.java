@@ -5,7 +5,6 @@ package com.sapient.unilever.d2.qa.dgt.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -30,7 +29,6 @@ public class Hosts implements AutoCloseable {
 	private Map<String, String> entries = null;
 	private List<String> hostOtherEntries;
 	private static Hosts host = null;
-	private Scanner in;
 
 	private Hosts() throws Exception {
 		hostOtherEntries = new ArrayList<String>();
@@ -70,75 +68,70 @@ public class Hosts implements AutoCloseable {
 	 */
 	private Map<String, String> parse() throws Exception {
 		entries = new LinkedHashMap<String, String>();
-		try {
-			if (!hosts.canRead()) {
-				throw new Exception("Do not have permissiont to read file.");
-			}
-			in = new Scanner(hosts);
-			String crntLine = "";
-			String[] split;
+		if (!hosts.canRead()) {
+			throw new Exception("Do not have permissiont to read file.");
+		}
+		Scanner in = new Scanner(hosts);
+		String crntLine = "";
+		String[] split;
+		while (in.hasNextLine()) {
+			crntLine = in.nextLine();
 
-			while (in.hasNextLine()) {
-				crntLine = in.nextLine();
-
-				/*
-				 * All needed info is to the left of the comment # if there is
-				 * one. So this checks for a comment and grabs everything to the
-				 * left of it.
-				 */
-				if (crntLine.contains("#")) {
-					split = crntLine.split("#");
-					if (split.length > 0) {
-						if (split[0].length() > 0) {
-							crntLine = split[0] = split[0].trim();
-						} else {
-							crntLine = "";
-						}
-						/* Adds commment line to Comment list */
-						if (split[1].length() > 0) {
-							hostOtherEntries.add("#" + split[1]);
-						} else {
-							hostOtherEntries.add("#");
-						}
+			/*
+			 * All needed info is to the left of the comment # if there is one.
+			 * So this checks for a comment and grabs everything to the left of
+			 * it.
+			 */
+			if (crntLine.contains("#")) {
+				split = crntLine.split("#");
+				if (split.length > 0) {
+					if (split[0].length() > 0) {
+						crntLine = split[0] = split[0].trim();
 					} else {
 						crntLine = "";
 					}
+					/* Adds commment line to Comment list */
+					if (split[1].length() > 0) {
+						hostOtherEntries.add("#" + split[1]);
+					} else {
+						hostOtherEntries.add("#");
+					}
+				} else {
+					crntLine = "";
 				}
+			}
 
-				/*
-				 * Checks the remaining text, which is gaurenteed not to have a
-				 * comment at this point, to see if there is a delimiter so that
-				 * two possible valuebles can be extracted.
-				 */
-				if (crntLine.contains("\t")) {
-					split = crntLine.split("\t");
+			/*
+			 * Checks the remaining text, which is gaurenteed not to have a
+			 * comment at this point, to see if there is a delimiter so that two
+			 * possible valuebles can be extracted.
+			 */
+			if (crntLine.contains("\t")) {
+				split = crntLine.split("\t");
+				for (String str : split) {
+					str = str.trim();
+				}
+				if (split[0].contains("::")) {
+					hostOtherEntries.add(split[0] + "\t" + split[1]);
+				} else {
+					entries.put(split[1], split[0]);
+				}
+			} else {
+				if (crntLine.contains(" ")) {
+					split = crntLine.split(" ");
 					for (String str : split) {
 						str = str.trim();
 					}
+
 					if (split[0].contains("::")) {
 						hostOtherEntries.add(split[0] + "\t" + split[1]);
 					} else {
 						entries.put(split[1], split[0]);
 					}
-				} else {
-					if (crntLine.contains(" ")) {
-						split = crntLine.split(" ");
-						for (String str : split) {
-							str = str.trim();
-						}
-
-						if (split[0].contains("::")) {
-							hostOtherEntries.add(split[0] + "\t" + split[1]);
-						} else {
-							entries.put(split[1], split[0]);
-						}
-					}
 				}
 			}
-
-		} catch (FileNotFoundException ex) {
-			logger.error("Host file not found", ex);
 		}
+		in.close();
 		return entries;
 	}
 
@@ -261,7 +254,6 @@ public class Hosts implements AutoCloseable {
 	 */
 	@Override
 	public void close() throws Exception {
-		in.close();
 		host = null;
 	}
 

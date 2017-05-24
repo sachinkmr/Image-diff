@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
@@ -39,7 +38,7 @@ public class TestInitializer {
 		if (file.exists() && file.isFile()) {
 			try {
 				for (String url : FileUtils.readLines(file, "UTF-8")) {
-					ThreadManager.processUrl(url);
+					ThreadManager.processUrl(url, false);
 				}
 				ThreadManager.cleanup();
 				System.out.println("\nGenerating Report ");
@@ -47,6 +46,7 @@ public class TestInitializer {
 				reporter = new HTMLGenerator();
 				reporter.generateImageReport();
 				reporter.generateJSReport();
+
 			} catch (IOException e) {
 				logger.debug("Error in controller", e);
 			}
@@ -77,9 +77,6 @@ public class TestInitializer {
 						+ e.getMessage();
 			}
 		}
-		if (reporter != null && !StringUtils.isEmpty(reporter.getReports())) {
-			System.setProperty("Reports", reporter.getReports());
-		}
 	}
 
 	@AfterSuite(enabled = true)
@@ -89,8 +86,8 @@ public class TestInitializer {
 		}
 		if (AppConstants.HOST != null) {
 			try {
-				AppConstants.HOST.remove(System.getProperty("HostName"));
-				logger.info("Removeded " + System.getProperty("HostName") + " in etc/hosts file");
+				AppConstants.HOST.remove(AppConstants.HOST_NAME);
+				logger.warn("Removeded " + System.getProperty("HostName") + " in etc/hosts file");
 				AppConstants.HOST.close();
 			} catch (Exception e) {
 				logger.debug("Not able to clear host object", e);

@@ -98,7 +98,7 @@
 	</div>
 		<header>			
 			<div class="blue darken-2 report-info right">
-				<div class='report-name left'>DGT JS Logs Report</div>
+				<div class='report-name left'>Difference Generation Tool</div>
 				<!-- nav -->
 				<nav>			
 					<ul id='slide-out' class='right'>

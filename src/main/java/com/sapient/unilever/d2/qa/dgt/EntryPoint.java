@@ -14,23 +14,23 @@ public class EntryPoint {
 
 	public static void main(String[] args) {
 
-		System.setProperty("BuildType", "pre");
-		System.setProperty("BrandName", "D2 Test");
-		// System.setProperty("Username", "d2showcase");
+		// System.setProperty("BuildType", "pre");
+		// System.setProperty("BrandName", "D2 Test");
+		// // System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
-		System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
+		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
 		// System.setProperty("SiteAddress",
 		// "https://www.suredeodorant.co.uk/home.html");
 
-		System.setProperty("imageDiff", "yes");
-		System.setProperty("jsDiff", "yes");
+		// System.setProperty("imageDiff", "no");
+		// System.setProperty("jsDiff", "no");
 		// System.setProperty("htmlDiff", "No");
-
+		//
 		// System.setProperty("HostName", "www.knorr.com");
 		// System.setProperty("HostIP", "52.29.239.245");
 
-		// System.setProperty("PreBuildVersion", "2.20.3");
-		// System.setProperty("PreBuildTime", "10-May-2017_03-54PM");
+		// System.setProperty("PreBuildVersion", "2.19.0.3");
+		// System.setProperty("PreBuildTime", "04-May-2017_02-35PM");
 
 		try {
 			List<String> suites = new ArrayList<>();

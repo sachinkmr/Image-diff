@@ -46,7 +46,7 @@ public class AppConstants {
 	public static Pattern SHOULD_VISIT_PATTERN;
 	public static Pattern IMAGE_PATTERN;
 	public static Pattern ASSETS_PATTERN;
-	public static String USER_AGENT, PRE_DATA;
+	public static String USER_AGENT, PRE_DATA, HOST_NAME, HOST_IP;
 	public static long START_TIME, END_TIME;
 	public static String ERROR_TEXT, DIFF_FOLDER, FOLDER, BUILD_VERSION, PRE_BUILD, PRE_TIME;
 	public static boolean ERROR;
@@ -57,19 +57,20 @@ public class AppConstants {
 	public static int FOOTER_PIXELS;
 	public static int PAGE_WAIT;
 	public static int SCROLL_DELAY, PAGE_TIMEOUT;
-	public static int BROWSER_INSTANCE;
+	public static int BROWSER_INSTANCE = 1;
 	public static Set<Browser> BROWSERS;
 	public static Set<D2Page> PAGES;
 	public static BuildType BUILD_TYPE;
 	public static Hosts HOST;
-	public static boolean MULTI_THREADED, SCROLLER;
 
 	static {
 		if (!StringUtils.isEmpty(System.getProperty("HostName"))
 				&& !StringUtils.isEmpty(System.getProperty("HostIP"))) {
+			HOST_NAME = System.getProperty("HostName");
+			HOST_IP = System.getProperty("HostIP");
 			HOST = Hosts.getInstance();
-			HOST.add(System.getProperty("HostName"), System.getProperty("HostIP"));
-			LoggerFactory.getLogger(AppConstants.class).info("Added " + System.getProperty("HostIP") + "\t"
+			HOST.add(HOST_NAME, HOST_IP);
+			LoggerFactory.getLogger(AppConstants.class).warn("Added " + System.getProperty("HostIP") + "\t"
 					+ System.getProperty("HostName") + " in etc/hosts file");
 		}
 		TIME_STAMP = HelperUtils.generateTimeString();
@@ -221,14 +222,10 @@ public class AppConstants {
 			FOOTER_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.footer.pixels", "0"));
 			IGNORED_PIXELS = Integer.parseInt(PROPERTIES.getProperty("image.ignore.pixel", "0"));
 			PAGE_WAIT = Integer.parseInt(PROPERTIES.getProperty("page.screen.wait", "1000"));
-			SCROLLER = Boolean.parseBoolean(PROPERTIES.getProperty("page.scroll", "true"));
 			SCROLL_DELAY = Integer.parseInt(PROPERTIES.getProperty("page.scroll.delay", "1000"));
 			PAGE_TIMEOUT = Integer.parseInt(PROPERTIES.getProperty("page.time.out", "30000"));
-			MULTI_THREADED = Boolean.parseBoolean(PROPERTIES.getProperty("app.browsers.multiple-threads", "true"));
-			int val = Integer.parseInt(PROPERTIES.getProperty("app.browsers.threads", "2"));
-			BROWSER_INSTANCE = val > 2 ? 2 : val;
-
 			// browsers info instantiation
+
 			String browserLoc = "";
 			if (System.getProperty("BrowserConfigFile") != null && !System.getProperty("BrowserConfigFile").isEmpty()) {
 				LoggerFactory.getLogger(AppConstants.class).info("Loading user's browser file");
@@ -244,6 +241,7 @@ public class AppConstants {
 			try {
 				JSONObject BROWSER_PROPERTIES = new JSONObject(
 						FileUtils.readFileToString(new File(browserLoc), "UTF-8"));
+				BROWSER_INSTANCE = BROWSER_PROPERTIES.getInt("instances");
 				BROWSERS = HelperUtils.readBrowsers(BROWSER_PROPERTIES);
 				BROWSER_PROPERTIES = null;
 			} catch (JSONException | IOException e) {
