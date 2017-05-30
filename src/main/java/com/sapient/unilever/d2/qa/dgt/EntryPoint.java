@@ -19,9 +19,8 @@ public class EntryPoint {
 		// // System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
-		// System.setProperty("SiteAddress",
-		// "https://www.suredeodorant.co.uk/home.html");
-
+		// System.setProperty("SiteAddress", "http://www.neutral.dk/");
+		//
 		// System.setProperty("imageDiff", "no");
 		// System.setProperty("jsDiff", "no");
 		// System.setProperty("htmlDiff", "No");

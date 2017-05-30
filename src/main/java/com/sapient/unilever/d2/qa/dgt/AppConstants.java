@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.slf4j.LoggerFactory;
 
 import com.sapient.unilever.d2.qa.dgt.page.D2Page;
@@ -49,7 +50,7 @@ public class AppConstants {
 	public static String USER_AGENT, PRE_DATA, HOST_NAME, HOST_IP;
 	public static long START_TIME, END_TIME;
 	public static String ERROR_TEXT, DIFF_FOLDER, FOLDER, BUILD_VERSION, PRE_BUILD, PRE_TIME;
-	public static boolean ERROR;
+	public static boolean ERROR, D2_SITE;
 	public static final String TIME_STAMP;
 	public static boolean URL_IS_CASE_SENSITIVE, HAS_DIFF, IMAGE_DIFF, JS_DIFF, HTML_DIFF, WEB;
 	public static int IGNORED_PIXELS;
@@ -334,6 +335,7 @@ public class AppConstants {
 		try {
 			String url = !StringUtils.isBlank(SITE) ? SITE : FileUtils.readLines(new File(URL_TEXT), "utf-8").get(0);
 			String document = NetUtils.getURLHtml(url, USERNAME, PASSWORD);
+			D2_SITE = Jsoup.parse(document).select("body").first().hasAttr("data-config");
 			document = document.substring(document.indexOf("<html"), document.indexOf("<head"));
 			int in = document.indexOf("<!--\"Release version - ");
 			document = document.substring(in).replaceAll("<!--\"Release version - ", "").replaceAll("\"-->", "");
