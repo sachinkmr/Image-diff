@@ -21,7 +21,7 @@ public class EntryPoint {
 		// System.setProperty("UrlsTextFile", "d:\\DoveUrls.txt");
 		// System.setProperty("SiteAddress", "http://www.neutral.dk/");
 		//
-		// System.setProperty("imageDiff", "no");
+		// System.setProperty("imageDiff", "yes");
 		// System.setProperty("jsDiff", "no");
 		// System.setProperty("htmlDiff", "No");
 		//
